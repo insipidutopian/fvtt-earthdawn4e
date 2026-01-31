@@ -155,7 +155,6 @@ export default class ClassAdvancementDialog extends ApplicationEd {
     this.selectedOption = "";
     this.selectedSpells = new Set();
     this.effectsGained = this.classItem.system.advancement.levels[ this.nextLevel - 1 ].effects;
-    this.castingType = null;
   }
 
   // region Rendering
@@ -164,10 +163,7 @@ export default class ClassAdvancementDialog extends ApplicationEd {
   async _prepareContext( options = {} ) {
     const context = await super._prepareContext( options );
 
-    // Initialize castingType if not already done
-    if ( this.castingType === null ) {
-      this.castingType = await this.classItem.system.getCastingType();
-    }
+    this.castingType ??= await this.classItem.system.getCastingType();
 
     context.render = {
       requirements:   this.currentStep === 0,
@@ -186,49 +182,29 @@ export default class ClassAdvancementDialog extends ApplicationEd {
     context.abilityOptionsByTier = this.classItem.system.advancement.availableAbilityOptions;
     context.selectedOption = this.selectedOption;
 
-    // Get all spell UUIDs matching the casting type
-    const allMatchingSpells = this.castingType ? await getAllDocuments(
-      "Item",
-      SYSTEM_TYPES.Item.spell,
-      true,
-      "OBSERVER",
-      [ "system.spellcastingType" ],
-      spell => spell.system?.spellcastingType === this.castingType
-    ) : [];
+    const allSpellDocs = this.castingType
+      ? await getAllDocuments(
+        "Item",
+        SYSTEM_TYPES.Item.spell,
+        true,
+        "OBSERVER",
+        [ "system.spellcastingType" ],
+        spell => spell.system?.spellcastingType === this.castingType
+      ).map( uuid => fromUuid( uuid ) )
+      : [];
     
-    // Filter out spells the actor already has - compare by edid since UUID changes on drag/drop
-    const ownedSpellEdids = this.actor.itemTypes.spell.map( s => s.system.edid ).filter( Boolean );
-    
-    // Load spell documents to check their edids
-    const allSpellDocs = await Promise.all( 
-      allMatchingSpells.map( uuid => fromUuid( uuid ) ) 
-    );
-    
-    const availableSpells = allMatchingSpells.filter( ( spellUuid, index ) => {
-      const spell = allSpellDocs[index];
-      const spellEdid = spell?.system?.edid;
-      if ( !spellEdid ) return true; // Keep spells without edid
-      
-      const isOwned = ownedSpellEdids.includes( spellEdid );
-      return !isOwned;
-    } );
+    const ownedSpellEdIDs = this.actor.itemTypes.spell.map( s => s.system.edid ).filter( Boolean );
+    const spellsNotLearnedYet = allSpellDocs.filter( spell => !ownedSpellEdIDs.includes( spell.system.edid ) );
 
-    // Group spells by level - reuse already loaded spell documents
+    // Group spells by level
     const spellsByLevel = {};
-    const availableSpellDocs = allSpellDocs.filter( ( spell, index ) => 
-      availableSpells.includes( allMatchingSpells[index] )
-    );
-    
-    for ( let i = 0; i < availableSpellDocs.length; i++ ) {
-      const spell = availableSpellDocs[i];
-      const spellUuid = availableSpells[i];
-      
+    for ( const spell of spellsNotLearnedYet ) {
       if ( spell?.system?.level !== undefined ) {
         const level = spell.system.level;
         if ( !spellsByLevel[level] ) {
           spellsByLevel[level] = [];
         }
-        spellsByLevel[level].push( spellUuid );
+        spellsByLevel[level].push( spell.uuid );
       }
     }
 
@@ -241,7 +217,7 @@ export default class ClassAdvancementDialog extends ApplicationEd {
       } ) );
 
     // Keep the flat list for backwards compatibility
-    context.availableSpells = availableSpells;
+    context.availableSpells = spellsNotLearnedYet;
     context.selectedSpells = Array.from( this.selectedSpells );
 
     context.nextLevel = this.nextLevel;
