@@ -182,7 +182,7 @@ export default class ClassAdvancementDialog extends ApplicationEd {
     context.abilityOptionsByTier = this.classItem.system.advancement.availableAbilityOptions;
     context.selectedOption = this.selectedOption;
 
-    const allSpellDocs = this.castingType
+    const allSpellUuids = this.castingType
       ? await getAllDocuments(
         "Item",
         SYSTEM_TYPES.Item.spell,
@@ -190,8 +190,8 @@ export default class ClassAdvancementDialog extends ApplicationEd {
         "OBSERVER",
         [ "system.spellcastingType" ],
         spell => spell.system?.spellcastingType === this.castingType
-      ).map( uuid => fromUuid( uuid ) )
-      : [];
+      ) : [];
+    const allSpellDocs = await Promise.all( allSpellUuids.map( uuid => fromUuid( uuid ) ) );
     
     const ownedSpellEdIDs = this.actor.itemTypes.spell.map( s => s.system.edid ).filter( Boolean );
     const spellsNotLearnedYet = allSpellDocs.filter( spell => !ownedSpellEdIDs.includes( spell.system.edid ) );
