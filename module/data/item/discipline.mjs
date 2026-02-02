@@ -63,15 +63,6 @@ export default class DisciplineData extends ClassTemplate.mixin(
 
   // region Getters
 
-  /**
-   * Whether this discipline is a spellcasting discipline.
-   * Automatically determined by checking if the discipline has a casting type.
-   * @type {boolean}
-   */
-  get isSpellcasting() {
-    return !!this.getCastingType();
-  }
-
   /** @inheritDoc */
   get increaseData() {
     const nextLevel = this.unmodifiedLevel + 1;

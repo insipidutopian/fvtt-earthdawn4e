@@ -128,11 +128,11 @@ export default class ClassTemplate extends ItemDataModel.mixin(
 
   /**
    * Get the casting type of the class, if it has a thread weaving ability for spellcasting.
-   * @returns {typeof AbilityTemplate.castingType} The casting type of the class, see {@link AbilityTemplate.castingType}.
+   * @returns {Promise<typeof AbilityTemplate.castingType>} The casting type of the class, see {@link AbilityTemplate.castingType}.
    */
-  getCastingType() {
+  async getCastingType() {
     const allUuids = this.getAllAbilityUuids();
-    const abilities = allUuids.map( uuid => fromUuidSync( uuid ) );
+    const abilities = await Promise.all( allUuids.map( uuid => fromUuid( uuid ) ) );
     
     // Find abilities with rollType === "threadWeaving"
     const threadWeavingAbility = abilities.find( ability => 
