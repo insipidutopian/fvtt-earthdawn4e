@@ -127,8 +127,8 @@
         "knackManeuver":                          "Maneuver"
       },
       "Characteristics": {
-        "mysticalArmor":                          "Mystical",
-        "mysticalDefense":                        "Mystical",
+        "mysticalArmor":                          "Mystic",
+        "mysticalDefense":                        "Mystic",
         "physicalArmor":                          "Physical",
         "physicalDefense":                        "Physical",
         "socialDefense":                          "Social",
@@ -224,8 +224,8 @@
         "legendTotal":                            "Total",
         "maneuvers":                              "Maneuver",
         "movement":                               "Movement",
-        "mysticalArmor":                          "Mystical Armor",
-        "mysticalDefense":                        "Mystical Defense",
+        "mysticalArmor":                          "Mystic Armor",
+        "mysticalDefense":                        "Mystic Defense",
         "name":                                   "Name",
         "namegiver":                              "Namegiver",
         "navigator":                              "Navigator",
@@ -454,7 +454,7 @@
         "wall":                                   "Wall"
       },
       "Armor": {
-        "mystical":                               "Mystical Armor",
+        "mystical":                               "Mystic Armor",
         "physical":                               "Physical Armor"
       },
       "AstralSpacePollution": {
@@ -512,7 +512,7 @@
         "highestX":                               "Highest of Group + Targets",
         "lowestOfGroup":                          "Lowest of Group",
         "lowestX":                                "Lowest of Group + Targets",
-        "mystical":                               "Mystical Defense",
+        "mystical":                               "Mystic Defense",
         "physical":                               "Physical Defense",
         "social":                                 "Social Defense"
       },
@@ -2064,8 +2064,8 @@
             },
             "defenseBonus": {
               "mystical": {
-                "hint":                           "Bonus to mystical defense from the shield",
-                "label":                          "Mystical Defense"
+                "hint":                           "Bonus to mystic defense from the shield",
+                "label":                          "Mystic Defense"
               },
               "physical": {
                 "hint":                           "Bonus to physical defense from the shield",
@@ -2818,12 +2818,12 @@
               "defenses": {
                 "mystical": {
                   "baseValue": {
-                    "hint":                       "Base value of the thread's mystical defense",
-                    "label":                      "Mystical Defense"
+                    "hint":                       "Base value of the thread's mystic defense",
+                    "label":                      "Mystic Defense"
                   },
                   "value": {
-                    "hint":                       "Total value of the thread's mystical defense",
-                    "label":                      "Mystical Defense Total"
+                    "hint":                       "Total value of the thread's mystic defense",
+                    "label":                      "Mystic Defense Total"
                   }
                 }
               }
@@ -2939,8 +2939,8 @@
               "label":                            "Maximum Threads"
             },
             "mysticalDefense": {
-              "hint":                             "The mystical defense is the target number to weave threads into this item",
-              "label":                            "Mystical Defense"
+              "hint":                             "The mystic defense is the target number to weave threads into this item",
+              "label":                            "Mystic Defense"
             },
             "threadItemLevels": {
               "hint":                             "TODO: Add translation",
@@ -3356,7 +3356,7 @@
       "knockdownChoice":                          "Choose the Ability to resist Knock Down",
       "missingItemHistoryAbilityConfirm":         "TODO: Add translation",
       "missingThreadWeavingAbilityConfirm":       "TODO: Add translation",
-      "mystical":                                 "Mystical Damage",
+      "mystical":                                 "Mystic Damage",
       "physical":                                 "Physical Damage",
       "threadRankExceedsWeavingAbilityConfirm":   "TODO: Add translation",
       "unknownPatternKeyKnowledgeConfirm":        "TODO: Add translation",
