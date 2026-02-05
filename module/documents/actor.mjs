@@ -1226,7 +1226,7 @@ export default class ActorEd extends Actor {
     const threadWeavingTalent = this.getThreadWeavingByCastingType( spellcastingType );
     if ( !threadWeavingTalent ) return null;
 
-    return fromUuidSync( threadWeavingTalent.system.source?.class );
+    return this.items.get( threadWeavingTalent.system.source?.class );
   }
 
   /**
