@@ -97,6 +97,10 @@ export class MetricData extends SparseDataModel {
     return this.unit === this.specialUnitKey;
   }
 
+  get localizedUnit() {
+    return this.schema.fields.unit.options.choices?.[this.unit];
+  }
+
   get scalarConfig() {
     return {};
   }
@@ -110,8 +114,8 @@ export class MetricData extends SparseDataModel {
       `<em>${MAGIC.spellEnhancements[this.constructor.TYPE].label}</em>`,
       "&emsp;",
     ];
-    const localizedUnit = this.schema.fields.unit.options.choices?.[this.unit];
-    if ( this.isScalarUnit && localizedUnit ) summary.push( this.value );
+    const localizedUnit = this.localizedUnit;
+    if ( this.isScalarUnit ) summary.push( this.value );
     if ( this.isSpecialUnit && this.special ) summary.push( this.special );
     if ( localizedUnit ) summary.push( localizedUnit );
     if ( summary.length === 2 ) summary.push( game.i18n.localize( "ED.Data.placeholderBlankSelectOption" ) );
@@ -173,6 +177,7 @@ export class MetricData extends SparseDataModel {
 
 }
 
+
 /**
  * Data model for storing effect metric data.
  * @augments MetricData
@@ -192,6 +197,7 @@ export class ActiveEffectValueMetricData extends MetricData {
   }
 
 }
+
 
 /**
  * Data model for storing area unit data.
@@ -226,23 +232,23 @@ export class AreaMetricData extends MetricData {
       case "circle":
       case "radius":
       case "sphere":
-        summary.push( `${areaType}: ${this.radius} ${this.unit}` );
+        summary.push( `${areaType.label}: ${this.radius} ${this.unit}` );
         break;
       case "cone":
         summary.push( `${this.angle}° ${areaType.label}: ${this.radius} ${this.unit}` );
         break;
       case "cube":
       case "square":
-        summary.push( `${areaType}: ${this.width} ${this.unit}` );
+        summary.push( `${areaType.label}: ${this.width} ${this.unit}` );
         break;
       case "cylinder":
-        summary.push( `${areaType}: (r x h) ${this.radius} ${this.unit} x ${this.height} ${this.unit}` );
+        summary.push( `${areaType.label}: (r x h) ${this.radius} ${this.unit} x ${this.height} ${this.unit}` );
         break;
       case "line":
-        summary.push( `${areaType}: (l x w) ${this.length} ${this.unit} x ${this.width} ${this.unit}` );
+        summary.push( `${areaType.label}: (l x w) ${this.length} ${this.unit} x ${this.width} ${this.unit}` );
         break;
       case "wall":
-        summary.push( `${areaType}: (l x w x t) ${this.length} ${this.unit} x ${this.width} ${this.unit} x ${this.thickness} ${this.unit}` );
+        summary.push( `${areaType.label}: (l x w x t) ${this.length} ${this.unit} x ${this.width} ${this.unit} x ${this.thickness} ${this.unit}` );
         break;
       default:
         summary.push( game.i18n.localize( "ED.Data.placeholderBlankSelectOption" ) );
@@ -354,40 +360,17 @@ export class EffectMetricData extends MetricData {
     Object.defineProperty( this, "TYPE", { value: "effect" } );
   }
 
-  /** @inheritDoc */
-  static defineSchema() {
-    const fields = foundry.data.fields;
-    return this.mergeSchema( super.defineSchema(), {
-      unit: new fields.StringField( {
-        required: true,
-        nullable: true,
-        blank:    false,
-        trim:     true,
-        choices:  QUANTITIES.earthdawnUnits,
-        initial:  "steps",
-      } )
-    } );
-  }
-
-  /* -------------------------------------------- */
-  /*  Properties                                  */
-  /* -------------------------------------------- */
+  // region Getters
 
   get isScalarUnit() {
     return true;
   }
 
-  get scalarConfig() {
-    return QUANTITIES.earthdawnUnits;
+  get localizedUnit() {
+    return Math.abs( this.value ) === 1 ? QUANTITIES.earthdawnUnits.step : QUANTITIES.earthdawnUnits.steps;
   }
 
-  get unit() {
-    return Math.abs( this.value ) === 1 ? "step" : "steps";
-  }
-
-  set unit( _ ) {
-    // ignore setting unit, as it is derived from value
-  }
+  // endregion
 
 }
 
@@ -488,12 +471,16 @@ export class TargetMetricData extends MetricData {
     Object.defineProperty( this, "TYPE", { value: "target" } );
   }
 
-  /* -------------------------------------------- */
-  /*  Properties                                  */
-  /* -------------------------------------------- */
+  // region Getters
 
   get isScalarUnit() {
     return true;
   }
+
+  get localizedUnit() {
+    return Math.abs( this.value ) === 1 ? QUANTITIES.earthdawnUnits.target : QUANTITIES.earthdawnUnits.targets;
+  }
+
+  // endregion
 
 }
