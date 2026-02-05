@@ -186,6 +186,7 @@ export const earthdawnUnits = {
   step:  "ED.Config.EarthdawnUnits.step",
   steps: "ED.Config.EarthdawnUnits.steps",
 };
+preLocalize( "earthdawnUnits" );
 
 // endregion
 
