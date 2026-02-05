@@ -183,8 +183,10 @@ preLocalize( "timePeriods" );
 // region Earthdawn
 
 export const earthdawnUnits = {
-  step:  "ED.Config.EarthdawnUnits.step",
-  steps: "ED.Config.EarthdawnUnits.steps",
+  step:    "ED.Config.EarthdawnUnits.step",
+  steps:   "ED.Config.EarthdawnUnits.steps",
+  target:  "ED.Config.EarthdawnUnits.target",
+  targets: "ED.Config.EarthdawnUnits.targets",
 };
 preLocalize( "earthdawnUnits" );
 
