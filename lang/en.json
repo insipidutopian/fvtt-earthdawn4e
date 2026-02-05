@@ -543,6 +543,12 @@
         },
         "allKnockdownTests":                      "All Knockdown Tests"
       },
+      "EarthdawnUnits": {
+        "step":                                   "step",
+        "steps":                                  "steps",
+        "target":                                 "target",
+        "targets":                                "targets"
+      },
       "Elements": {
         "air":                                    "Air",
         "airElectric":                            "Air—Electric",
@@ -686,7 +692,7 @@
         "special":                                "Special"
       },
       "SpellEnhancements": {
-        "activeEffect":                           "TODO: Add translation",
+        "activeEffect":                           "Active Effect",
         "area":                                   "Area",
         "duration":                               "Duration",
         "effect":                                 "Effect",
