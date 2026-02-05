@@ -180,6 +180,14 @@ preLocalize( "timePeriods" );
 
 // endregion
 
+// region Earthdawn
+
+export const earthdawnUnits = {
+  step:  "ED.Config.EarthdawnUnits.step",
+  steps: "ED.Config.EarthdawnUnits.steps",
+};
+
+// endregion
 
 // region Magic
 
