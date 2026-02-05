@@ -111,7 +111,7 @@ export class MetricData extends SparseDataModel {
       "&emsp;",
     ];
     const localizedUnit = this.schema.fields.unit.options.choices?.[this.unit];
-    if ( this.isScalarUnit && localizedUnit ) summary.push( `${this.value} ${localizedUnit}` );
+    if ( this.isScalarUnit && localizedUnit ) summary.push( this.value );
     if ( this.isSpecialUnit && this.special ) summary.push( this.special );
     if ( localizedUnit ) summary.push( localizedUnit );
     if ( summary.length === 2 ) summary.push( game.i18n.localize( "ED.Data.placeholderBlankSelectOption" ) );
@@ -354,6 +354,21 @@ export class EffectMetricData extends MetricData {
     Object.defineProperty( this, "TYPE", { value: "effect" } );
   }
 
+  /** @inheritDoc */
+  static defineSchema() {
+    const fields = foundry.data.fields;
+    return this.mergeSchema( super.defineSchema(), {
+      unit: new fields.StringField( {
+        required: true,
+        nullable: true,
+        blank:    false,
+        trim:     true,
+        choices:  QUANTITIES.earthdawnUnits,
+        initial:  "steps",
+      } )
+    } );
+  }
+
   /* -------------------------------------------- */
   /*  Properties                                  */
   /* -------------------------------------------- */
@@ -364,6 +379,14 @@ export class EffectMetricData extends MetricData {
 
   get scalarConfig() {
     return QUANTITIES.earthdawnUnits;
+  }
+
+  get unit() {
+    return Math.abs( this.value ) === 1 ? "step" : "steps";
+  }
+
+  set unit( _ ) {
+    // ignore setting unit, as it is derived from value
   }
 
 }
