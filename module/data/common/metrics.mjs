@@ -1,6 +1,7 @@
 import FormulaField from "../fields/formula-field.mjs";
-import ED4E from "../../config/_module.mjs";
 import SparseDataModel from "../abstract/sparse-data-model.mjs";
+import * as MAGIC from "../../config/magic.mjs";
+import * as QUANTITIES from "../../config/quantities.mjs";
 
 const fields = foundry.data.fields;
 
@@ -106,7 +107,7 @@ export class MetricData extends SparseDataModel {
 
   get summaryString() {
     const summary = [
-      `<em>${ED4E.spellEnhancements[this.constructor.TYPE].label}</em>`,
+      `<em>${MAGIC.spellEnhancements[this.constructor.TYPE].label}</em>`,
       "&emsp;",
     ];
     const localizedUnit = this.schema.fields.unit.options.choices?.[this.unit];
@@ -196,7 +197,7 @@ export class ActiveEffectValueMetricData extends MetricData {
  * Data model for storing area unit data.
  * @augments MetricData
  * @property {string} count     Number of areas.
- * @property {keyof ED4E.areaTargetDefinition} areaType  Type of area.
+ * @property {keyof QUANTITIES.areaTargetDefinition} areaType  Type of area.
  * @property {string} angle     Angle of the area.
  * @property {string} height    Height of the area.
  * @property {string} length    Length of the area.
@@ -216,11 +217,11 @@ export class AreaMetricData extends MetricData {
 
   get summaryString() {
     const summary = [
-      `<em>${ED4E.spellEnhancements[this.constructor.TYPE].label}</em>`,
+      `<em>${MAGIC.spellEnhancements[this.constructor.TYPE].label}</em>`,
       "&emsp;",
     ];
 
-    const areaType = ED4E.areaTargetDefinition[this.areaType];
+    const areaType = QUANTITIES.areaTargetDefinition[this.areaType];
     switch ( this.areaType ) {
       case "circle":
       case "radius":
@@ -263,7 +264,7 @@ export class AreaMetricData extends MetricData {
         nullable: true,
         blank:    false,
         trim:     true,
-        choices:  ED4E.movementUnits,
+        choices:  QUANTITIES.movementUnits,
         initial:  null,
       } ),
       count: new FormulaField( {
@@ -273,7 +274,7 @@ export class AreaMetricData extends MetricData {
         required: true,
         blank:    true,
         trim:     true,
-        choices:  ED4E.areaTargetDefinition,
+        choices:  QUANTITIES.areaTargetDefinition,
         initial:  "",
       } ),
       angle:  new fields.AngleField( ),
@@ -317,7 +318,7 @@ export class DurationMetricData extends MetricData {
         nullable: true,
         blank:    false,
         trim:     true,
-        choices:  ED4E.timePeriods,
+        choices:  QUANTITIES.timePeriods,
         initial:  "inst",
       } )
     } );
@@ -329,14 +330,14 @@ export class DurationMetricData extends MetricData {
   /* -------------------------------------------- */
 
   get scalarConfig() {
-    return ED4E.scalarTimePeriods;
+    return QUANTITIES.scalarTimePeriods;
   }
 
   get unitGroupOptions() {
     return {
-      "":                                                   ED4E.specialTimePeriods,
-      "ED.Data.Fields.Options.Duration.groupScalarTime":    ED4E.scalarTimePeriods,
-      "ED.Data.Fields.Options.Duration.groupPermanentTime": ED4E.permanentTimePeriods
+      "":                                                   QUANTITIES.specialTimePeriods,
+      "ED.Data.Fields.Options.Duration.groupScalarTime":    QUANTITIES.scalarTimePeriods,
+      "ED.Data.Fields.Options.Duration.groupPermanentTime": QUANTITIES.permanentTimePeriods
     };
   }
 
@@ -361,6 +362,10 @@ export class EffectMetricData extends MetricData {
     return true;
   }
 
+  get scalarConfig() {
+    return QUANTITIES.earthdawnUnits;
+  }
+
 }
 
 
@@ -383,7 +388,7 @@ export class RangeMetricData extends MetricData {
         nullable: true,
         blank:    false,
         trim:     true,
-        choices:  ED4E.distanceUnits,
+        choices:  QUANTITIES.distanceUnits,
         initial:  "any",
       } )
     } );
@@ -395,13 +400,13 @@ export class RangeMetricData extends MetricData {
   /* -------------------------------------------- */
 
   get scalarConfig() {
-    return ED4E.movementUnits;
+    return QUANTITIES.movementUnits;
   }
 
   get unitGroupOptions() {
     return {
-      "":                                                ED4E.rangeTypes,
-      "ED.Data.Fields.Options.Range.groupMovementUnits": ED4E.movementUnits
+      "":                                                QUANTITIES.rangeTypes,
+      "ED.Data.Fields.Options.Range.groupMovementUnits": QUANTITIES.movementUnits
     };
   }
 
