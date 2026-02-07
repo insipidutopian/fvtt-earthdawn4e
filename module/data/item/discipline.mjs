@@ -327,7 +327,7 @@ export default class DisciplineData extends ClassTemplate.mixin(
 
   /** @inheritDoc */
   static async learn( actor, item, createData = {} ) {
-    if ( isEmpty( actor.disciplines && actor.itemTypes.questor ) ) {
+    if ( isEmpty( actor.disciplines ) && isEmpty( actor.itemTypes.questor ) ) {
       ui.notifications.warn( game.i18n.localize( "ED.Notifications.Warn.firstClassViaCharGen" ) );
     }
 
