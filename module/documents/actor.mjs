@@ -554,7 +554,7 @@ export default class ActorEd extends Actor {
     const { isStrain, damageType, armorType, ignoreArmor, damageRoll, strainOrigin } = options;
     const { armor, health } = this.system.characteristics;
     const armorValue = armor[armorType]?.[options.naturalArmorOnly ? "baseValue" : "value"];
-    const damageTaken = amount - ( ignoreArmor || !armorType ? 0 : armorValue );
+    const damageTaken = Math.max( amount - ( ignoreArmor || !armorType ? 0 : armorValue ), 0 );
     const newDamage = health.damage[damageType] + damageTaken;
 
     const updates = { [`system.characteristics.health.damage.${ damageType }`]: newDamage };
