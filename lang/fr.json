@@ -543,6 +543,12 @@
         },
         "allKnockdownTests":                      "TODO: Add translation"
       },
+      "EarthdawnUnits": {
+        "step":                                   "TODO: Add translation",
+        "steps":                                  "TODO: Add translation",
+        "target":                                 "TODO: Add translation",
+        "targets":                                "TODO: Add translation"
+      },
       "Elements": {
         "air":                                    "TODO: Add translation",
         "airElectric":                            "TODO: Add translation",

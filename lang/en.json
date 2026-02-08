@@ -543,6 +543,12 @@
         },
         "allKnockdownTests":                      "All Knockdown Tests"
       },
+      "EarthdawnUnits": {
+        "step":                                   "step",
+        "steps":                                  "steps",
+        "target":                                 "target",
+        "targets":                                "targets"
+      },
       "Elements": {
         "air":                                    "Air",
         "airElectric":                            "Air—Electric",
@@ -686,7 +692,7 @@
         "special":                                "Special"
       },
       "SpellEnhancements": {
-        "activeEffect":                           "TODO: Add translation",
+        "activeEffect":                           "Active Effect",
         "area":                                   "Area",
         "duration":                               "Duration",
         "effect":                                 "Effect",
@@ -3135,11 +3141,11 @@
       },
       "Configs": {
         "Constraints": {
-          "hint":                                 "To add a constraint, drag it from the list below. (Not yet implemented, coming in V13)",
+          "hint":                                 "To add a constraint, click it on the list below.",
           "title":                                "Configuration: Constraints"
         },
         "SpellEnhancement": {
-          "hint":                                 "To add an enhancement, drag it from the list below. (Not yet implemented, coming in V13)",
+          "hint":                                 "To add an enhancement, click it on the list below.",
           "title":                                "Configuration: Spell Enhancement"
         }
       },

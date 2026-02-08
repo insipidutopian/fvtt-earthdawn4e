@@ -25,7 +25,8 @@ export default class SpellEnhancementsConfig extends BaseConfigSheet {
   /** @inheritDoc */
   static PARTS = {
     config: {
-      template: "systems/ed4e/templates/configs/spell-enhancements-config.hbs",
+      template:   "systems/ed4e/templates/configs/spell-enhancements-config.hbs",
+      scrollable: [ ".selected-metrics" ],
     },
   };
 
