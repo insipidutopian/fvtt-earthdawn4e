@@ -6,6 +6,7 @@ import ED4E from "../../../config/_module.mjs";
 import ItemDataModel from "../../abstract/item-data-model.mjs";
 import { SYSTEM_TYPES } from "../../../constants/constants.mjs";
 
+
 /**
  * Data model template with information on "class"-like items: paths, disciplines, and questors.
  * @property {number} level         either circle or rank of the class 
@@ -312,13 +313,20 @@ export default class ClassTemplate extends ItemDataModel.mixin(
   }
 
   async _addFreeAbilities( nextLevelData, systemSourceData ) {
+    const mergeObject = foundry.utils.mergeObject;
+
     const freeAbilityData = await Promise.all(
       nextLevelData.abilities.free.map(
         async uuid => {
           const item = await fromUuid( uuid );
-          return Object.assign(
+          return mergeObject(
             item?.toObject(),
-            systemSourceData
+            mergeObject(
+              systemSourceData,
+              { system: { talentCategory: "free"} },
+              { inplace: false }
+            ),
+            { inplace: false },
           );
         }
       ) );
