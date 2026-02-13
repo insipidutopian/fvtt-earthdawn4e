@@ -290,7 +290,7 @@ export default class ActorEd extends Actor {
     const knockdownBlockingStatuses = [ "knockedDown", "unconscious", "dead" ];
 
     return !knockdownBlockingStatuses.some( status => this.statuses.has( status ) )
-    && damageTaken >= this.system.characteristics.woundThreshold + 5
+    && damageTaken >= this.system.characteristics.health.woundThreshold + 5
     && !isStrain;
   }
 
