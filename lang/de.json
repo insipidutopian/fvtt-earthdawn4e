@@ -3599,6 +3599,7 @@
       "Modifiers": {
         "bonusDamageFromExtraSuccesses":          "+2 pro extra Erfolg von Angriff",
         "grimoirePenalty":                        "Fremdes Grimoire",
+        "jumpUpNoKnockdownPenalty":               "Kein Malus durch Niedergeschlagen",
         "manual":                                 "Manuelle Anpassung",
         "spellEffectOrDamageStepCircle":          "Kreis ({discipline})",
         "stunRecoveryWillpower":                  "Willenskraft"
