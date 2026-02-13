@@ -653,10 +653,9 @@ export default class ActorEd extends Actor {
    * @returns {Promise<ItemEd|undefined>} The knockdown ability item, or undefined if none was found.
    */
   async knockdownAbility() {
-    const knockdownAbility = await fromUuid(
+    return await fromUuid(
       await this.getPrompt( "knockdown" )
     );
-    return knockdownAbility;
   }
 
   /**
