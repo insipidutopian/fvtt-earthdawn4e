@@ -1401,60 +1401,6 @@
               "hint":                             "Das Talent basiert auf diesem Attribut",
               "label":                            "Attribut"
             },
-            "rollTypeDetails": {
-              "ability": {
-                "hint":                           "Fähigkeit auf die sich der Würfelwurf bezieht",
-                "label":                          "Fähigkeit"
-              },
-              "attack": {
-                "hint":                           "Angriff auf den sich der Würfelwurf bezieht",
-                "label":                          "Angriff",
-                "weaponItemStatus": {
-                  "hint":                         "Waffenstatus auf den sich der Würfelwurf bezieht",
-                  "label":                        "Waffenstatus"
-                },
-                "weaponTypes": {
-                  "hint":                         "Waffentyp auf den sich der Würfelwurf bezieht",
-                  "label":                        "Waffentyp"
-                }
-              },
-              "damage": {
-                "combatType": {
-                  "hint":                         "Typ von Kampf/Waffe für den Schaden gewürfelt werden kann",
-                  "label":                        "Kampftyp"
-                },
-                "hint":                           "Schaden auf den sich der Würfelwurf bezieht",
-                "label":                          "Schaden"
-              },
-              "effect": {
-                "hint":                           "Effekt auf den sich der Würfelwurf bezieht",
-                "label":                          "Effekt"
-              },
-              "initiative": {
-                "hint":                           "Initiative auf die sich der Würfelwurf bezieht",
-                "label":                          "Initiative"
-              },
-              "reaction": {
-                "defenseType": {
-                  "hint":                         "Defensiver Typ auf den sich der Würfelwurf bezieht",
-                  "label":                        "Defensiver Typ"
-                }
-              },
-              "recovery": {
-                "hint":                           "Erholung auf die sich der Würfelwurf bezieht",
-                "label":                          "Erholung"
-              },
-              "spellcasting": {
-                "hint":                           "Spruchzauberei auf die sich der Würfelwurf bezieht",
-                "label":                          "Spruchzauberei"
-              },
-              "threadWeaving": {
-                "castingType": {
-                  "hint":                         "Fadenweben Typ auf den sich der Würfelwurf bezieht",
-                  "label":                        "Fadenweben Typ"
-                }
-              }
-            },
             "source": {
               "atLevel": {
                 "hint":                           "Kreis auf dem dieses Talent erlernt wurde",
@@ -2059,6 +2005,60 @@
             "rollType": {
               "hint":                             "Art des Tests",
               "label":                            "Testtyp"
+            },
+            "rollTypeDetails": {
+              "ability": {
+                "hint":                           "Fähigkeit auf die sich der Würfelwurf bezieht",
+                "label":                          "Fähigkeit"
+              },
+              "attack": {
+                "hint":                           "Angriff auf den sich der Würfelwurf bezieht",
+                "label":                          "Angriff",
+                "weaponItemStatus": {
+                  "hint":                         "Waffenstatus auf den sich der Würfelwurf bezieht",
+                  "label":                        "Waffenstatus"
+                },
+                "weaponTypes": {
+                  "hint":                         "Waffentyp auf den sich der Würfelwurf bezieht",
+                  "label":                        "Waffentyp"
+                }
+              },
+              "damage": {
+                "combatType": {
+                  "hint":                         "Typ von Kampf/Waffe für den Schaden gewürfelt werden kann",
+                  "label":                        "Kampftyp"
+                },
+                "hint":                           "Schaden auf den sich der Würfelwurf bezieht",
+                "label":                          "Schaden"
+              },
+              "effect": {
+                "hint":                           "Effekt auf den sich der Würfelwurf bezieht",
+                "label":                          "Effekt"
+              },
+              "initiative": {
+                "hint":                           "Initiative auf die sich der Würfelwurf bezieht",
+                "label":                          "Initiative"
+              },
+              "reaction": {
+                "defenseType": {
+                  "hint":                         "Defensiver Typ auf den sich der Würfelwurf bezieht",
+                  "label":                        "Defensiver Typ"
+                }
+              },
+              "recovery": {
+                "hint":                           "Erholung auf die sich der Würfelwurf bezieht",
+                "label":                          "Erholung"
+              },
+              "spellcasting": {
+                "hint":                           "Spruchzauberei auf die sich der Würfelwurf bezieht",
+                "label":                          "Spruchzauberei"
+              },
+              "threadWeaving": {
+                "castingType": {
+                  "hint":                         "Fadenweben Typ auf den sich der Würfelwurf bezieht",
+                  "label":                        "Fadenweben Typ"
+                }
+              }
             }
           }
         },
