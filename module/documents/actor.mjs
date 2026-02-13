@@ -665,11 +665,17 @@ export default class ActorEd extends Actor {
    * @returns {Promise<EdRoll|null>} The result of the knockdown test roll, or null if the test was not performed.
    */
   async knockdownTest( damageTaken, options = {} ) {
+    const workflowOptions = foundry.utils.mergeObject(
+      options,
+      { damageTaken },
+      {
+        overwrite: true,
+        inplace:   false,
+      }
+    );
     const knockdownWorkflow = new KnockdownWorkflow(
       this,
-      {
-        damageTaken
-      },
+      workflowOptions,
     );
     return knockdownWorkflow.execute();
   }
