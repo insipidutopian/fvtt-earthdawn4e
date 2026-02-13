@@ -279,6 +279,21 @@ export default class ActorEd extends Actor {
     }
   }
 
+  /**
+   * Determines if the character needs to make a knockdown test based on the damage taken,
+   * current statuses, and whether the damage type is strain.
+   * @param {number} damageTaken - The amount of damage the character has taken.
+   * @param {boolean} [isStrain] - Indicates if the damage taken is strain damage.
+   * @returns {boolean} Returns `true` if the character needs a knockdown test, otherwise `false`.
+   */
+  needsKnockdownTest( damageTaken, isStrain = false ) {
+    const knockdownBlockingStatuses = [ "knockedDown", "unconscious", "dead" ];
+
+    return !knockdownBlockingStatuses.some( status => this.statuses.has( status ) )
+    && damageTaken >= this.system.characteristics.woundThreshold + 5
+    && !isStrain;
+  }
+
   // endregion
 
   // region Active Effects
@@ -586,7 +601,7 @@ export default class ActorEd extends Actor {
       amount:  damageTaken,
     } );
 
-    let messageData = {
+    const messageData = {
       user:    game.user._id,
       speaker: ChatMessage.getSpeaker( { actor: this.actor } ),
       content: chatFlavor
@@ -595,12 +610,12 @@ export default class ActorEd extends Actor {
       await ChatMessage.create( messageData );
     }
 
-    const knockdownTest = !this.statuses.has( "knockedDown" ) && damageTaken >= health.woundThreshold + 5 && !options.isStrain;
-    if ( knockdownTest ) await this.knockdownTest( damageTaken );
+    const knockdownTestNeeded = this.needsKnockdownTest( damageTaken, options.isStrain );
+    if ( knockdownTestNeeded ) await this.knockdownTest( damageTaken );
 
     return {
       damageTaken,
-      knockdownTest,
+      knockdownTest: knockdownTestNeeded,
     };
   }
 
