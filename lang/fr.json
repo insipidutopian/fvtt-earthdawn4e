@@ -1401,60 +1401,6 @@
               "hint":                             "TODO: Add translation",
               "label":                            "TODO: Add translation"
             },
-            "rollTypeDetails": {
-              "ability": {
-                "hint":                           "TODO: Add translation",
-                "label":                          "TODO: Add translation"
-              },
-              "attack": {
-                "hint":                           "TODO: Add translation",
-                "label":                          "TODO: Add translation",
-                "weaponItemStatus": {
-                  "hint":                         "TODO: Add translation",
-                  "label":                        "TODO: Add translation"
-                },
-                "weaponTypes": {
-                  "hint":                         "TODO: Add translation",
-                  "label":                        "TODO: Add translation"
-                }
-              },
-              "damage": {
-                "combatType": {
-                  "hint":                         "TODO: Add translation",
-                  "label":                        "TODO: Add translation"
-                },
-                "hint":                           "TODO: Add translation",
-                "label":                          "TODO: Add translation"
-              },
-              "effect": {
-                "hint":                           "TODO: Add translation",
-                "label":                          "TODO: Add translation"
-              },
-              "initiative": {
-                "hint":                           "TODO: Add translation",
-                "label":                          "TODO: Add translation"
-              },
-              "reaction": {
-                "defenseType": {
-                  "hint":                         "TODO: Add translation",
-                  "label":                        "TODO: Add translation"
-                }
-              },
-              "recovery": {
-                "hint":                           "TODO: Add translation",
-                "label":                          "TODO: Add translation"
-              },
-              "spellcasting": {
-                "hint":                           "TODO: Add translation",
-                "label":                          "TODO: Add translation"
-              },
-              "threadWeaving": {
-                "castingType": {
-                  "hint":                         "TODO: Add translation",
-                  "label":                        "TODO: Add translation"
-                }
-              }
-            },
             "source": {
               "atLevel": {
                 "hint":                           "TODO: Add translation",
@@ -2059,6 +2005,60 @@
             "rollType": {
               "hint":                             "TODO: Add translation",
               "label":                            "TODO: Add translation"
+            },
+            "rollTypeDetails": {
+              "ability": {
+                "hint":                           "TODO: Add translation",
+                "label":                          "TODO: Add translation"
+              },
+              "attack": {
+                "hint":                           "TODO: Add translation",
+                "label":                          "TODO: Add translation",
+                "weaponItemStatus": {
+                  "hint":                         "TODO: Add translation",
+                  "label":                        "TODO: Add translation"
+                },
+                "weaponTypes": {
+                  "hint":                         "TODO: Add translation",
+                  "label":                        "TODO: Add translation"
+                }
+              },
+              "damage": {
+                "combatType": {
+                  "hint":                         "TODO: Add translation",
+                  "label":                        "TODO: Add translation"
+                },
+                "hint":                           "TODO: Add translation",
+                "label":                          "TODO: Add translation"
+              },
+              "effect": {
+                "hint":                           "TODO: Add translation",
+                "label":                          "TODO: Add translation"
+              },
+              "initiative": {
+                "hint":                           "TODO: Add translation",
+                "label":                          "TODO: Add translation"
+              },
+              "reaction": {
+                "defenseType": {
+                  "hint":                         "TODO: Add translation",
+                  "label":                        "TODO: Add translation"
+                }
+              },
+              "recovery": {
+                "hint":                           "TODO: Add translation",
+                "label":                          "TODO: Add translation"
+              },
+              "spellcasting": {
+                "hint":                           "TODO: Add translation",
+                "label":                          "TODO: Add translation"
+              },
+              "threadWeaving": {
+                "castingType": {
+                  "hint":                         "TODO: Add translation",
+                  "label":                        "TODO: Add translation"
+                }
+              }
             }
           }
         },
