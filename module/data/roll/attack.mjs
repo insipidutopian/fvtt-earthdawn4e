@@ -174,8 +174,15 @@ export default class AttackRollOptions extends EdRollOptions {
       : undefined;
 
     newContext.targets = await Promise.all( this.target.tokens.map( tokens => fromUuid( tokens ) ) );
-    newContext.reactionsByTarget = await this._getDefendantItems( "", "reaction" );
-    newContext.maneuversByTarget = await this._getDefendantItems( SYSTEM_TYPES.Item.maneuver, "" );
+    newContext.reactionsByTarget = await this._getDefendantItems(
+      "",
+      "reaction",
+      { defenseType: newContext.attackAbility.system.difficulty.target },
+    );
+    newContext.maneuversByTarget = await this._getDefendantItems(
+      SYSTEM_TYPES.Item.maneuver,
+      ""
+    );
     newContext.maneuvers = await this._getManeuvers();
 
     newContext.weaponType = this.weaponType;
@@ -193,16 +200,21 @@ export default class AttackRollOptions extends EdRollOptions {
    * Get the items with the given roll type for all targeted actors.
    * @param {string} itemType The type of the items to get.
    * @param {string} rollType The roll type of the items to get.
+   * @param {{}} options Additional options.
+   * @param {string} [options.defenseType] The defense type to filter reactions by.
    * @returns {Promise<{}>} A mapping of target actor names to their items with the given roll type.
    */
-  async _getDefendantItems( itemType = "", rollType = "" ) {
+  async _getDefendantItems( itemType = "", rollType = "", options = { defenseType: "" } ) {
     const reactionsByTarget = {};
     for ( const targetedTokenUuid of this.target.tokens ) {
       const targetedActor = ( await fromUuid( targetedTokenUuid ) ).actor;
       if ( targetedActor ) {
-        const reactions = targetedActor.items.filter(
+        let reactions = targetedActor.items.filter(
           item => ( !itemType || item.type === itemType )
             && ( !rollType || item.system.rollType === rollType )
+        );
+        if ( rollType === "reaction" ) reactions = reactions?.filter(
+          reaction => reaction.system.rollTypeDetails.reaction.defenseType === options.defenseType
         );
         if ( reactions ) reactionsByTarget[targetedActor.name] = reactions;
       }
