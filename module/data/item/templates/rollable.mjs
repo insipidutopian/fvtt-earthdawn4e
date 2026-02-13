@@ -1,8 +1,11 @@
-import ED4E from "../../../config/_module.mjs";
 import EdRollOptions from "../../roll/common.mjs";
 import { filterObject } from "../../../utils.mjs";
 import SystemDataModel from "../../abstract/system-data-model.mjs";
 import { SYSTEM_TYPES } from "../../../constants/constants.mjs";
+import * as ACTIONS from "../../../config/actions.mjs";
+import * as ITEMS from "../../../config/items.mjs";
+import * as MAGIC from "../../../config/magic.mjs";
+import * as ROLLS from "../../../config/rolls.mjs";
 
 const { fields } = foundry.data;
 
@@ -23,9 +26,71 @@ export default class RollableTemplate extends SystemDataModel {
         blank:    true,
         initial:  "",
         choices:  filterObject(
-          ED4E.rollTypes,
+          ROLLS.rollTypes,
           ( key, _ ) => ![ "attribute", "attuning", "halfmagic" ].includes( key )
         ),
+      } ),
+      rollTypeDetails: new fields.SchemaField( {
+        ability:       new fields.SchemaField( {}, {} ),
+        attack:        new fields.SchemaField( {
+          weaponItemStatus: new fields.SetField(
+            new fields.StringField( {
+              required: true,
+              blank:    false,
+              choices:  ITEMS.itemStatus,
+            } ),
+            {
+              required: true,
+              initial:  [],
+            }
+          ),
+          weaponTypes: new fields.SetField(
+            new fields.StringField( {
+              required: true,
+              blank:    false,
+              initial:  "melee",
+              choices:  ITEMS.weaponType,
+            } ),
+            {
+              required: true,
+              initial:  [ "melee", ],
+            },
+          ),
+        } ),
+        damage:        new fields.SchemaField( {
+          combatType: new fields.SetField( new fields.StringField( {
+            required: true,
+            nullable: true,
+            blank:    false,
+            choices:  ITEMS.weaponType,
+          } ), {
+            required: true,
+            initial:  [],
+          } ),
+        }, {} ),
+        effect:        new fields.SchemaField( {}, {} ),
+        initiative:    new fields.SchemaField( {}, {} ),
+        reaction:      new fields.SchemaField( {
+          defenseType: new fields.StringField( {
+            required: true,
+            nullable: true,
+            blank:    true,
+            initial:  "physical",
+            choices:  ACTIONS.targetDifficulty,
+          } ),
+        } ),
+        recovery:      new fields.SchemaField( {}, {} ),
+        spellcasting:  new fields.SchemaField( {}, {} ),
+        threadWeaving: new fields.SchemaField( {
+          castingType: new fields.StringField( {
+            required: false,
+            nullable: true,
+            blank:    false,
+            trim:     true,
+            initial:  null,
+            choices:  MAGIC.spellcastingTypes,
+          } ),
+        }, {} ),
       } ),
     } );
   }

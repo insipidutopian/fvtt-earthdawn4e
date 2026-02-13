@@ -8,11 +8,8 @@ import RollProcessor from "../../../services/roll-processor.mjs";
 import CombatDamageWorkflow from "../../../workflows/workflow/damage-workflow.mjs";
 import AttackWorkflow from "../../../workflows/workflow/attack-workflow.mjs";
 import SiblingDocumentField from "../../fields/sibling-document-field.mjs";
-import * as ACTIONS from "../../../config/actions.mjs";
 import * as ACTORS from "../../../config/actors.mjs";
-import * as ITEMS from "../../../config/items.mjs";
 import * as LEGEND from "../../../config/legend.mjs";
-import * as MAGIC from "../../../config/magic.mjs";
 import * as SYSTEM from "../../../config/system.mjs";
 
 /**
@@ -64,68 +61,6 @@ export default class AbilityTemplate extends ActionTemplate.mixin(
       },
       {
         required: false,
-      } ),
-      rollTypeDetails: new fields.SchemaField( {
-        ability:       new fields.SchemaField( {}, {} ),
-        attack:        new fields.SchemaField( {
-          weaponItemStatus: new fields.SetField(
-            new fields.StringField( {
-              required: true,
-              blank:    false,
-              choices:  ITEMS.itemStatus,
-            } ),
-            {
-              required: true,
-              initial:  [],
-            }
-          ),
-          weaponTypes: new fields.SetField(
-            new fields.StringField( {
-              required: true,
-              blank:    false,
-              initial:  "melee",
-              choices:  ITEMS.weaponType,
-            } ),
-            {
-              required: true,
-              initial:  [ "melee", ],
-            },
-          ),
-        } ),
-        damage:        new fields.SchemaField( {
-          combatType: new fields.SetField( new fields.StringField( {
-            required: true,
-            nullable: true,
-            blank:    false,
-            choices:  ITEMS.weaponType,
-          } ), {
-            required: true,
-            initial:  [],
-          } ),
-        }, {} ),
-        effect:        new fields.SchemaField( {}, {} ),
-        initiative:    new fields.SchemaField( {}, {} ),
-        reaction:      new fields.SchemaField( {
-          defenseType: new fields.StringField( {
-            required: true,
-            nullable: true,
-            blank:    true,
-            initial:  "physical",
-            choices:  ACTIONS.targetDifficulty,
-          } ),
-        } ),
-        recovery:      new fields.SchemaField( {}, {} ),
-        spellcasting:  new fields.SchemaField( {}, {} ),
-        threadWeaving: new fields.SchemaField( {
-          castingType: new fields.StringField( {
-            required: false,
-            nullable: true,
-            blank:    false,
-            trim:     true,
-            initial:  null,
-            choices:  MAGIC.spellcastingTypes,
-          } ),
-        }, {} ),
       } ),
     } );
   }
