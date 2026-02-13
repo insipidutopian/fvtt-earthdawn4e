@@ -11,11 +11,14 @@ import {
 import CharacterGenerationPrompt from "../../applications/actor/character-generation-prompt.mjs";
 import LpTrackingData from "../advancement/lp-tracking.mjs";
 import ActorEd from "../../documents/actor.mjs";
-import ED4E from "../../config/_module.mjs";
 import PromptFactory from "../../applications/global/prompt-factory.mjs";
 import { getSetting } from "../../settings.mjs";
 import DialogEd from "../../applications/api/dialog.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as ACTORS from "../../config/actors.mjs";
+import * as DOCUMENT_DATA from "../../config/document-data.mjs";
+import * as ITEMS from "../../config/items.mjs";
+import * as LEGEND from "../../config/legend.mjs";
 
 const fUtils = foundry.utils;
 
@@ -112,7 +115,7 @@ export default class PcData extends NamegiverTemplate {
    * @type {string[]}
    */
   get _attributeValueKeys() {
-    return Object.keys( ED4E.attributes ).map( key => `system.attributes.${ key }.value` );
+    return Object.keys( ACTORS.attributes ).map( key => `system.attributes.${ key }.value` );
   }
 
   /**
@@ -201,7 +204,7 @@ export default class PcData extends NamegiverTemplate {
       if ( !abilities.find( item => item.system.edid === edidQuestorDevotion ) ) {
 
         let questorDevotion = await getSingleGlobalItemByEdid( edidQuestorDevotion, SYSTEM_TYPES.Item.devotion );
-        questorDevotion ??= await Item.create( ED4E.documentData.Item.devotion.questor );
+        questorDevotion ??= await Item.create( DOCUMENT_DATA.documentData.Item.devotion.questor );
 
         await questorDevotion.update( {
           system: {
@@ -305,7 +308,7 @@ export default class PcData extends NamegiverTemplate {
 
     const attributeEnhanceStep = getAttributeStep( attributeField.value + 1 ) > attributeField.step ? attributeField.step + 1 : attributeField.step;
     const rule = game.settings.get( "ed4e", "lpTrackingAttributes" );
-    const lpCost = onCircleIncrease && rule === "freePerCircle" ? 0 : ED4E.legendPointsCost[currentIncrease + 1 + 4];
+    const lpCost = onCircleIncrease && rule === "freePerCircle" ? 0 : LEGEND.legendPointsCost[currentIncrease + 1 + 4];
     const increaseValidationData = {
       requiredLp:  actor.currentLp >= lpCost,
       maxLevel:    currentIncrease < 3,
@@ -348,9 +351,9 @@ export default class PcData extends NamegiverTemplate {
       {
         amount:      spendLp === "spendLp" ? lpCost : 0,
         entityType:  "attribute",
-        name:        ED4E.attributes[attribute].label,
+        name:        ACTORS.attributes[attribute].label,
         description: game.i18n.format( "ED.Actor.LpTracking.Spendings.attributeIncrease", {
-          name:           ED4E.attributes[attribute].label,
+          name:           ACTORS.attributes[attribute].label,
           timesIncreased: currentIncrease + 1
         } ),
         value:       {
@@ -508,7 +511,7 @@ export default class PcData extends NamegiverTemplate {
     // attribute based
     for ( const defenseType of Object.keys( this.characteristics.defenses ) ) {
       this.characteristics.defenses[defenseType].baseValue = getDefenseValue(
-        this.attributes[ED4E.defenseAttributeMapping[defenseType]].value
+        this.attributes[ACTORS.defenseAttributeMapping[defenseType]].value
       );
     }
 
@@ -633,7 +636,7 @@ export default class PcData extends NamegiverTemplate {
     // relevant items are those with a weight property and are either equipped or carried
     const relevantItems = this.parent.items.filter( item =>
       item.system.hasOwnProperty( "weight" )
-      && ( item.system.itemStatus === "equipped" || item.system.itemStatus === "carried" )
+      && ( ITEMS.carriedLoadRelevantItemStatuses.includes( item.system.itemStatus ) )
     );
 
     const carriedWeight = relevantItems.reduce( ( accumulator, currentItem ) => {

@@ -61,6 +61,20 @@ export const itemStatus = {
 };
 preLocalize( "itemStatus" );
 
+
+/**
+ * A list of item statuses that are relevant to calculating the total carried load for encumbrance.
+ * @type {string[]}
+ */
+export const carriedLoadRelevantItemStatuses = [
+  "carried",
+  "equipped",
+  "mainHand",
+  "offHand",
+  "twoHands",
+  "tail",
+];
+
 /**
  * RecoveryProperty
  * @enum {string}
