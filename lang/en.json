@@ -3586,8 +3586,8 @@
         "spellNotReadyToCast":                    "The spell is not ready to cast. Threads still required.",
         "versatilityTalentLimit":                 "The versatility talent limit has been reached.",
         "warningEffectNoActor":                   "This effect has no actor assigned. Please assign one.",
-        "weaveThreadNoActor":                     "TODO: Add translation",
-        "youAreNotKnockedDown":                   "TODO: Add translation"
+        "weaveThreadNoActor":                     "Could not find an actor to weave the thread",
+        "youAreNotKnockedDown":                   "The character is not knocked down"
       }
     },
     "Rolls": {
@@ -3599,8 +3599,9 @@
       "Modifiers": {
         "bonusDamageFromExtraSuccesses":          "Bonus Damage from Extra Successes",
         "grimoirePenalty":                        "Foreign Grimoire",
+        "jumpUpNoKnockdownPenalty":               "No penalty from knocked down",
         "manual":                                 "Manual Adjustment",
-        "spellEffectOrDamageStepCircle":          "TODO: Add translation",
+        "spellEffectOrDamageStepCircle":          "Circle ({discipline})",
         "stunRecoveryWillpower":                  "Willpower"
       },
       "baseValue":                                "Base Step",
