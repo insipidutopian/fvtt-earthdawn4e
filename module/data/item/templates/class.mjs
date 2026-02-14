@@ -199,7 +199,7 @@ export default class ClassTemplate extends ItemDataModel.mixin(
     // increase all abilities of category "free" to new circle, if lower
     const freeAbilities = this.containingActor.items.filter(
       i => i.system.talentCategory === "free"
-        && i.system.source?.class === this.parent.uuid
+        && i.system.source?.class === this.parent.id
         && i.system.level < nextLevel
     );
     // TODO: check if there are any free abilities already on this level or higher

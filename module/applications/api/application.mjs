@@ -91,6 +91,9 @@ export default class ApplicationEd extends HandlebarsApplicationMixin( Applicati
 
   // region Properties
 
+  /** @type {boolean} */
+  #resolved = false;
+
   /**
    * Stored form data.
    * @type {object|null}
@@ -125,6 +128,19 @@ export default class ApplicationEd extends HandlebarsApplicationMixin( Applicati
     this._data = options.data ?? {};
   }
 
+  // region Life Cycle Events
+
+  /** @inheritDoc */
+  async _preClose( options ) {
+    if ( !this.#resolved ) {
+      this.#resolved = true;
+      this.resolve?.( undefined );
+    }
+    return super._preClose?.( options );
+  }
+
+  // endregion
+
   // region Event Handlers
 
   /**
@@ -133,7 +149,10 @@ export default class ApplicationEd extends HandlebarsApplicationMixin( Applicati
    * @type {ApplicationClickAction}
    */
   static async _cancel( event, target ) {
-    this.resolve?.( undefined );
+    if ( !this.#resolved ) {
+      this.#resolved = true;
+      this.resolve?.( undefined );
+    }
     return this.close();
   }
 
@@ -144,7 +163,10 @@ export default class ApplicationEd extends HandlebarsApplicationMixin( Applicati
    */
   static async _continue( event, target ) {
     this.submit();
-    this.resolve?.( this.data );
+    if ( !this.#resolved ) {
+      this.#resolved = true;
+      this.resolve?.( undefined );
+    }
     return this.close();
   }
 
