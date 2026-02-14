@@ -83,9 +83,9 @@ export default class EdRoll extends Roll {
 
 
   /**
-   * Retrieves the results of all dice rolls.
-   * @returns {Array<number>|undefined} An array of dice roll results if valid, or undefined if the roll
+   * Retrieves the results of all dice rolls or undefined if the roll
    * is not valid or not evaluated.
+   * @type {Array<number>|undefined}
    */
   get diceResults() {
     if ( !this.validEdRoll || !this._evaluated ) return undefined;
