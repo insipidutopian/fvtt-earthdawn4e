@@ -99,7 +99,7 @@ export default class EdRoll extends Roll {
     // more than one die required
     if ( this.numDice < 2 ) return false;
 
-    return this.total === this.numDice;
+    return this.diceResults.every( result => result === 1 );
   }
 
   get isBasicSuccess() {
