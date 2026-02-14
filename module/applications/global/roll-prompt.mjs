@@ -103,10 +103,10 @@ export default class RollPrompt extends ApplicationEd {
   // region Static Methods
 
   /**
-   * Wait for dialog to be resolved.
-   * @param {object} edRollOptions             The roll options that are updated by the prompt.
-   * @param {object} [options]        Options to pass to the constructor.
-   * @returns {Promise<EdRoll|null>}  Created roll instance or `null`.
+   * Wait for the dialog to be resolved.
+   * @param {object} edRollOptions         The roll options that are updated by the prompt.
+   * @param {object} [options]             Options to pass to the constructor.
+   * @returns {Promise<EdRoll|undefined>}  The created roll if successful.
    */
   static waitPrompt( edRollOptions, options = {} ) {
     return new Promise( ( resolve ) => {
