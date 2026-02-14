@@ -1,0 +1,130 @@
+<h1>Fäden und Strukturen</h1>
+<div>
+  <div>
+    <p>In diesem Kapitel werden die Funktionsweisen von magischen Fäden - außerhalb der Spruchzauberei - behandelt.</p>
+  </div>
+  <section>
+    <h2>Strukturen</h2>
+    <div>
+      <p>
+        Das Earthdawn System unterstützt aktuell Wahre Strukturen an Gegenständen und Akteuren. Wahre Strukturen
+        können nur im Bearbeitungs-Modus erstellt werden. Für Akteure kannst du im Tab "Verbindungen" eine Wahre magische
+        Struktur erzeugen. Bei Gegenständen (Ausrüstung, Rüstung, Schilde und Waffen) fügst du sie über den Tab
+        "Wahre Struktur" hinzu.
+      </p>
+      <p>
+        Wahre Strukturen von Gegenständen sind grundsätzlich für Spielende unsichtbar. Die Spielleitung hat die Möglichkeit
+        die Struktur auch für Spielende sichtbar zu machen. Mit dem kleinen "Auge-Symbol"
+        <i class="fa-light fa-xs fa-eye-slash" inert=""></i> an der wahren Struktur schaltest du die Sichtbarkeit aus
+        oder ein. Für alle weiteren Funktionen muss die Wahre Struktur für die Spielenden sichtbar sein.
+      </p>
+    </div>
+    <h3>Grundfunktionen von wahren Strukturen</h3>
+    <div>
+      <p>
+        Wahre Strukturen besitzen drei Grundfunktionen. Artefaktgeschichte, Forschen und Fadenweben. Dafür gibt es je
+        einen Aktionsbutton im Spiel-Modus der entsprechenden Wahren Struktur. Die Funktionen sind aktuell nur dann
+        automatisch unterstützt, wenn der Akteur selbst die entsprechenden Fähigkeiten (Artefaktgeschichte, Forschen
+        und Fadenweben) besitzt.
+      </p>
+      <p>Aktuell wird für Wahre Strukturen von Akteuren nur die Fadenweben Funktion unterstützt.</p>
+      <h4>Artefaktgeschichte</h4>
+      <div>
+        <p>
+          Mit der Artefaktgeschichte-Funktion können Spielende mit dem Talent Artefaktgeschichte die Struktur des
+          Gegenstandes untersuchen. Dafür muss das entsprechende Talent die <code>ed-id</code> für
+          <em lang="en">item-history</em> haben.
+        </p>
+        <p>
+          Bei einer erfolgreichen Probe werden die Anzahl der Ränge (als Tabs) im Gegenstand angezeigt. Pro Erfolg in
+          der Artefaktgeschichte-Probe wird ein Rang der wahren Struktur sichtbar.
+        </p>
+        <p>
+          Ähnlich wie bei der Wahren Struktur selbst ist ein Teil des Ranges aber weiterhin für Spielende unsichtbar
+          (siehe Forschen und Fadenweben).
+        </p>
+      </div>
+      <h4>Forschen</h4>
+      <div>
+        <p>Noch nicht implementiert.</p>
+      </div>
+      <h4>Fadenweben</h4>
+      <div>
+        <p>
+          Die Fadenweben-Funktion ermöglicht es Spielern einen Faden an die wahre Struktur zu weben. Bei einer
+          erfolgreichen Probe entsteht im Tab "Verknüpfungen" ein Eintrag, mit einem Link zu dem Ursprung des Fadens.
+        </p>
+      </div>
+    </div>
+  </section>
+  <section>
+    <h2>Fadengegenstände</h2>
+    <div>
+      <p>
+        Fadengegenstände sind eine mögliche Form von Strukturgegenständen. Sie enthalten die üblichen Werte eines
+        Strukturgegenständes:
+      </p>
+      <ul>
+        <li>Mystische Verteidigung</li>
+        <li>maximale Anzahl der Fäden</li>
+        <li>Stufe</li>
+        <li>Link zu den gewobenen Fäden</li>
+      </ul>
+      <p>Die Ränge haben folgende Optionen:</p>
+      <ul>
+        <li>Schlüsselinformation-Frage</li>
+        <li>Schlüsselinformation-Antwort</li>
+        <li>Tat</li>
+        <li>Effektbeschreibung</li>
+        <li>Earthdawn Active Effect Link</li>
+        <li>Fähigkeits link</li>
+      </ul>
+      <p>
+        Wenn die Artefaktgeschichte-Probe erfolgreich war, werden entsprechend weitere Ränge freigeschaltet. Die
+        Spielenden sehen hier erstmal nur die Frage der erforderlichen Schlüsselinformation.
+      </p>
+      <p>
+        Das Freischalten der Antwort und des Effekts, der Tat und der verlinkten Objekte ist nur durch die Spielleitung
+        möglich.
+      </p>
+      <p>
+        <strong>Hinweis:</strong> Wie viele andere Funktionen im Earthdawn Foundry System stützt sich das System stark
+        auf "Earthdawn Active Effects". Aktuell ist die automatische Zuordnung der Effekte von Wahren Strukturen an die
+        Akteure noch nicht implementiert. Spielleitung und Spielende müssen deshalb die Effekte manuell anlegen oder
+        in der wahren Struktur aktivieren.
+      </p>
+    </div>
+    <h2>Fadenränge steigern</h2>
+    <div>
+      <p>
+        Nachdem ein Faden initial zu einem Gegenstand gewoben wurde, können die Fäden im Editier-Modus im Akteur einfach
+        erhöht werden (siehe <a href="Verbesserungen.html">Verbesserungen</a>).
+      </p>
+    </div>
+  </section>
+  <section>
+    <h2>Gruppenstrukturen</h2>
+    <div>
+      <p>
+        FÜr eine Gruppenstruktur ist ein Gegenstand nötig, der als Fokus für die Fäden der Akteure dient. Erstelle dazu
+        als Spielleitung einen Gegenstand in der Welt. Dann gib allen Spielenden "Besitzer/Owner-Rechte" an diesem
+        Gegenstand, damit sie Fäden zu diesem Gegenstand weben können. Der Gegenstand selbst bleibt in der Welt, kann
+        aber auch jedem Charakter hinzugefügt werden.
+      </p>
+      <p>
+        Wenn der Gegenstand in der Welt bleibt, können alle Charaktere die Fäden zum gleichen Gegenstand weben. Dadurch
+        gibt es eine klare Übersicht und die Verbindung zur Gruppe ist sichtbar.
+      </p>
+      <p>
+        Der Gegenstand sollte Fadenanzahl von mindestens "Anzahl Spielende * 5" besitzen. Das ist notwendig, damit jeder
+        Akteur 5 Fäden zu der Wahren Struktur der Gruppe weben kann (entsprechen den Regeln laut Regelwerk).
+      </p>
+      <p>
+        Gewobene Fäden sind im Tab "Verknüpfungen" zu finden und können auch dort verbessert werden.
+      </p>
+      <p>
+        Ähnlich wie bei Fadengegenständen müssen hier Spielende und Spielleitung auch die Effekte selbst verwalten.
+      </p>
+    </div>
+  </section>
+</div>
