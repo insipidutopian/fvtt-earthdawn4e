@@ -543,6 +543,12 @@
         },
         "allKnockdownTests":                      "Alle Niederschlagsproben"
       },
+      "EarthdawnUnits": {
+        "step":                                   "Stufe",
+        "steps":                                  "Stufen",
+        "target":                                 "Ziel",
+        "targets":                                "Ziele"
+      },
       "Elements": {
         "air":                                    "Luft",
         "airElectric":                            "Elektrizität",

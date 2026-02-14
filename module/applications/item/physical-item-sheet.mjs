@@ -101,9 +101,7 @@ export default class PhysicalItemSheetEd extends ItemSheetEd {
     if ( group !== "truePattern" ) return originalTabsConfig;
 
     // create a tabConfig entry for each thread rank
-    const tabsConfig = {
-      ...this.constructor.TABS[ group ],
-    };
+    const tabsConfig = structuredClone( this.constructor.TABS[ group ] );
     const threadRanks = Object.values( this.document.system.truePattern?.threadItemLevels ?? {} );
     const threadRankTabs = threadRanks.map( levelData => {
       return {
