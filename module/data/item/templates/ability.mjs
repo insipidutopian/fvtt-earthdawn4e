@@ -270,24 +270,16 @@ export default class AbilityTemplate extends ActionTemplate.mixin(
   async rollAttack() {
     if ( !this.isActorEmbedded ) return;
 
-    const whatToDo = await this.containingActor.checkEquippedWeapons( this );
-    if ( !whatToDo ) throw new Error( "No action to take! Something's messed up :)" );
+    const weaponData = await this.containingActor.prepareWeaponForAttack( this );
+    if ( !weaponData ) return;
 
-    let weapon = null;
-    if ( whatToDo !== "_unarmed" ) {
-      weapon = whatToDo.uuid ? whatToDo : null;
-      weapon ??= await this[whatToDo]();
-      if ( !weapon ) {
-        ui.notifications.warn( game.i18n.localize( "ED.Notifications.Warn.noWeaponToAttackWith" ) );
-        return;
-      }
-    }
+    const weapon = weaponData.isUnarmed ? undefined : weaponData.weapon;
 
     const attackWorkflow = new AttackWorkflow(
       this.containingActor,
       {
         attackAbility: this.parentDocument,
-        weapon:        weapon ?? undefined,
+        weapon,
       },
     );
 

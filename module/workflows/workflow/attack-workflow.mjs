@@ -6,7 +6,7 @@ import Rollable from "./rollable.mjs";
 
 /**
  * @typedef {object} AttackWorkflowOptions
- * @property {"tail"|"unarmed"|"weapon"} [attackType] The type of attack being performed. Defaults to "unarmed", if no
+ * @property {"tail"|"unarmed"|"weapon"|"melee"|"missile"|"thrown"} [attackType] The type of attack being performed. Defaults to "unarmed", if no
  * weapon is provided.
  * @property {ItemEd} [weapon] The weapon being used for the attack.
  * @property {ItemEd} [attackAbility] The ability used for the attack. Can be omitted to have it determined from
@@ -55,9 +55,16 @@ export default class AttackWorkflow extends Rollable( ActorWorkflow ) {
     const weaponStatus = this._attackType === "tail"
       ? [ "tail" ]
       : [ "mainHand", "offHand", "twoHands" ];
-    let weapon = this._actor.itemTypes.weapon.find( item => weaponStatus.includes( item.system.itemStatus ) );
 
-    if ( !weapon && this._attackType !== "tail" ) weapon = this._actor.drawWeapon();
+    const isSpecificWeaponType = [ "melee", "missile", "thrown" ].includes( this._attackType );
+
+    let weapon = this._actor.itemTypes.weapon.find( item => {
+      const statusMatch = weaponStatus.includes( item.system.itemStatus );
+      const typeMatch = !isSpecificWeaponType || item.system.weaponType === this._attackType;
+      return statusMatch && typeMatch;
+    } );
+
+    if ( !weapon && this._attackType !== "tail" ) weapon = await this._actor.drawWeapon();
     if ( !weapon ) throw new WorkflowInterruptError(
       this,
       game.i18n.localize( "ED.Notifications.Warn.attackNoWeaponFound" ),
