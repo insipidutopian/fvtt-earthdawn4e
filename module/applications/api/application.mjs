@@ -165,7 +165,7 @@ export default class ApplicationEd extends HandlebarsApplicationMixin( Applicati
     this.submit();
     if ( !this.#resolved ) {
       this.#resolved = true;
-      this.resolve?.( undefined );
+      this.resolve?.( this.data );
     }
     return this.close();
   }
