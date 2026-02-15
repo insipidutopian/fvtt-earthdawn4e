@@ -187,19 +187,20 @@ export default class MatrixTemplate extends SystemDataModel {
    */
   _prepareMatrixData( data ) {
     const edidMatrix = getSetting( "edidSpellMatrix" );
+    const isBecoming = this._isBecomingMatrix( data, edidMatrix );
+    const isLosing = this._isLosingMatrix( data, edidMatrix );
 
-    if ( !this._isLosingMatrix( data, edidMatrix ) ) {
-      this._prepareMatrixLevel( data );
-    }
-
-    this._prepareActiveSpell( data );
-
-    if ( this._isBecomingMatrix( data, edidMatrix ) ) {
+    if ( isBecoming ) {
       this._setDefaultMatrixData( data );
-    } else if ( this._isLosingMatrix( data, edidMatrix ) ) {
+    } else if ( isLosing ) {
       this._clearMatrixData( data );
     } else if ( this._isMatrixTypeChanging( data ) ) {
       this._updateMatrixTypeData( data );
+    }
+
+    if ( !isLosing && ( this.hasMatrix || isBecoming ) ) {
+      this._prepareMatrixLevel( data );
+      this._prepareActiveSpell( data );
     }
 
     return data;
@@ -210,17 +211,23 @@ export default class MatrixTemplate extends SystemDataModel {
    * @param {object} data The data to prepare, see {@link _preCreate} and {@link _preUpdate}.
    */
   _prepareActiveSpell( data ) {
-    const hasOnlyOneNonActiveSpell = !this.matrixHasMultipleSpells && this.matrixSpellId && !this.matrix.activeSpell;
-    const hasMissingActiveSpell = this.matrix?.activeSpell && !this.matrix?.spells?.has( this.matrix.activeSpell );
+    const spells = foundry.utils.getProperty( data, "system.matrix.spells" ) ?? this.matrix?.spells;
+    let activeSpell = foundry.utils.getProperty( data, "system.matrix.activeSpell" );
+    if ( activeSpell === undefined ) activeSpell = this.matrix?.activeSpell;
 
-    if ( hasOnlyOneNonActiveSpell ) {
-      // If the matrix has only one spell attuned, only that one can be active
-      data.system.matrix ??= {};
-      data.system.matrix.activeSpell = this.matrixSpellId;
-    } else if ( hasMissingActiveSpell ) {
-      // If the active spell is not in the list of spells, reset it
-      data.system.matrix ??= {};
-      data.system.matrix.activeSpell = null;
+    const spellSet = spells instanceof Set ? spells : new Set( spells || [] );
+    const numSpells = spellSet.size;
+
+    // If the active spell is not in the list of spells, reset it
+    if ( activeSpell && !spellSet.has( activeSpell ) ) {
+      activeSpell = null;
+      foundry.utils.setProperty( data, "system.matrix.activeSpell", null );
+    }
+
+    // If the matrix has only one spell attuned and no active spell is set, make it active
+    if ( ( numSpells === 1 ) && !activeSpell ) {
+      const firstSpellId = spellSet.first?.() || Array.from( spellSet )[ 0 ] || null;
+      foundry.utils.setProperty( data, "system.matrix.activeSpell", firstSpellId );
     }
   }
 
@@ -229,9 +236,10 @@ export default class MatrixTemplate extends SystemDataModel {
    * @param {object} data The data to prepare, see {@link _preCreate} and {@link _preUpdate}.
    */
   _prepareMatrixLevel( data ) {
-    const parentLevel = data.system?.level;
-    if ( foundry.utils.getType( parentLevel ) === "number" && data.system?.matrix )
-      data.system.matrix.level = parentLevel;
+    const parentLevel = foundry.utils.getProperty( data, "system.level" );
+    if ( foundry.utils.getType( parentLevel ) === "number" ) {
+      foundry.utils.setProperty( data, "system.matrix.level", parentLevel );
+    }
   }
 
   /**
@@ -241,7 +249,8 @@ export default class MatrixTemplate extends SystemDataModel {
    * @returns {boolean} True if the item is becoming a matrix, false otherwise.
    */
   _isBecomingMatrix( data, edidMatrix ) {
-    return data.system?.edid === edidMatrix && this.edid !== edidMatrix;
+    const newEdid = foundry.utils.getProperty( data, "system.edid" );
+    return newEdid === edidMatrix && this.edid !== edidMatrix;
   }
 
   /**
@@ -249,7 +258,8 @@ export default class MatrixTemplate extends SystemDataModel {
    * @param {object} data The data to set, see {@link _preCreate} and {@link _preUpdate}.
    */
   _setDefaultMatrixData( data ) {
-    data.system.matrix ??= {
+    const matrixData = foundry.utils.getProperty( data, "system.matrix" ) || {};
+    foundry.utils.setProperty( data, "system.matrix", foundry.utils.mergeObject( {
       matrixType:  "standard",
       deathRating: this._lookupMatrixDeathRating(),
       threads:     {
@@ -258,7 +268,7 @@ export default class MatrixTemplate extends SystemDataModel {
           max:   this._lookupMatrixMaxHoldThread(),
         },
       },
-    };
+    }, matrixData ) );
   }
 
   /**
@@ -268,10 +278,11 @@ export default class MatrixTemplate extends SystemDataModel {
    * @returns {boolean} True if the item is losing its matrix status, false otherwise.
    */
   _isLosingMatrix( data, edidMatrix ) {
+    const newEdid = foundry.utils.getProperty( data, "system.edid" );
     return (
       this.edid === edidMatrix
-      && typeof data.system?.edid === "string"
-      && data.system?.edid !== edidMatrix
+      && typeof newEdid === "string"
+      && newEdid !== edidMatrix
     );
   }
 
@@ -280,7 +291,7 @@ export default class MatrixTemplate extends SystemDataModel {
    * @param {object} data The data to clear, see {@link _preCreate} and {@link _preUpdate}.
    */
   _clearMatrixData( data ) {
-    data.system.matrix = null;
+    foundry.utils.setProperty( data, "system.matrix", null );
   }
 
   /**
@@ -289,9 +300,11 @@ export default class MatrixTemplate extends SystemDataModel {
    * @returns {boolean} True if the matrix type is changing, false otherwise.
    */
   _isMatrixTypeChanging( data ) {
+    const newType = foundry.utils.getProperty( data, "system.matrix.matrixType" );
     return (
-      String( data.system?.matrix?.matrixType ) !== String( this.matrix?.matrixType )
-      && data.system?.matrix?.matrixType in MAGIC.matrixTypes
+      newType !== undefined
+      && String( newType ) !== String( this.matrix?.matrixType )
+      && newType in MAGIC.matrixTypes
     );
   }
 
@@ -300,10 +313,10 @@ export default class MatrixTemplate extends SystemDataModel {
    * @param {object} data The data to update, see {@link _preCreate} and {@link _preUpdate}.
    */
   _updateMatrixTypeData( data ) {
-    const matrixType = data.system?.matrix?.matrixType;
-    data.system.matrix.deathRating = this._lookupMatrixDeathRating( matrixType );
-    data.system.matrix.threads.hold.value = this._lookupMatrixMaxHoldThread( matrixType );
-    data.system.matrix.threads.hold.max = this._lookupMatrixMaxHoldThread( matrixType );
+    const matrixType = foundry.utils.getProperty( data, "system.matrix.matrixType" );
+    foundry.utils.setProperty( data, "system.matrix.deathRating", this._lookupMatrixDeathRating( matrixType ) );
+    foundry.utils.setProperty( data, "system.matrix.threads.hold.value", this._lookupMatrixMaxHoldThread( matrixType ) );
+    foundry.utils.setProperty( data, "system.matrix.threads.hold.max", this._lookupMatrixMaxHoldThread( matrixType ) );
   }
 
   // endregion
@@ -392,10 +405,11 @@ export default class MatrixTemplate extends SystemDataModel {
 
   /**
    * Remove the given spells from the matrix, or all if none are given
-   * @param {string[]} [spellsToRemove] The IDs of the spells to remove, or undefined, empty or null to remove all.
+   * @param {string[]} [spellsToRemove] The IDs of the spells to remove, or undefined, empty, or null to remove all.
    * @returns {Promise<Document | undefined>} The updated matrix item, or undefined if not updated
    */
   async removeSpells( spellsToRemove ) {
+    if ( !this.matrix?.spells ) return;
     const removeList = Array.from( spellsToRemove || this.matrix.spells );
     const newSpells = this.matrix.spells.filter( spell => !removeList.includes( spell ) );
     return this.parent?.update( {
@@ -418,8 +432,8 @@ export default class MatrixTemplate extends SystemDataModel {
    * @returns {Promise<Document|null>} The active spell document, or null if no active spell could be set.
    */
   async getActiveSpell() {
-    if ( !this.matrix.activeSpell ) await this.selectActiveSpell();
-    return this.containingActor?.items.get( this.matrix.activeSpell );
+    if ( !this.matrix?.activeSpell ) await this.selectActiveSpell();
+    return this.containingActor?.items.get( this.matrix?.activeSpell );
   }
 
   /**
