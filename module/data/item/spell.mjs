@@ -518,6 +518,8 @@ export default class SpellData extends ItemDataModel.mixin(
         rollData: caster.getRollData(),
       },
     );
+    if ( !roll ) return;
+
     await roll.toMessage();
 
     await this.parent.update( {
@@ -610,6 +612,7 @@ export default class SpellData extends ItemDataModel.mixin(
           rollData: caster.getRollData(),
         },
       );
+      if ( !roll ) return;
       await roll.toMessage();
 
       if ( roll?.numSuccesses > 0 ) {
