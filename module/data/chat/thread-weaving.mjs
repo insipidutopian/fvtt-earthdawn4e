@@ -45,7 +45,8 @@ export default class ThreadWeavingMessageData extends BaseMessageData {
 
   static DEFAULT_OPTIONS = {
     actions: {
-      castSpell:   this._onCastSpell,
+      castSpell:       this._onCastSpell,
+      continueWeaving: this._onCastSpell,
     },
   };
 
@@ -99,21 +100,20 @@ export default class ThreadWeavingMessageData extends BaseMessageData {
     await this.caster.castSpell(
       spell,
       {
-        castingMethod,
-        matrix,
-        grimoire,
+        workflowOptions: { castingMethod, matrix, grimoire, },
       },
     );
   }
 
   async _prepareSpell() {
     const spell = this.spell;
+    const extraThreads = this.extraThreads || [];
     if ( spell.system.threads.woven !== this.numThreadsWoven ) {
       return spell.update( {
         system: {
           "isWeaving":     true,
           "threads.woven": this.numThreadsWoven,
-          "threads.extra": this.extraThreads || [],
+          "threads.extra": { ...extraThreads },
         },
       },
       );

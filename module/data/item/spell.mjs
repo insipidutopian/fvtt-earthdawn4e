@@ -687,7 +687,7 @@ export default class SpellData extends ItemDataModel.mixin(
         matrix:          matrix?.uuid ?? null,
         grimoire:        grimoire?.uuid ?? null,
         numThreadsWoven: templateData.threads.woven.total,
-        extraThreads:    templateData.spell.system.threads.extra,
+        extraThreads:    { ...templateData.spell.system.threads.extra },
       }
     } );
 

@@ -205,7 +205,7 @@ export default class ActorSheetEdSentient extends ActorSheetEd {
       throw new Error( "Could not find spell UUID in cast spell action. This shouldn't happen :(" );
     }
 
-    await this.document.castSpell( spell );
+    await this.document.castSpell( spell, { resetSpell: true } );
   }
 
   /**

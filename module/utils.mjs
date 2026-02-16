@@ -924,6 +924,7 @@ export async function preloadHandlebarsTemplates() {
     "systems/ed4e/templates/chat/chat-buttons/apply-damage.hbs",
     "systems/ed4e/templates/chat/chat-buttons/assign-effect.hbs",
     "systems/ed4e/templates/chat/chat-buttons/cast-spell.hbs",
+    "systems/ed4e/templates/chat/chat-buttons/continue-weaving.hbs",
     "systems/ed4e/templates/chat/chat-buttons/roll-damage.hbs",
     "systems/ed4e/templates/chat/chat-buttons/roll-effect.hbs",
     "systems/ed4e/templates/chat/chat-buttons/run-macro.hbs",

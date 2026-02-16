@@ -943,11 +943,21 @@ export default class ActorEd extends Actor {
   /**
    * Cast a spell using the spellcasting workflow.
    * @param {ItemEd} spell - The spell to cast.
-   * @param {object} [workflowOptions] - Additional options for the spellcasting workflow.
+   * @param {object} [options] - Additional options for casting the spell.
+   * @param {object} [options.workflowOptions] - Additional options for the spellcasting workflow.
    * See {@link SpellcastingWorkflow} for details.
+   * @param {boolean} [options.resetSpell] - Whether to reset the spell state before starting the spellcasting
+   * workflow, that is, reset weaving status, woven, and extra threads.
    * @returns {Promise<*>} A promise that resolves when the spellcasting workflow execution is complete.
    */
-  async castSpell( spell, workflowOptions = {} ) {
+  async castSpell(
+    spell,
+    options = {
+      resetSpell:      false,
+      workflowOptions: {},
+    }
+  ) {
+    if ( options.resetSpell === true ) await spell.system.stopWeaving();
     const castingWorkflow = new SpellcastingWorkflow(
       this,
       foundry.utils.mergeObject(
@@ -955,7 +965,7 @@ export default class ActorEd extends Actor {
           spell,
           stopOnWeaving: false,
         },
-        workflowOptions,
+        options.workflowOptions,
       ),
     );
 

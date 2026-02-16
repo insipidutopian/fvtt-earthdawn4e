@@ -276,7 +276,7 @@ export default class PhysicalItemSheetEd extends ItemSheetEd {
       return;
     }
 
-    await actor.castSpell( spell );
+    await actor.castSpell( spell, { resetSpell: true } );
   }
 
   /**
