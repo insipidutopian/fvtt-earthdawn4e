@@ -14,8 +14,9 @@ export default class ThreadWeavingMessageData extends BaseMessageData {
         blank:    false,
         choices:  Object.keys( SpellcastingWorkflow.CASTING_WORKFLOW_TYPES ),
       } ),
-      matrix:   new fields.DocumentUUIDField(),
-      grimoire: new fields.DocumentUUIDField(),
+      matrix:           new fields.DocumentUUIDField(),
+      grimoire:         new fields.DocumentUUIDField(),
+      hasSpellBeenCast: new fields.BooleanField( { required: false, default: false } ),
     } );
   }
 
@@ -72,7 +73,18 @@ export default class ThreadWeavingMessageData extends BaseMessageData {
   static async _onCastSpell( event, button ) {
     event.preventDefault();
 
-    await this.caster.castSpell( this.spell );
+    const castingMethod = this.castingMethod;
+    const matrix = await fromUuid( this.matrix );
+    const grimoire = await fromUuid( this.grimoire );
+
+    await this.caster.castSpell(
+      this.spell,
+      {
+        castingMethod,
+        matrix,
+        grimoire,
+      },
+    );
   }
 
   // endregion

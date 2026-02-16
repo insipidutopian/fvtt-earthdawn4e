@@ -943,15 +943,20 @@ export default class ActorEd extends Actor {
   /**
    * Cast a spell using the spellcasting workflow.
    * @param {ItemEd} spell - The spell to cast.
+   * @param {object} [workflowOptions] - Additional options for the spellcasting workflow.
+   * See {@link SpellcastingWorkflow} for details.
    * @returns {Promise<*>} A promise that resolves when the spellcasting workflow execution is complete.
    */
-  async castSpell( spell ) {
+  async castSpell( spell, workflowOptions = {} ) {
     const castingWorkflow = new SpellcastingWorkflow(
       this,
-      {
-        spell,
-        stopOnWeaving: false,
-      }
+      foundry.utils.mergeObject(
+        {
+          spell,
+          stopOnWeaving: false,
+        },
+        workflowOptions,
+      ),
     );
 
     return castingWorkflow.execute();
