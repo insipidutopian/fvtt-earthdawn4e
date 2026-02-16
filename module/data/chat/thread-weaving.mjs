@@ -16,7 +16,10 @@ export default class ThreadWeavingMessageData extends BaseMessageData {
       } ),
       matrix:           new fields.DocumentUUIDField(),
       grimoire:         new fields.DocumentUUIDField(),
-      hasSpellBeenCast: new fields.BooleanField( { required: false, default: false } ),
+      numThreadsWoven: new fields.NumberField( {
+        min:     0,
+        integer: true,
+      } )
     } );
   }
 

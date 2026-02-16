@@ -678,11 +678,15 @@ export default class SpellData extends ItemDataModel.mixin(
     );
     if ( !roll ) return;
 
+    await roll.evaluate();
+    const templateData = await roll.getFlavorTemplateData();
+
     await roll?.toMessage?.( {
       system: {
         castingMethod,
-        matrix:   matrix?.uuid ?? null,
-        grimoire: grimoire?.uuid ?? null,
+        matrix:          matrix?.uuid ?? null,
+        grimoire:        grimoire?.uuid ?? null,
+        numThreadsWoven: templateData.threads.woven.total,
       }
     } );
 
