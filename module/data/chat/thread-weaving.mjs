@@ -1,6 +1,7 @@
 import BaseMessageData from "./base-message.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
 import SpellcastingWorkflow from "../../workflows/workflow/spellcasting-workflow.mjs";
+import { MetricData } from "../common/metrics.mjs";
 
 export default class ThreadWeavingMessageData extends BaseMessageData {
 
@@ -19,7 +20,16 @@ export default class ThreadWeavingMessageData extends BaseMessageData {
       numThreadsWoven: new fields.NumberField( {
         min:     0,
         integer: true,
-      } )
+      } ),
+      extraThreads: new fields.TypedObjectField(
+        new fields.TypedSchemaField( MetricData.TYPES, {
+        } ),
+        {
+          required: true,
+          nullable: true,
+          initial:  null,
+        }
+      ),
     } );
   }
 
@@ -99,7 +109,14 @@ export default class ThreadWeavingMessageData extends BaseMessageData {
   async _prepareSpell() {
     const spell = this.spell;
     if ( spell.system.threads.woven !== this.numThreadsWoven ) {
-      return spell.update( { "system.threads.woven": this.numThreadsWoven} );
+      return spell.update( {
+        system: {
+          "isWeaving":     true,
+          "threads.woven": this.numThreadsWoven,
+          "threads.extra": this.extraThreads || [],
+        },
+      },
+      );
     }
     return spell;
   }
