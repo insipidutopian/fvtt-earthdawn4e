@@ -1,12 +1,22 @@
 import BaseMessageData from "./base-message.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import SpellcastingWorkflow from "../../workflows/workflow/spellcasting-workflow.mjs";
 
 export default class ThreadWeavingMessageData extends BaseMessageData {
 
   // region Schema
 
   static defineSchema() {
-    return this.mergeSchema( super.defineSchema(), {} );
+    const fields = foundry.data.fields;
+    return this.mergeSchema( super.defineSchema(), {
+      castingMethod: new fields.StringField( {
+        required: false,
+        blank:    false,
+        choices:  Object.keys( SpellcastingWorkflow.CASTING_WORKFLOW_TYPES ),
+      } ),
+      matrix:   new fields.DocumentUUIDField(),
+      grimoire: new fields.DocumentUUIDField(),
+    } );
   }
 
   // endregion
