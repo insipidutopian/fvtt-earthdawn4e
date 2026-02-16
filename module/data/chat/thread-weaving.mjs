@@ -73,6 +73,10 @@ export default class ThreadWeavingMessageData extends BaseMessageData {
 
   // region Event Handlers
 
+  /**
+   * @type {ApplicationClickAction}
+   * @this {ThreadWeavingMessageData}
+   */
   static async _onCastSpell( event, button ) {
     event.preventDefault();
 
@@ -80,14 +84,24 @@ export default class ThreadWeavingMessageData extends BaseMessageData {
     const matrix = await fromUuid( this.matrix );
     const grimoire = await fromUuid( this.grimoire );
 
+    const spell = await this._prepareSpell();
+
     await this.caster.castSpell(
-      this.spell,
+      spell,
       {
         castingMethod,
         matrix,
         grimoire,
       },
     );
+  }
+
+  async _prepareSpell() {
+    const spell = this.spell;
+    if ( spell.system.threads.woven !== this.numThreadsWoven ) {
+      return spell.update( { "system.threads.woven": this.numThreadsWoven} );
+    }
+    return spell;
   }
 
   // endregion
