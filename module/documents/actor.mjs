@@ -287,9 +287,10 @@ export default class ActorEd extends Actor {
    * @returns {boolean} Returns `true` if the character needs a knockdown test, otherwise `false`.
    */
   needsKnockdownTest( damageTaken, isStrain = false ) {
-    const knockdownBlockingStatuses = [ "knockedDown", "unconscious", "dead" ];
+    const isAlreadyKnockedDown = this.statuses.has( "knockedDown" );
+    const blocking = isAlreadyKnockedDown || this.system.isDead || this.system.isUnconscious;
 
-    return !knockdownBlockingStatuses.some( status => this.statuses.has( status ) )
+    return !blocking
     && damageTaken >= this.system.characteristics.health.woundThreshold + 5
     && !isStrain;
   }
