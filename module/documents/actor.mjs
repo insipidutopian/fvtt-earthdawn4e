@@ -279,6 +279,22 @@ export default class ActorEd extends Actor {
     }
   }
 
+  /**
+   * Determines if the character needs to make a knockdown test based on the damage taken,
+   * current statuses, and whether the damage type is strain.
+   * @param {number} damageTaken - The amount of damage the character has taken.
+   * @param {boolean} [isStrain] - Indicates if the damage taken is strain damage.
+   * @returns {boolean} Returns `true` if the character needs a knockdown test, otherwise `false`.
+   */
+  needsKnockdownTest( damageTaken, isStrain = false ) {
+    const isAlreadyKnockedDown = this.statuses.has( "knockedDown" );
+    const blocking = isAlreadyKnockedDown || this.system.isDead || this.system.isUnconscious;
+
+    return !blocking
+    && damageTaken >= this.system.characteristics.health.woundThreshold + 5
+    && !isStrain;
+  }
+
   // endregion
 
   // region Active Effects
@@ -586,7 +602,7 @@ export default class ActorEd extends Actor {
       amount:  damageTaken,
     } );
 
-    let messageData = {
+    const messageData = {
       user:    game.user._id,
       speaker: ChatMessage.getSpeaker( { actor: this.actor } ),
       content: chatFlavor
@@ -595,12 +611,12 @@ export default class ActorEd extends Actor {
       await ChatMessage.create( messageData );
     }
 
-    const knockdownTest = !this.statuses.has( "knockedDown" ) && damageTaken >= health.woundThreshold + 5 && !options.isStrain;
-    if ( knockdownTest ) await this.knockdownTest( damageTaken );
+    const knockdownTestNeeded = this.needsKnockdownTest( damageTaken, options.isStrain );
+    if ( knockdownTestNeeded ) await this.knockdownTest( damageTaken );
 
     return {
       damageTaken,
-      knockdownTest,
+      knockdownTest: knockdownTestNeeded,
     };
   }
 
@@ -638,10 +654,9 @@ export default class ActorEd extends Actor {
    * @returns {Promise<ItemEd|undefined>} The knockdown ability item, or undefined if none was found.
    */
   async knockdownAbility() {
-    const knockdownAbility = await fromUuid(
+    return await fromUuid(
       await this.getPrompt( "knockdown" )
     );
-    return knockdownAbility;
   }
 
   /**
@@ -651,11 +666,17 @@ export default class ActorEd extends Actor {
    * @returns {Promise<EdRoll|null>} The result of the knockdown test roll, or null if the test was not performed.
    */
   async knockdownTest( damageTaken, options = {} ) {
+    const workflowOptions = foundry.utils.mergeObject(
+      options,
+      { damageTaken },
+      {
+        overwrite: true,
+        inplace:   false,
+      }
+    );
     const knockdownWorkflow = new KnockdownWorkflow(
       this,
-      {
-        damageTaken
-      },
+      workflowOptions,
     );
     return knockdownWorkflow.execute();
   }
