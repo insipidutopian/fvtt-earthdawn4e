@@ -1,6 +1,7 @@
 import EdRollOptions from "./common.mjs";
 import { getSetting } from "../../settings.mjs";
 import { createContentAnchor } from "../../utils.mjs";
+import * as STATUSES from "../../config/statuses.mjs";
 
 /**
  * Roll options for jump up tests.
@@ -77,16 +78,29 @@ export default class JumpUpRollOptions extends EdRollOptions {
   /** @inheritDoc */
   static _prepareStepData( data ) {
     const jumpUpAbility = data.jumpUpAbility ?? fromUuidSync( data.jumpUpAbilityUuid );
-    if ( jumpUpAbility ) {
-      return {
-        base:      jumpUpAbility.system.rankFinal,
-      };
-    }
-
     const actor = data.actor ?? fromUuidSync( data.rollingActorUuid );
+
+    const modifiers = {};
+    if ( actor.statuses.has( "knockedDown" ) ) {
+      modifiers[
+        game.i18n.localize( "ED.Rolls.Modifiers.jumpUpNoKnockdownPenalty" )
+      ] = -this.#getKnockedDownModifier();
+    }
     return {
-      base:      actor.system.attributes.dex.step,
+      base:      jumpUpAbility?.system.rankFinal ?? actor.system.attributes.dex.step,
+      modifiers,
     };
+  }
+
+
+  /**
+   * Retrieves the modifier applied when the knockedDown status condition is active.
+   * @returns {number} The step modifier for the knockedDown condition.
+   */
+  static #getKnockedDownModifier() {
+    return STATUSES.STATUS_CONDITIONS.knockedDown.changes.find(
+      change => change.key === "system.globalBonuses.allTests.value"
+    ).value;
   }
 
   /** @inheritDoc */

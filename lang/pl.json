@@ -3599,6 +3599,7 @@
       "Modifiers": {
         "bonusDamageFromExtraSuccesses":          "TODO: Add translation",
         "grimoirePenalty":                        "TODO: Add translation",
+        "jumpUpNoKnockdownPenalty":               "TODO: Add translation",
         "manual":                                 "TODO: Add translation",
         "spellEffectOrDamageStepCircle":          "TODO: Add translation",
         "stunRecoveryWillpower":                  "TODO: Add translation"
