@@ -270,26 +270,16 @@ export default class AbilityTemplate extends ActionTemplate.mixin(
   async rollAttack() {
     if ( !this.isActorEmbedded ) return;
 
-    const equippedWeapons = this.containingActor.equippedWeapons;
+    const weaponData = await this.containingActor.prepareWeaponForAttack( this );
+    if ( !weaponData ) return;
 
-    const whatToDo = this._checkEquippedWeapons( equippedWeapons );
-    if ( !whatToDo ) throw new Error( "No action to take! Something's messed up :)" );
-
-    let weapon = null;
-    if ( whatToDo !== "_unarmed" ) {
-      weapon = whatToDo.uuid ? whatToDo : null;
-      weapon ??= await this[whatToDo]();
-      if ( !weapon ) {
-        ui.notifications.warn( game.i18n.localize( "ED.Notifications.Warn.noWeaponToAttackWith" ) );
-        return;
-      }
-    }
+    const weapon = weaponData.isUnarmed ? undefined : weaponData.weapon;
 
     const attackWorkflow = new AttackWorkflow(
       this.containingActor,
       {
         attackAbility: this.parentDocument,
-        weapon:        weapon ?? undefined,
+        weapon,
       },
     );
 
@@ -312,41 +302,6 @@ export default class AbilityTemplate extends ActionTemplate.mixin(
 
   async _attack() {
     return true;
-  }
-
-  async _drawWeapon() {
-    return this.containingActor.drawWeapon();
-  }
-
-  async _switchWeapon() {
-    return this.containingActor.switchWeapon();
-  }
-
-  /**
-   * Check if the character has the required weapon with the correct type equipped.
-   * @param {ItemEd[]} equippedWeapons - An array of weapon items equipped by the character.
-   * @returns {string} - The action to take or an empty string (which should not happen!).
-   * @protected
-   */
-  _checkEquippedWeapons( equippedWeapons ) {
-
-    const attackWeaponTypes = this.rollTypeDetails.attack.weaponTypes;
-    if ( attackWeaponTypes.has( "unarmed" ) ) return "_unarmed";
-
-    const requiredWeaponStatus = this.rollTypeDetails.attack.weaponItemStatus;
-    const requiredWeaponTypes = attackWeaponTypes;
-
-    const weaponByStatus = equippedWeapons.find( weapon => requiredWeaponStatus.has( weapon.system.itemStatus ) );
-    const weaponByType = equippedWeapons.find( weapon => requiredWeaponTypes.has( weapon.system.weaponType ) );
-
-    if (
-      // we need to check for the weapon  itself before comparing the uuids
-      // otherwise if both are null, the comparison will return true
-      weaponByStatus && weaponByType
-      && ( weaponByStatus.uuid === weaponByType.uuid )
-    ) return weaponByStatus;
-    if ( !weaponByStatus && weaponByType ) return "_switchWeapon";
-    return "_drawWeapon";
   }
 
   // endregion
