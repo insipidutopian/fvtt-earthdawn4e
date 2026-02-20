@@ -1,6 +1,7 @@
 import ActorSheetEd from "./common-sheet.mjs";
 import { MAGIC, STATUSES } from "../../config/_module.mjs";
 import { staticStatusId } from "../../utils.mjs";
+import PromptFactory from "../global/prompt-factory.mjs";
 
 
 /**
@@ -201,11 +202,9 @@ export default class ActorSheetEdSentient extends ActorSheetEd {
     const li = target.closest( "div.action-zone.cast-zone" );
     const spell = await fromUuid( li?.dataset?.uuid );
 
-    if ( !spell ) {
-      throw new Error( "Could not find spell UUID in cast spell action. This shouldn't happen :(" );
-    }
-
-    await this.document.castSpell( spell, { resetSpell: true } );
+    const continueWeaving = await PromptFactory.fromDocument( spell ).getPrompt( "continueWeavingSpell" );
+    if ( continueWeaving === null ) return;
+    await this.document.castSpell( spell, { resetSpell: continueWeaving === false } );
   }
 
   /**
