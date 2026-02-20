@@ -114,7 +114,7 @@ export default class ItemDataModel extends SystemDataModel {
    */
   async richTooltip( enrichmentOptions = {} ) {
     return {
-      content: await renderTemplate(
+      content: await foundry.applications.handlebars.renderTemplate(
         this.constructor.ITEM_TOOLTIP_TEMPLATE, await this.getCardData( enrichmentOptions )
       ),
       classes: [ "earthdawn4e", "earthdawn4e-tooltip", "item-tooltip" ]
