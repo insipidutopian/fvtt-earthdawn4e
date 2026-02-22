@@ -1,12 +1,36 @@
 import BaseMessageData from "./base-message.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import SpellcastingWorkflow from "../../workflows/workflow/spellcasting-workflow.mjs";
+import { MetricData } from "../common/metrics.mjs";
 
 export default class ThreadWeavingMessageData extends BaseMessageData {
 
   // region Schema
 
   static defineSchema() {
-    return this.mergeSchema( super.defineSchema(), {} );
+    const fields = foundry.data.fields;
+    return this.mergeSchema( super.defineSchema(), {
+      castingMethod: new fields.StringField( {
+        required: false,
+        blank:    false,
+        choices:  Object.keys( SpellcastingWorkflow.CASTING_WORKFLOW_TYPES ),
+      } ),
+      matrix:           new fields.DocumentUUIDField(),
+      grimoire:         new fields.DocumentUUIDField(),
+      numThreadsWoven: new fields.NumberField( {
+        min:     0,
+        integer: true,
+      } ),
+      extraThreads: new fields.TypedObjectField(
+        new fields.TypedSchemaField( MetricData.TYPES, {
+        } ),
+        {
+          required: true,
+          nullable: true,
+          initial:  null,
+        }
+      ),
+    } );
   }
 
   // endregion
@@ -21,7 +45,8 @@ export default class ThreadWeavingMessageData extends BaseMessageData {
 
   static DEFAULT_OPTIONS = {
     actions: {
-      castSpell:   this._onCastSpell,
+      castSpell:       this._onCastSpell,
+      continueWeaving: this._onCastSpell,
     },
   };
 
@@ -59,10 +84,41 @@ export default class ThreadWeavingMessageData extends BaseMessageData {
 
   // region Event Handlers
 
+  /**
+   * @type {ApplicationClickAction}
+   * @this {ThreadWeavingMessageData}
+   */
   static async _onCastSpell( event, button ) {
     event.preventDefault();
 
-    await this.caster.castSpell( this.spell );
+    const castingMethod = this.castingMethod;
+    const matrix = await fromUuid( this.matrix );
+    const grimoire = await fromUuid( this.grimoire );
+
+    const spell = await this._prepareSpell();
+
+    await this.caster.castSpell(
+      spell,
+      {
+        workflowOptions: { castingMethod, matrix, grimoire, },
+      },
+    );
+  }
+
+  async _prepareSpell() {
+    const spell = this.spell;
+    const extraThreads = this.extraThreads || [];
+    if ( spell.system.threads.woven !== this.numThreadsWoven ) {
+      return spell.update( {
+        system: {
+          "isWeaving":     true,
+          "threads.woven": this.numThreadsWoven,
+          "threads.extra": { ...extraThreads },
+        },
+      },
+      );
+    }
+    return spell;
   }
 
   // endregion

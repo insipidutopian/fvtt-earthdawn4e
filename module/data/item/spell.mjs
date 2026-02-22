@@ -566,69 +566,152 @@ export default class SpellData extends ItemDataModel.mixin(
    * @returns {Promise<EdRoll|undefined>} Returns the roll made for weaving threads, or undefined if no roll was made.
    */
   async weaveThreads( threadWeavingAbility, options = {} ) {
-    let system = this;
     const { grimoire, matrix } = options;
     const caster = options.caster || this.containingActor;
+    const castingMethod = this._getThreadWeavingCastingMethod( { grimoire, matrix } );
 
     if ( matrix && !matrix?.system?.canWeave() ) {
       ui.notifications.warn( game.i18n.localize( "ED.Notifications.Warn.matrixBrokenCannotWeave" ) );
       return;
     }
 
+    // cspell:disable-next-line
+    // Quote Zhell on Discord: "Embedded data models (of which the TypeDataModel kind of is one) are reinstantiated entirely each update"
+    const system = await this._ensureWeavingInitialized( caster, matrix );
+
+    if ( system.missingThreads <= 0 ) {
+      ui.notifications.info( game.i18n.localize( "ED.Notifications.Info.noWeavingNecessary" ) );
+      return;
+    }
+
+    const roll = await this._rollThreadWeaving(
+      system,
+      threadWeavingAbility,
+      caster,
+      { grimoire, matrix },
+      castingMethod,
+    );
+
+    await this._applyThreadWeavingRollResult( system, roll );
+
+    return roll;
+  }
+
+  /**
+   * Decide which "castingMethod" flag to put onto the chat message.
+   * Matrix takes precedence over grimoire, grimoire over raw.
+   * @param {{grimoire?: ItemEd, matrix?: ItemEd}} params The grimoire or matrix item used in weaving the thread.
+   * @returns {"raw"|"grimoire"|"matrix"} The casting method, depending on whether a grimoire or matrix was used.
+   */
+  _getThreadWeavingCastingMethod( { grimoire, matrix } ) {
+    if ( matrix ) return "matrix";
+    if ( grimoire ) return "grimoire";
+    return "raw";
+  }
+
+  /**
+   * Ensure the spell is put into "weaving" state and extra threads are chosen once.
+   * Returns the *current* (possibly re-instantiated) system model.
+   * @param {ActorEd} caster The actor casting the spell.
+   * @param {ItemEd|undefined} matrix The matrix this spell is attuned to, if any.
+   * @returns {Promise<this>} The up-to-date system data model instance.
+   */
+  async _ensureWeavingInitialized( caster, matrix ) {
+    let system = this;
+
     if ( !this.isWeaving ) {
       const chosenExtraThreads = await SelectExtraThreadsPrompt.waitPrompt( {
         spell:  this.parent,
         caster,
       } );
+
       await this.parent.update( {
         "system.isWeaving":     true,
         "system.threads.extra": chosenExtraThreads || [],
         "system.threads.woven": matrix?.system?.matrix?.threads?.hold?.value || 0,
       } );
+
       // cspell:disable-next-line
       // Quote Zhell on Discord: "Embedded data models (of which the TypeDataModel kind of is one) are reinstantiated entirely each update"
       system = this.parent.system;
     }
 
-    if ( system.missingThreads > 0 ) {
-      const weavingRollOptions = ThreadWeavingRollOptions.fromActor(
-        {
-          spellUuid:          system.parent.uuid,
-          spell:              system.parent,
-          weavingAbilityUuid: threadWeavingAbility.uuid,
-          weavingAbility:     threadWeavingAbility,
-          grimoire,
-          threads:            {
-            required: system.threads.required,
-            extra:    system.numChosenExtraThreads,
-          },
-        },
-        caster,
-      );
+    return system;
+  }
 
-      const roll = await RollPrompt.waitPrompt(
-        weavingRollOptions,
-        {
-          rollData: caster.getRollData(),
-        },
-      );
-      if ( !roll ) return;
-      await roll.toMessage();
+  /**
+   * Execute the roll prompt and send it to chat.
+   * @param {this} system The up-to-date system model
+   * @param {ItemEd} threadWeavingAbility The ability used for weaving threads to this spell.
+   * @param {ActorEd} caster The actor casting the spell.
+   * @param {{grimoire?: ItemEd, matrix?: ItemEd}} sources The grimoire or matrix item used in weaving the thread.
+   * @param {"raw"|"grimoire"|"matrix"} castingMethod The casting method, depending on whether a grimoire or matrix was used.
+   * @returns {Promise<EdRoll|undefined>} Returns the roll made for weaving threads, or undefined if no roll was made.
+   */
+  async _rollThreadWeaving(
+    system,
+    threadWeavingAbility,
+    caster,
+    sources,
+    castingMethod
+  ) {
+    const { grimoire, matrix } = sources;
 
-      if ( roll?.numSuccesses > 0 ) {
-        const wovenThreads = Math.min(
-          system.totalRequiredThreads,
-          system.wovenThreads + roll.numSuccesses
-        );
-        await this.parent.update( {
-          "system.threads.woven": wovenThreads,
-        } );
+    const weavingRollOptions = ThreadWeavingRollOptions.fromActor(
+      {
+        spellUuid:          system.parent.uuid,
+        spell:              system.parent,
+        weavingAbilityUuid: threadWeavingAbility.uuid,
+        weavingAbility:     threadWeavingAbility,
+        grimoire,
+        threads:            {
+          required: system.threads.required,
+          extra:    system.numChosenExtraThreads,
+        },
+      },
+      caster,
+    );
+
+    const roll = await RollPrompt.waitPrompt(
+      weavingRollOptions,
+      { rollData: caster.getRollData() },
+    );
+    if ( !roll ) return;
+
+    await roll.evaluate();
+    const templateData = await roll.getFlavorTemplateData();
+
+    await roll?.toMessage?.( {
+      system: {
+        castingMethod,
+        matrix:          matrix?.uuid ?? null,
+        grimoire:        grimoire?.uuid ?? null,
+        numThreadsWoven: templateData.threads.woven.total,
+        extraThreads:    { ...templateData.spell.system.threads.extra },
       }
+    } );
 
-      return roll;
-    } else {
-      ui.notifications.info( game.i18n.localize( "ED.Notifications.Info.noWeavingNecessary" ) );
-    }
+    return roll;
+  }
+
+  /**
+   * Apply roll successes to woven thread count (capped).
+   * @param {this} system The up-to-date system model
+   * @param {EdRoll|undefined} roll The roll result to apply.
+   * @returns {Promise<ItemEd|undefined>} Returns the updated spell item or undefined if not updated.
+   */
+  async _applyThreadWeavingRollResult( system, roll ) {
+    const successes = roll?.numSuccesses ?? 0;
+    if ( successes <= 0 ) return;
+
+    const wovenThreads = Math.min(
+      system.totalRequiredThreads,
+      system.wovenThreads + successes,
+    );
+
+    return this.parent.update( {
+      "system.threads.woven": wovenThreads,
+    } );
   }
 
   // endregion

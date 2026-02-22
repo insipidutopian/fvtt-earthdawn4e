@@ -266,17 +266,18 @@ export default class PhysicalItemSheetEd extends ItemSheetEd {
   static async _onCastSpell( event, target ) {
     event.preventDefault();
 
-    const spell = await this._getEmbeddedDocument( target );
+    const spell = /** @type {ItemEd} */ await this._getEmbeddedDocument( target );
     const actor = this.document.system.containingActor
       ?? game.user.character
       ?? canvas.tokens.controlled[0]?.actor;
-
     if ( !actor ) {
       ui.notifications.warn( game.i18n.localize( "ED.Notifications.Warn.castSpellNoActor" ) );
       return;
     }
 
-    await actor.castSpell( spell );
+    const continueWeaving = await PromptFactory.fromDocument( spell ).getPrompt( "continueWeavingSpell" );
+    if ( continueWeaving === null ) return;
+    await actor.castSpell( spell, { resetSpell: continueWeaving === false } );
   }
 
   /**

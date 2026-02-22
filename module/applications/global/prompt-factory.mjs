@@ -638,6 +638,7 @@ class ItemPromptFactory extends PromptFactory {
 
   _promptTypeMapping = {
     chooseTier:             this._chooseTierPrompt.bind( this ),
+    continueWeavingSpell:   this._continueWeavingSpell.bind( this ),
     learnKnack:             this._learnKnackPrompt.bind( this ),
     lpIncrease:             this._lpIncreasePrompt.bind( this ),
     learnAbility:           this._learnAbilityPrompt.bind( this ),
@@ -835,6 +836,33 @@ class ItemPromptFactory extends PromptFactory {
       },
       modal:   false,
       buttons,
+    } );
+  }
+
+  async _continueWeavingSpell() {
+    if ( !this.document.system.spellcastingType ) {
+      throw new Error( "Item must be a spell to use this prompt." );
+    }
+
+    if ( this.document.system.isWeaving === false ) return undefined;
+
+    return DialogClass.confirm( {
+      id:          "continue-weaving-spell-prompt",
+      uniqueId:    String( ++foundry.applications.api.ApplicationV2._appId ),
+      classes:     [ "earthdawn4e", "continue-weaving-spell-prompt" ],
+      window:      {
+        title: game.i18n.format( "ED.Dialogs.Title.continueWeavingSpell", {
+          spellName: this.document.name
+        } ),
+        minimizable: false
+      },
+      content: game.i18n.localize( "ED.Dialogs.continueWeavingSpell" ),
+      yes:     {
+        label: "ED.Dialogs.Buttons.continueWeavingSpellYes"
+      },
+      no: {
+        label: "ED.Dialogs.Buttons.continueWeavingSpellNo"
+      }
     } );
   }
 }

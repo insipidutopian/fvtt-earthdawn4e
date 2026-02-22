@@ -93,6 +93,7 @@ export default class SpellcastingWorkflow extends Rollable( ActorWorkflow ) {
   }
 
   async #chooseCastingMethod() {
+    if ( this._spell.system.isWeaving && this._matrix ) this._castingMethod = "matrix";
     if ( this._castingMethod ) return;
     if ( this._isRawCaster ) {
       this._castingMethod = "raw";
