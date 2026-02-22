@@ -81,11 +81,25 @@ export default class EdRoll extends Roll {
     return true;
   }
 
+
+  /**
+   * Retrieves the results of all dice rolls or undefined if the roll
+   * is not valid or not evaluated.
+   * @type {Array<number>|undefined}
+   */
+  get diceResults() {
+    if ( !this.validEdRoll || !this._evaluated ) return undefined;
+    return this.dice.flatMap( diceTerm =>
+      diceTerm.results.map( r => r.result )
+    );
+  }
+
   get isRuleOfOne() {
     if ( !this.validEdRoll || !this._evaluated ) return undefined;
     // more than one die required
     if ( this.numDice < 2 ) return false;
-    return this.total === this.numDice;
+
+    return this.diceResults.every( result => result === 1 );
   }
 
   get isBasicSuccess() {
