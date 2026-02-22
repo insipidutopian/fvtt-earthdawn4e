@@ -161,7 +161,7 @@ export default class BaseConfigSheet extends DocumentSheetMixinEd( DocumentSheet
    * @protected
    */
   async _onDrop( event ) {
-    /* const data = TextEditor.getDragEventData( event );
+    /* const data = foundry.applications.ux.TextEditor.getDragEventData( event );
 
     // Handle different data types
     switch ( data.type ) {

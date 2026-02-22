@@ -178,7 +178,7 @@ export default class DevotionData extends IncreasableAbilityTemplate.mixin(
       `;
     const increaseQuestor = await DialogEd.confirm( {
       rejectClose: false,
-      content:     await TextEditor.enrichHTML( content ),
+      content:     await foundry.applications.ux.TextEditor.enrichHTML( content ),
     } );
     if ( increaseQuestor && !(
       await questorItem.update( { "system.level": updatedDevotion.system.level } )
