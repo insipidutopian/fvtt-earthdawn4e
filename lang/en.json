@@ -2057,8 +2057,62 @@
         "Rollable": {
           "FIELDS": {
             "rollType": {
-              "hint":                              "Type of test",
-              "label":                             "Test Type"
+              "hint":                             "Type of test",
+              "label":                            "Test Type"
+            },
+            "rollTypeDetails": {
+              "ability": {
+                "hint":                           "Ability related to this roll",
+                "label":                          "Ability"
+              },
+              "attack": {
+                "hint":                           "Attack related to this roll",
+                "label":                          "Attack",
+                "weaponItemStatus": {
+                  "hint":                         "Weapon status related to this roll",
+                  "label":                        "Weapon Status"
+                },
+                "weaponTypes": {
+                  "hint":                         "TODO: Add translation",
+                  "label":                        "TODO: Add translation"
+                }
+              },
+              "damage": {
+                "combatType": {
+                  "hint":                         "TODO: Add translation",
+                  "label":                        "TODO: Add translation"
+                },
+                "hint":                           "Damage related to this roll",
+                "label":                          "Damage"
+              },
+              "effect": {
+                "hint":                           "Effect related to this roll",
+                "label":                          "Effect"
+              },
+              "initiative": {
+                "hint":                           "Initiative related to this roll",
+                "label":                          "Initiative"
+              },
+              "reaction": {
+                "defenseType": {
+                  "hint":                         "Defense type related to this roll",
+                  "label":                        "Defense Type"
+                }
+              },
+              "recovery": {
+                "hint":                           "Recovery related to this roll",
+                "label":                          "Recovery"
+              },
+              "spellcasting": {
+                "hint":                           "Spellcasting related to this roll",
+                "label":                          "Spellcasting"
+              },
+              "threadWeaving": {
+                "castingType": {
+                  "hint":                         "Thread Weaving type related to this roll",
+                  "label":                        "Thread Weaving Type"
+                }
+              }
             }
           }
         },
