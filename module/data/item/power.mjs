@@ -1,5 +1,4 @@
 import ItemDescriptionTemplate from "./templates/item-description.mjs";
-import ED4E, { ACTORS } from "../../config/_module.mjs";
 import ActionTemplate from "./templates/action.mjs";
 import TargetTemplate from "./templates/targeting.mjs";
 import RollPrompt from "../../applications/global/roll-prompt.mjs";
@@ -8,6 +7,10 @@ import AttackRollOptions from "../roll/attack.mjs";
 import RollProcessor from "../../services/roll-processor.mjs";
 import DamageRollOptions from "../roll/damage.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as ACTORS from "../../config/actors.mjs";
+import * as COMBAT from "../../config/combat.mjs";
+import * as MAGIC from "../../config/magic.mjs";
+
 
 /**
  * Data model template with information on Power items.
@@ -43,12 +46,12 @@ export default class PowerData extends ActionTemplate.mixin(
         nullable: true,
         blank:    true,
         initial:  "",
-        choices:  ED4E.armor,
+        choices:  ACTORS.armor,
       } ),
       damage:        new fields.SchemaField( {
         type: new fields.StringField( {
           initial:  "standard",
-          choices:  ED4E.damageType,
+          choices:  COMBAT.damageType,
         } ),
         armorType: new fields.StringField( {
           required: true,
@@ -69,7 +72,7 @@ export default class PowerData extends ActionTemplate.mixin(
           nullable: true,
           blank:    true,
           trim:     true,
-          choices:  ED4E.elements,
+          choices:  MAGIC.elements,
         } ),
         subtype: new fields.StringField( {
           required: true,
@@ -77,7 +80,7 @@ export default class PowerData extends ActionTemplate.mixin(
           blank:    true,
           trim:     true,
           choices:  Object.values(
-            ED4E.elementSubtypes
+            MAGIC.elementSubtypes
           ).map(
             subtypes => Object.keys( subtypes )
           ).flat(),

@@ -19,12 +19,14 @@ import SpellcastingWorkflow from "../workflows/workflow/spellcasting-workflow.mj
 import DialogEd from "../applications/api/dialog.mjs";
 import HalfMagicWorkflow from "../workflows/workflow/half-magic-workflow.mjs";
 import SubstituteWorkflow from "../workflows/workflow/substitute-workflow.mjs";
-import { DOCUMENT_DATA, TOKEN, ITEMS } from "../config/_module.mjs";
 import CombatDamageWorkflow from "../workflows/workflow/damage-workflow.mjs";
 import JumpUpWorkflow from "../workflows/workflow/jump-up-workflow.mjs";
 import WeaveThreadWorkflow from "../workflows/workflow/weave-thread-workflow.mjs";
 import ItemHistoryWorkflow from "../workflows/workflow/item-history-workflow.mjs";
 import { SYSTEM_TYPES } from "../constants/constants.mjs";
+import * as DOCUMENT_DATA from "../config/document-data.mjs";
+import * as ITEMS from "../config/items.mjs";
+import * as TOKEN from "../config/token.mjs";
 
 /**
  * Extend the base Actor class to implement additional system-specific logic.

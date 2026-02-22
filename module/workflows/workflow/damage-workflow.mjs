@@ -2,8 +2,9 @@ import Rollable from "./rollable.mjs";
 import SentientTemplate from "../../data/actor/templates/sentient.mjs";
 import DamageRollOptions from "../../data/roll/damage.mjs";
 import ActorWorkflow from "./actor-workflow.mjs";
-import { COMBAT } from "../../config/_module.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as COMBAT from "../../config/combat.mjs";
+
 
 /**
  * @typedef {WorkflowOptions} CombatDamageWorkflowOptions

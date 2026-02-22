@@ -1,7 +1,7 @@
 import PhysicalItemTemplate from "./templates/physical-item.mjs";
 import ItemDescriptionTemplate from "./templates/item-description.mjs";
-import ED4E from "../../config/_module.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as ITEMS from "../../config/items.mjs";
 
 /**
  * Data model template with information on equipment items.
@@ -27,7 +27,7 @@ export default class EquipmentData extends PhysicalItemTemplate.mixin(
           nullable: true,
           blank:    true,
           initial:  "",
-          choices:  ED4E.ammunitionType,
+          choices:  ITEMS.ammunitionType,
         } ),
       } ),
       bundleSize: new fields.NumberField( {

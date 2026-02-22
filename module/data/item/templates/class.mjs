@@ -2,9 +2,9 @@ import AdvancementData from "../../advancement/base-advancement.mjs";
 import LpIncreaseTemplate from "./lp-increase.mjs";
 import LearnableTemplate from "./learnable.mjs";
 import ClassAdvancementDialog from "../../../applications/advancement/class-advancement.mjs";
-import ED4E from "../../../config/_module.mjs";
 import ItemDataModel from "../../abstract/item-data-model.mjs";
 import { SYSTEM_TYPES } from "../../../constants/constants.mjs";
+import * as LEGEND from "../../../config/legend.mjs";
 
 
 /**
@@ -87,10 +87,10 @@ export default class ClassTemplate extends ItemDataModel.mixin(
     const nextLevel = this.unmodifiedLevel + 1;
     const disciplineSortingFactor = this.order - 1;
     const nextLevelTier = nextLevel === 0 ? "novice" : this.advancement.levels.find( l => l.level === nextLevel )?.tier;
-    return ED4E.legendPointsCost[
+    return LEGEND.legendPointsCost[
       1 // new level
     + disciplineSortingFactor
-    + ED4E.lpIndexModForTier[1][nextLevelTier]
+    + LEGEND.lpIndexModForTier[1][nextLevelTier]
     ];
   }
 

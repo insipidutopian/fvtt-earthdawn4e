@@ -1,5 +1,6 @@
-import ED4E from "../../../config/_module.mjs";
 import SystemDataModel from "../../abstract/system-data-model.mjs";
+import * as ACTIONS from "../../../config/actions.mjs";
+import * as SYSTEM from "../../../config/system.mjs";
 
 /**
  * Data model template with information on Ability items.
@@ -47,13 +48,13 @@ export default class TargetTemplate extends SystemDataModel {
           blank:    true,
           required: false,
           initial:  "",
-          choices:  ED4E.targetDifficulty,
+          choices:  ACTIONS.targetDifficulty,
         } ),
         group: new foundry.data.fields.StringField( {
           nullable: true,
           blank:    true,
           initial:  "",
-          choices:  ED4E.groupDifficulty,
+          choices:  ACTIONS.groupDifficulty,
         } ),
         fixed: new foundry.data.fields.NumberField( {
           required: false,
@@ -84,7 +85,7 @@ export default class TargetTemplate extends SystemDataModel {
     }
 
     if ( difficulty.target ) {
-      label += ED4E.ACTIONS.targetDifficulty[ difficulty.target ]?.abbreviation;
+      label += ACTIONS.targetDifficulty[ difficulty.target ]?.abbreviation;
     }
     if ( difficulty.group ) {
       label += ` ${ this.groupDifficultyIcon }`;
@@ -101,7 +102,7 @@ export default class TargetTemplate extends SystemDataModel {
     let groupDifficulty = this.difficulty?.group;
     if ( !groupDifficulty ) return "";
 
-    const icons = ED4E.SYSTEM.icons.GroupDifficulty;
+    const icons = SYSTEM.icons.GroupDifficulty;
     const group = `<i class="fa-thin ${icons.group}"></i>`;
     const highest = `<i class="fa-thin ${icons.highest}"></i>`;
     const lowest = `<i class="fa-thin ${icons.lowest}"></i>`;

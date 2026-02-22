@@ -1,7 +1,7 @@
 import getDice from "./step-tables.mjs";
 import { sum } from "../utils.mjs";
-import ED4E from "../config/_module.mjs";
 import { SYSTEM_TYPES } from "../constants/constants.mjs";
+import * as ROLLS from "../config/rolls.mjs";
 
 const { renderTemplate } = foundry.applications.handlebars;
 
@@ -46,7 +46,7 @@ export default class EdRoll extends Roll {
     const baseTerm = getBaseTerm( formula, edRollOptions );
     super( baseTerm, data, edRollOptions );
 
-    this.flavorTemplate = ED4E.rollTypes[this.options.rollType]?.flavorTemplate ?? ED4E.testTypes.arbitrary.flavorTemplate;
+    this.flavorTemplate = ROLLS.rollTypes[this.options.rollType]?.flavorTemplate ?? ROLLS.testTypes.arbitrary.flavorTemplate;
 
     if ( !this.options.extraDiceAdded ) this.#addExtraDice();
     if ( !this.options.configured ) this.#configureModifiers();
@@ -273,7 +273,7 @@ export default class EdRoll extends Roll {
   async getFlavorTemplateData() {
     let templateData = {};
 
-    const rollingActor = await fromUuid( this.options.rollingActorUuid );
+    const rollingActor = /** @type {ActorEd} */await fromUuid( this.options.rollingActorUuid );
 
     // Basic Data
     templateData.CONFIG = CONFIG;
@@ -288,7 +288,7 @@ export default class EdRoll extends Roll {
     templateData.result = this.total;
     templateData.step = this.options.step;
     templateData.target = this.options.target;
-    templateData.testType = ED4E.testTypes[this.options.testType].label;
+    templateData.testType = ROLLS.testTypes[this.options.testType].label;
     templateData.ruleOfOne = this.isRuleOfOne;
     templateData.success = this.isSuccess;
     templateData.failure = this.isFailure;
@@ -300,7 +300,7 @@ export default class EdRoll extends Roll {
     templateData.numAdditionalExtraSuccesses = this.numAdditionalExtraSuccesses ?? 0;
     templateData.successesTooltip = this._getSuccessesTooltip();
 
-    // Roll Type specific data
+    // roll type-specific data
     if ( this.options.getFlavorTemplateData instanceof Function ) templateData = await this.options.getFlavorTemplateData( templateData );
 
     return templateData;

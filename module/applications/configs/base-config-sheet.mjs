@@ -1,4 +1,3 @@
-import ED4E from "../../config/_module.mjs";
 import DocumentSheetMixinEd from "../api/document-sheet-mixin.mjs";
 
 const { DocumentSheetV2, } = foundry.applications.api;
@@ -78,7 +77,7 @@ export default class BaseConfigSheet extends DocumentSheetMixinEd( DocumentSheet
       newContext.system = this.document.system;
       newContext.options = this.options;
       newContext.systemFields = this.document.system.schema.fields;
-      newContext.config = ED4E;
+      newContext.config = CONFIG.ED4E;
     }
 
     return newContext;

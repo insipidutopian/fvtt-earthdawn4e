@@ -1,4 +1,5 @@
-import { MAGIC, SYSTEM } from "../../config/_module.mjs";
+import * as MAGIC from "../../config/magic.mjs";
+import * as SYSTEM from "../../config/system.mjs";
 
 export default class SceneConfigEd extends foundry.applications.sheets.SceneConfig {
 

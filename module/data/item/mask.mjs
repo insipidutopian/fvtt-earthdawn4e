@@ -1,8 +1,8 @@
 import ItemDescriptionTemplate from "./templates/item-description.mjs";
 import ItemDataModel from "../abstract/item-data-model.mjs";
 import MappingField from "../fields/mapping-field.mjs";
-import ED4E from "../../config/_module.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as ACTORS from "../../config/actors.mjs";
 
 /**
  * Data model template with information on mask items.
@@ -60,7 +60,7 @@ export default class MaskData extends ItemDataModel.mixin(
           integer:  true,
         } )
       } ), {
-        initialKeys:     ED4E.attributes,
+        initialKeys:     ACTORS.attributes,
         initialKeysOnly: true,
       } ),
       movement: new fields.SchemaField( {

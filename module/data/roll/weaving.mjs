@@ -1,6 +1,6 @@
 import EdRollOptions from "./common.mjs";
 import { createContentAnchor } from "../../utils.mjs";
-import { MAGIC } from "../../config/_module.mjs";
+import * as MAGIC from "../../config/magic.mjs";
 
 /**
  * @typedef { object } EdThreadWeavingRollOptionsInitializationData

@@ -3,9 +3,10 @@ import LearnableTemplate from "./learnable.mjs";
 import { ConstraintData } from "../../common/restrict-require.mjs";
 import EdIdField from "../../fields/edid-field.mjs";
 import PromptFactory from "../../../applications/global/prompt-factory.mjs";
-import ED4E from "../../../config/_module.mjs";
 import SystemDataModel from "../../abstract/system-data-model.mjs";
 import { SYSTEM_TYPES } from "../../../constants/constants.mjs";
+import * as LEGEND from "../../../config/legend.mjs";
+
 
 /**
  * Data model template for Knacks
@@ -125,7 +126,7 @@ export default class KnackTemplate extends SystemDataModel.mixin(
   get requiredLpForLearning() {
     // if no fixed lp cost is configured, use the default cost of a novice talent of the same rank as the min level.
     if ( !this.lpCost ) {
-      return ED4E.legendPointsCost[
+      return LEGEND.legendPointsCost[
         this.minLevel
       ];
     } else {
@@ -145,7 +146,7 @@ export default class KnackTemplate extends SystemDataModel.mixin(
 
     const learnData = this.learnData;
     return {
-      [ED4E.validationCategories.talentsRequirement]: [
+      [LEGEND.validationCategories.talentsRequirement]: [
         {
           name:      "ED.Dialogs.Legend.Validation.sourceTalentName",
           value:     learnData.talent.name,
@@ -157,7 +158,7 @@ export default class KnackTemplate extends SystemDataModel.mixin(
           fulfilled: learnData.talent.system.level >= this.minLevel
         },
       ],
-      [ED4E.validationCategories.resources]: [
+      [LEGEND.validationCategories.resources]: [
         {
           name:      "ED.Dialogs.Legend.Validation.availableLp",
           value:     this.requiredLpForLearning,
@@ -169,7 +170,7 @@ export default class KnackTemplate extends SystemDataModel.mixin(
           fulfilled: this.requiredMoneyForLearning <= learnData.actor.currentSilver,
         },
       ],
-      [ED4E.validationCategories.health]:    [
+      [LEGEND.validationCategories.health]:    [
         {
           name:      "ED.Dialogs.Legend.Validation.hasDamage",
           value:     learnData.hasDamage ? game.i18n.localize( "ED.Dialogs.Legend.Validation.hasDamage" ) : game.i18n.localize( "ED.Dialogs.Legend.Validation.hasNoDamage" ),

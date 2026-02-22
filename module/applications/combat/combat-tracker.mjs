@@ -1,4 +1,4 @@
-import { ED4E } from "../../../earthdawn4e.mjs";
+import * as SYSTEM from "../../config/system.mjs";
 
 export default class CombatTrackerEd extends foundry.applications.sidebar.tabs.CombatTracker {
 
@@ -9,7 +9,7 @@ export default class CombatTrackerEd extends foundry.applications.sidebar.tabs.C
       ...super._getEntryContextOptions(),
       {
         name:      "COMBAT.CombatantShowStartRoundPrompt",
-        icon:      `<i class="fa-solid ${ED4E.icons.eye}"></i>`,
+        icon:      `<i class="fa-solid ${SYSTEM.icons.eye}"></i>`,
         condition: li => ( game.user.isGM || getCombatant( li ).actor === game.user.character ) && getCombatant( li ).system.savePromptSettings,
         callback:  li => {
           const combatant = getCombatant( li );
@@ -21,7 +21,7 @@ export default class CombatTrackerEd extends foundry.applications.sidebar.tabs.C
       },
       {
         name:      "COMBAT.CombatantHideStartRoundPrompt",
-        icon:      `<i class="fa-solid ${ED4E.icons.eyeSlash}"></i>`,
+        icon:      `<i class="fa-solid ${SYSTEM.icons.eyeSlash}"></i>`,
         condition: li => ( game.user.isGM || getCombatant( li ).actor === game.user.character ) && !getCombatant( li ).system.savePromptSettings,
         callback:  li => {
           const combatant = getCombatant( li );

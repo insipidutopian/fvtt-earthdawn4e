@@ -1,7 +1,7 @@
-// region Earthdawn
-
-import ED4E from "./config/_module.mjs";
 import { SYSTEM_TYPES } from "./constants/constants.mjs";
+import * as SYSTEM from "./config/system.mjs";
+
+// region Earthdawn
 
 /**
  * Calculate the armor value for the given attribute value.
@@ -612,7 +612,7 @@ export const SLUG_REGEX = /^[a-z0-9]+(?:-[a-z0-9]+)*$/g;
  */
 export function validateEdid( value ) {
   // `any` is a reserved word
-  if ( value === ED4E.reservedEdid.ANY ) {
+  if ( value === SYSTEM.reservedEdid.ANY ) {
     return new foundry.data.validation.DataModelValidationFailure( {
       unresolved:   true,
       invalidValue: value,

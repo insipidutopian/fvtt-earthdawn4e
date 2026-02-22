@@ -1,6 +1,7 @@
-import ED4E from "../../config/_module.mjs";
 import ActorSheetEdNamegiver from "./namegiver-sheet.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as SYSTEM from "../../config/system.mjs";
+
 
 /**
  * An actor sheet application designed for actors of type "PC"
@@ -101,42 +102,42 @@ export default class ActorSheetEdCharacter extends ActorSheetEdNamegiver {
         type:     "button",
         label:    game.i18n.localize( "ED.Actor.Buttons.halfMagic" ),
         cssClass: "halfMagic",
-        icon:     `fas ${ED4E.icons.halfMagic}`,
+        icon:     `fas ${SYSTEM.icons.halfMagic}`,
         action:   "halfMagic",
       },
       {
         type:     "button",
         label:    game.i18n.localize( "ED.Actor.Buttons.initiative" ),
         cssClass: "initiative",
-        icon:     `fas ${ED4E.icons.initiative}`,
+        icon:     `fas ${SYSTEM.icons.initiative}`,
         action:   "initiative",
       },
       {
         type:     "button",
         label:    game.i18n.localize( "ED.Actor.Buttons.jumpUp" ),
         cssClass: "jumpUp",
-        icon:     `fas ${ED4E.icons.jumpUp}`,
+        icon:     `fas ${SYSTEM.icons.jumpUp}`,
         action:   "jumpUp",
       },
       {
         type:     "button",
         label:    game.i18n.localize( "ED.Actor.Buttons.knockdownTest" ),
         cssClass: "knockdownTest",
-        icon:     `fas ${ED4E.icons.knockdownTest}`,
+        icon:     `fas ${SYSTEM.icons.knockdownTest}`,
         action:   "knockdownTest",
       },
       {
         type:     "button",
         label:    game.i18n.localize( "ED.Actor.Buttons.recovery" ),
         cssClass: "recovery",
-        icon:     `fas ${ED4E.icons.recovery}`,
+        icon:     `fas ${SYSTEM.icons.recovery}`,
         action:   "recovery",
       },
       {
         type:     "button",
         label:    game.i18n.localize( "ED.Actor.Buttons.takeDamage" ),
         cssClass: "takeDamage",
-        icon:     `fas ${ED4E.icons.takeDamage}`,
+        icon:     `fas ${SYSTEM.icons.takeDamage}`,
         action:   "takeDamage",
       },
     ];

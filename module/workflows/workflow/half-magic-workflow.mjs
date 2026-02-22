@@ -1,8 +1,9 @@
 import ActorWorkflow from "./actor-workflow.mjs";
 import Rollable from "./rollable.mjs";
 import EdRollOptions from "../../data/roll/common.mjs";
-import ED4E from "../../config/_module.mjs";
 import PromptFactory from "../../applications/global/prompt-factory.mjs";
+import * as ACTORS from "../../config/actors.mjs";
+import * as EFFECTS from "../../config/effects.mjs";
 
 /**
  * Workflow for handling actor half magic tests
@@ -50,10 +51,10 @@ export default class HalfMagicWorkflow extends Rollable( ActorWorkflow ) {
     const allTestsModifiers = this._actor.system.globalBonuses?.allTests.value ?? 0;
     const allActionsModifiers = this._actor.system.globalBonuses?.allActions.value ?? 0;
     if ( allTestsModifiers ) {
-      stepModifiers[ED4E.EFFECTS.globalBonuses.allTests.label] = allTestsModifiers;
+      stepModifiers[EFFECTS.globalBonuses.allTests.label] = allTestsModifiers;
     }
     if ( allActionsModifiers ) {
-      stepModifiers[ED4E.EFFECTS.globalBonuses.allActions.label] = allActionsModifiers;
+      stepModifiers[EFFECTS.globalBonuses.allActions.label] = allActionsModifiers;
     }
     const attribute = this._actor.system.attributes[this._attributeId];
     const finalStep = attribute.step + discipline.system.level;
@@ -73,7 +74,7 @@ export default class HalfMagicWorkflow extends Rollable( ActorWorkflow ) {
             actor:      this._actor.name,
             step:       finalStep,
             discipline: discipline.name,
-            attribute:  ED4E.attributes[this._attributeId].label,
+            attribute:  ACTORS.attributes[this._attributeId].label,
           },
         ),
         rollType: "attribute",

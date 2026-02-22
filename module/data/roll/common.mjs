@@ -1,8 +1,9 @@
 import { lowerCaseFirstLetter, sum } from "../../utils.mjs";
 import getDice from "../../dice/step-tables.mjs";
-import ED4E, { EFFECTS } from "../../config/_module.mjs";
 import MappingField from "../fields/mapping-field.mjs";
 import FormulaField from "../fields/formula-field.mjs";
+import * as EFFECTS from "../../config/effects.mjs";
+import * as ROLLS from "../../config/rolls.mjs";
 
 import SparseDataModel from "../abstract/sparse-data-model.mjs";
 
@@ -244,14 +245,14 @@ export default class EdRollOptions extends SparseDataModel {
         nullable: false,
         blank:    true,
         initial:  "arbitrary",
-        choices:  ED4E.ROLLS.testTypes,
+        choices:  ROLLS.testTypes,
       } ),
       rollType: new fields.StringField( {
         required: false,
         nullable: true,
         blank:    true,
         initial:  "arbitrary",
-        choices:  ED4E.ROLLS.rollTypes,
+        choices:  ROLLS.rollTypes,
       } ),
       successes: new fields.SchemaField( {
         guaranteed: new fields.NumberField( {
@@ -430,7 +431,7 @@ export default class EdRollOptions extends SparseDataModel {
 
   static initResourceStep( _ ) {
     const parentField = this?.parent?.name;
-    return ED4E.resourceDefaultStep[parentField] ?? 4;
+    return ROLLS.resourceDefaultStep[parentField] ?? 4;
   }
 
   static initTotal( source, attribute, defaultValue ){
@@ -648,7 +649,7 @@ export default class EdRollOptions extends SparseDataModel {
   async getFlavorTemplateData( context ) {
     return {
       ...context,
-      config:       ED4E,
+      config:       CONFIG.ED4E,
       isGM:         game.user.isGM,
       customFlavor: context.customFlavor || this._getChatFlavor(),
     };

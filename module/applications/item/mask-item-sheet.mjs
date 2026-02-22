@@ -1,4 +1,3 @@
-import ED4E from "../../config/_module.mjs";
 import { getSetting } from "../../settings.mjs";
 import { linkForUuid } from "../../utils.mjs";
 import ItemSheetEd from "./item-sheet.mjs";
@@ -118,7 +117,7 @@ export default class MaskItemSheetEd extends ItemSheetEd {
         system:                 this.document.system,
         options:                this.options,
         systemFields:           this.document.system.schema.fields,
-        config:                 ED4E,
+        config:                 CONFIG.ED4E,
         isGM:                   game.user.isGM,
       },
     );

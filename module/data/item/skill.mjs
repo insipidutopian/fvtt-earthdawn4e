@@ -1,7 +1,7 @@
 import ItemDescriptionTemplate from "./templates/item-description.mjs";
-import ED4E from "../../config/_module.mjs";
 import IncreasableAbilityTemplate from "./templates/increasable-ability.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as LEGEND from "../../config/legend.mjs";
 
 /**
  * Data model template with information on Skill items.
@@ -20,7 +20,7 @@ export default class SkillData extends IncreasableAbilityTemplate.mixin(
       skillType: new fields.StringField( {
         required: true,
         initial:  "general",
-        choices:  ED4E.skillTypes,
+        choices:  LEGEND.skillTypes,
       } ),
     } );
   }
@@ -86,7 +86,7 @@ export default class SkillData extends IncreasableAbilityTemplate.mixin(
    * @inheritDoc
    */
   get increaseRules() {
-    const trainingTime = ED4E.trainingTime[this.unmodifiedLevel];
+    const trainingTime = LEGEND.trainingTime[this.unmodifiedLevel];
     return game.i18n.format(
       "ED.Dialogs.Legend.Rules.skillIncreaseShortRequirements",
       { trainingTime: trainingTime }
@@ -98,9 +98,9 @@ export default class SkillData extends IncreasableAbilityTemplate.mixin(
    */
   get requiredLpForIncrease() {
     // skill lp costs are equivalent to second discipline talents
-    const tierModifier = ED4E.lpIndexModForTier[2][this.tier];
+    const tierModifier = LEGEND.lpIndexModForTier[2][this.tier];
 
-    return ED4E.legendPointsCost[
+    return LEGEND.legendPointsCost[
       this.unmodifiedLevel
     + 1 // new level
     +  tierModifier
@@ -122,14 +122,14 @@ export default class SkillData extends IncreasableAbilityTemplate.mixin(
 
     const increaseData = this.increaseData;
     return {
-      [ED4E.validationCategories.base]:      [
+      [LEGEND.validationCategories.base]:      [
         {
           name:      "ED.Dialogs.Legend.Validation.maxLevel",
           value:     increaseData.newLevel,
-          fulfilled: increaseData.newLevel <= game.settings.get( "ed4e", "lpTrackingMaxRankSkill" ),
+          fulfilled: increaseData.newLevel <= game.settings.get( "LEGEND", "lpTrackingMaxRankSkill" ),
         },
       ],
-      [ED4E.validationCategories.resources]: [
+      [LEGEND.validationCategories.resources]: [
         {
           name:      "ED.Dialogs.Legend.Validation.availableLp",
           value:     this.requiredLpForIncrease,
@@ -141,7 +141,7 @@ export default class SkillData extends IncreasableAbilityTemplate.mixin(
           fulfilled: this.requiredMoneyForIncrease <= this.parent.actor.currentSilver,
         },
       ],
-      [ED4E.validationCategories.health]:    [
+      [LEGEND.validationCategories.health]:    [
         {
           name:      "ED.Dialogs.Legend.Validation.hasDamage",
           value:     increaseData.hasDamage ? game.i18n.localize( "ED.Dialogs.Legend.Validation.hasDamage" ) : game.i18n.localize( "ED.Dialogs.Legend.Validation.hasNoDamage" ),

@@ -1,7 +1,7 @@
-import ED4E from "../../config/_module.mjs";
 import ItemDescriptionTemplate from "./templates/item-description.mjs";
 import ItemDataModel from "../abstract/item-data-model.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as ITEMS from "../../config/items.mjs";
 
 /**
  * Data model template with information on Poison and Disease items.
@@ -84,7 +84,7 @@ export default class PoisonDiseaseData extends ItemDataModel.mixin(
         required: true,
         blank:    false,
         initial:  "wound",
-        choices:  ED4E.PoisonActivation,
+        choices:  ITEMS.poisonActivation,
       } ),
       death: new fields.BooleanField( {
         required: true,

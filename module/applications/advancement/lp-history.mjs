@@ -1,7 +1,7 @@
 import LpTrackingData from "../../data/advancement/lp-tracking.mjs";
 import LpEarningTransactionData from "../../data/advancement/lp-earning-transaction.mjs";
 import ApplicationEd from "../api/application.mjs";
-import ED4E from "../../config/_module.mjs";
+import * as SYSTEM from "../../config/system.mjs";
 
 /**
  * The application responsible for handling Legend Point related interactions and data.
@@ -96,15 +96,15 @@ export default class LegendPointHistory extends ApplicationEd {
       tabs:        [
         {
           id:       "earned",
-          icon:     ED4E.icons.Tabs.lpEarned,
+          icon:     SYSTEM.icons.Tabs.lpEarned,
         },
         {
           id:       "spend",
-          icon:     ED4E.icons.Tabs.lpSpend,
+          icon:     SYSTEM.icons.Tabs.lpSpend,
         },
         {
           id:       "chronological",
-          icon:     ED4E.icons.Tabs.lpChronological,
+          icon:     SYSTEM.icons.Tabs.lpChronological,
         },
       ],
       initial:     "chronological",

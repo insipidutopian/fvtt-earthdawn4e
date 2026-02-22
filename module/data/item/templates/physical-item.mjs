@@ -1,9 +1,11 @@
 import TargetTemplate from "./targeting.mjs";
-import ED4E from "../../../config/_module.mjs";
 import MatrixTemplate from "./matrix.mjs";
 import GrimoireTemplate from "./grimoire.mjs";
 import ItemDataModel from "../../abstract/item-data-model.mjs";
 import TruePatternData from "../../thread/true-pattern.mjs";
+import * as ACTIONS from "../../../config/actions.mjs";
+import * as ITEMS from "../../../config/items.mjs";
+
 
 /**
  * Data model template with information on physical items.
@@ -62,7 +64,7 @@ export default class PhysicalItemTemplate extends ItemDataModel.mixin(
           blank:    true,
           trim:     true,
           initial:  "silver",
-          choices:  ED4E.denomination,
+          choices:  ITEMS.denomination,
         } )
       } ),
       weight: new fields.SchemaField( {
@@ -90,7 +92,7 @@ export default class PhysicalItemTemplate extends ItemDataModel.mixin(
         blank:    true,
         trim:     true,
         initial:  "average",
-        choices:  ED4E.availability,
+        choices:  ITEMS.availability,
 
       } ),
       amount: new fields.NumberField( {
@@ -122,7 +124,7 @@ export default class PhysicalItemTemplate extends ItemDataModel.mixin(
           required: true,
           nullable: true,
           blank:    true,
-          choices:  ED4E.action,
+          choices:  ACTIONS.action,
           initial:  "standard",
         } ),
         recoveryPropertyValue: new fields.NumberField( {
@@ -131,7 +133,7 @@ export default class PhysicalItemTemplate extends ItemDataModel.mixin(
           min:      0,
           max:      5,
           initial:  0,
-          choices:  ED4E.recoveryProperty,
+          choices:  ITEMS.recoveryProperty,
           integer:  true,
         } ),
       } ),
@@ -140,7 +142,7 @@ export default class PhysicalItemTemplate extends ItemDataModel.mixin(
         nullable: true,
         blank:    false,
         initial:  "owned",
-        choices:  ED4E.itemStatus,
+        choices:  ITEMS.itemStatus,
       } ),
       truePattern: TruePatternData.asEmbeddedDataField(),
     } );

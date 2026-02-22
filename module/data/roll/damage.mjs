@@ -1,8 +1,11 @@
 import EdRollOptions from "./common.mjs";
-import ED4E, { ACTORS, COMBAT, ENVIRONMENT, MAGIC } from "../../config/_module.mjs";
 import { createContentAnchor } from "../../utils.mjs";
-import * as ITEMS from "../../config/items.mjs";
+import * as ACTORS from "../../config/actors.mjs";
+import * as COMBAT from "../../config/combat.mjs";
 import * as EFFECTS from "../../config/effects.mjs";
+import * as ENVIRONMENT from "../../config/environment.mjs";
+import * as ITEMS from "../../config/items.mjs";
+import * as MAGIC from "../../config/magic.mjs";
 
 
 /**
@@ -194,7 +197,7 @@ export default class DamageRollOptions extends EdRollOptions {
         choices:  COMBAT.damageSourceConfig,
       } ),
       weaponType:             new fields.StringField( {
-        choices: ED4E.weaponType,
+        choices: ITEMS.weaponType,
       } ),
       armorType:              new fields.StringField( {
         required: true,
@@ -220,11 +223,11 @@ export default class DamageRollOptions extends EdRollOptions {
         {
           type: new fields.StringField( {
             required: false,
-            choices:  ED4E.elements,
+            choices:  MAGIC.elements,
           } ),
           subtype: new fields.StringField( {
             required: false,
-            choices:  ED4E.elementSubtypes,
+            choices:  MAGIC.elementSubtypes,
           } ),
         },
         {

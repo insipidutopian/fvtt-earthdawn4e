@@ -1,6 +1,6 @@
 import EdIdField from "../../fields/edid-field.mjs";
 import SystemDataModel from "../../abstract/system-data-model.mjs";
-import { SYSTEM } from "../../../config/_module.mjs";
+import * as SYSTEM from "../../../config/system.mjs";
 
 /**
  * Data model template with item description

@@ -1,5 +1,6 @@
 import EdRollOptions from "./common.mjs";
-import ED4E from "../../config/_module.mjs";
+import * as WORKFLOWS from "../../config/workflows.mjs";
+
 
 /**
  * @typedef { object } RecoveryRollOptionsInitializationData
@@ -31,7 +32,7 @@ export default class RecoveryRollOptions extends EdRollOptions {
     return this.mergeSchema( super.defineSchema(), {
       recoveryMode: new fields.StringField( {
         initial:  "recovery",
-        choices:  ED4E.WORKFLOWS.recoveryMode,
+        choices:  WORKFLOWS.recoveryModes,
       } ),
       initialDamage: new fields.SchemaField(
         {

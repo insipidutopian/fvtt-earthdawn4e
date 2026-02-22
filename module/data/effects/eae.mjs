@@ -2,10 +2,10 @@ import EdIdField from "../fields/edid-field.mjs";
 import EarthdawnActiveEffectChangeData from "./eae-change-data.mjs";
 import EarthdawnActiveEffectDurationData from "./eae-duration.mjs";
 import FormulaField from "../fields/formula-field.mjs";
-import ED4E from "../../config/_module.mjs";
 import ActiveEffectDataModel from "../abstract/active-effect-data-model.mjs";
 import { mapObject } from "../../utils.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as EFFECTS from "../../config/effects.mjs";
 
 
 /**
@@ -27,7 +27,7 @@ export default class EarthdawnActiveEffectData extends ActiveEffectDataModel {
       executable:       new fields.BooleanField(),
       executeOn:        new fields.StringField( {
         required: false,
-        choices:  ED4E.eaeExecutionTime,
+        choices:  EFFECTS.eaeExecutionTime,
       } ),
       executionScript:  new fields.JavaScriptField( {
         required: false,

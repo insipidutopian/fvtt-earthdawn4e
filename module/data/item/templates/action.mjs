@@ -1,6 +1,6 @@
-import ED4E from "../../../config/_module.mjs";
 import RollableTemplate from "./rollable.mjs";
 import ItemDataModel from "../../abstract/item-data-model.mjs";
+import * as ACTIONS from "../../../config/actions.mjs";
 
 /**
  * Data model template with information on Attack items.
@@ -30,7 +30,7 @@ export default class ActionTemplate extends ItemDataModel.mixin(
         required: true,
         nullable: true,
         blank:    true,
-        choices:  ED4E.action,
+        choices:  ACTIONS.action,
         initial:  "standard",
       } ),
       strain: new foundry.data.fields.NumberField( {
