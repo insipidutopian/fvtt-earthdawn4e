@@ -1,5 +1,7 @@
 // Import configuration
 import * as config from "../config/_module.mjs";
+import * as SOCKETS from "../config/sockets.mjs";
+import * as STATUSES from "../config/statuses.mjs";
 import ED4E_CONSTANTS from "../constants/_module.mjs";
 import  "../tours/ed-tours.mjs";
 import registerHandlebarHelpers from "../handlebar-helpers.mjs";
@@ -56,13 +58,13 @@ function setupCanvas() {
  *
  */
 function setupStatusEffects() {
-  CONFIG.statusEffects = config.STATUSES.statusEffects.map( ( status ) => {
+  CONFIG.statusEffects = STATUSES.statusEffects.map( ( status ) => {
     return {
       _id: staticStatusId( status.id ),
       ...status
     };
   } );
-  Object.assign( CONFIG.specialStatusEffects, config.STATUSES.specialStatusEffects );
+  Object.assign( CONFIG.specialStatusEffects, STATUSES.specialStatusEffects );
 }
 
 /**
@@ -82,7 +84,7 @@ function setupDataModels() {
  *
  */
 function setupQueries() {
-  Object.assign( CONFIG.queries, config.SOCKETS.queries );
+  Object.assign( CONFIG.queries, SOCKETS.queries );
 }
 
 /**
