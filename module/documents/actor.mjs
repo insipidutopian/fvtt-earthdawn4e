@@ -11,7 +11,9 @@ import PromptFactory from "../applications/global/prompt-factory.mjs";
 import ClassTemplate from "../data/item/templates/class.mjs";
 import MigrationManager from "../services/migrations/migration-manager.mjs";
 import AttackWorkflow from "../workflows/workflow/attack-workflow.mjs";
-import { AttributeWorkflow, AttuneMatrixWorkflow, KnockdownWorkflow } from "../workflows/workflow/_module.mjs";
+import AttributeWorkflow from "../workflows/workflow/attribute-workflow.mjs";
+import AttuneMatrixWorkflow from "../workflows/workflow/attune-matrix-workflow.mjs";
+import KnockdownWorkflow from "../workflows/workflow/knockdown-workflow.mjs";
 import { getDefaultEdid, getSetting } from "../settings.mjs";
 import RollProcessor from "../services/roll-processor.mjs";
 import RecoveryWorkflow from "../workflows/workflow/recovery-workflow.mjs";
@@ -19,12 +21,14 @@ import SpellcastingWorkflow from "../workflows/workflow/spellcasting-workflow.mj
 import DialogEd from "../applications/api/dialog.mjs";
 import HalfMagicWorkflow from "../workflows/workflow/half-magic-workflow.mjs";
 import SubstituteWorkflow from "../workflows/workflow/substitute-workflow.mjs";
-import { DOCUMENT_DATA, TOKEN, ITEMS } from "../config/_module.mjs";
 import CombatDamageWorkflow from "../workflows/workflow/damage-workflow.mjs";
 import JumpUpWorkflow from "../workflows/workflow/jump-up-workflow.mjs";
 import WeaveThreadWorkflow from "../workflows/workflow/weave-thread-workflow.mjs";
 import ItemHistoryWorkflow from "../workflows/workflow/item-history-workflow.mjs";
 import { SYSTEM_TYPES } from "../constants/constants.mjs";
+import * as DOCUMENT_DATA from "../config/document-data.mjs";
+import * as ITEMS from "../config/items.mjs";
+import * as TOKEN from "../config/token.mjs";
 
 /**
  * Extend the base Actor class to implement additional system-specific logic.

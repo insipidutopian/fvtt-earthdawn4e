@@ -1,5 +1,5 @@
 import ApplicationEd from "../api/application.mjs";
-import { ED4E } from "../../../earthdawn4e.mjs";
+import * as MAGIC from "../../config/magic.mjs";
 
 export default class SelectExtraThreadsPrompt extends ApplicationEd {
 
@@ -124,7 +124,7 @@ export default class SelectExtraThreadsPrompt extends ApplicationEd {
    * @returns {number} The maximum number of extra threads that can be selected.
    */
   #getMaxExtraThreads() {
-    return ED4E.extraThreadsByCircle[ this.#discipline?.system?.level || 0 ] || 0;
+    return MAGIC.extraThreadsByCircle[ this.#discipline?.system?.level || 0 ] || 0;
   }
 
   // region Rendering

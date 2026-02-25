@@ -1,19 +1,22 @@
 import ItemDescriptionTemplate from "./templates/item-description.mjs";
 import LearnableTemplate from "./templates/learnable.mjs";
-import ED4E, { ACTORS, COMBAT, MAGIC } from "../../config/_module.mjs";
 import LearnSpellPrompt from "../../applications/advancement/learn-spell.mjs";
 import TargetTemplate from "./templates/targeting.mjs";
 import { AreaMetricData, DurationMetricData, MetricData, RangeMetricData } from "../common/metrics.mjs";
 import ItemDataModel from "../abstract/item-data-model.mjs";
-import { SelectExtraThreadsPrompt } from "../../applications/workflow/_module.mjs";
+import SelectExtraThreadsPrompt from "../../applications/workflow/select-extra-threads-prompt.mjs";
 import ThreadWeavingRollOptions from "../roll/weaving.mjs";
-import { RollPrompt } from "../../applications/global/_module.mjs";
+import RollPrompt from "../../applications/global/roll-prompt.mjs";
 import SpellcastingRollOptions from "../roll/spellcasting.mjs";
 import RollProcessor from "../../services/roll-processor.mjs";
 import SpellEffectRollOptions from "../roll/spelleffect.mjs";
 import CombatDamageWorkflow from "../../workflows/workflow/damage-workflow.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
-
+import * as ACTORS from "../../config/actors.mjs";
+import * as COMBAT from "../../config/combat.mjs";
+import * as LEGEND from "../../config/legend.mjs";
+import * as MAGIC from "../../config/magic.mjs";
+import * as ROLLS from "../../config/rolls.mjs";
 
 const { fields } = foundry.data;
 
@@ -37,7 +40,7 @@ export default class SpellData extends ItemDataModel.mixin(
         nullable: false,
         blank:    false,
         trim:     true,
-        choices:  ED4E.spellcastingTypes,
+        choices:  MAGIC.spellcastingTypes,
         initial:  "elementalism",
       } ),
       level: new fields.NumberField( {
@@ -52,15 +55,15 @@ export default class SpellData extends ItemDataModel.mixin(
         reattune: new fields.NumberField( {
           required: true,
           nullable: false,
-          min:      ED4E.minDifficulty,
-          initial:  ( data ) => { return data.weaving + 5 || ED4E.minDifficulty; },
+          min:      ROLLS.minDifficulty,
+          initial:  ( data ) => { return data.weaving + 5 || ROLLS.minDifficulty; },
           integer:  true,
         } ),
         weaving: new fields.NumberField( {
           required: true,
           nullable: false,
-          min:      ED4E.minDifficulty,
-          initial:  ( _ ) => { return this.parent?.parent?.fields?.level?.initial + 4 || ED4E.minDifficulty; },
+          min:      ROLLS.minDifficulty,
+          initial:  ( _ ) => { return this.parent?.parent?.fields?.level?.initial + 4 || ROLLS.minDifficulty; },
           integer:  true,
         } ),
       } ),
@@ -169,7 +172,7 @@ export default class SpellData extends ItemDataModel.mixin(
         nullable: false,
         blank:    false,
         trim:     true,
-        choices:  ED4E.spellKeywords,
+        choices:  MAGIC.spellKeywords,
       } ), {
         required: true,
         nullable: false,
@@ -181,7 +184,7 @@ export default class SpellData extends ItemDataModel.mixin(
           nullable: true,
           blank:    false,
           trim:     true,
-          choices:  ED4E.elements,
+          choices:  MAGIC.elements,
         } ),
         subtype: new fields.StringField( {
           required: true,
@@ -260,7 +263,7 @@ export default class SpellData extends ItemDataModel.mixin(
       // subtype is optional
       if ( !elemSubtype ) return undefined;
 
-      if ( !Object.keys( ED4E.elementSubtypes[ elemType ] ).includes( elemSubtype ) )
+      if ( !Object.keys( MAGIC.elementSubtypes[ elemType ] ).includes( elemSubtype ) )
         throw new Error( game.i18n.format( "ED.Notifications.Error.invalidElementSubtype" ) );
     }
 
@@ -427,7 +430,7 @@ export default class SpellData extends ItemDataModel.mixin(
   /** @inheritDoc */
   get requiredLpToLearn() {
     switch ( game.settings.get( "ed4e", "lpTrackingSpellCost" ) ) {
-      case "noviceTalent": return ED4E.legendPointsCost[ this.unmodifiedLevel ];
+      case "noviceTalent": return LEGEND.legendPointsCost[ this.unmodifiedLevel ];
       case "circleX100": return this.unmodifiedLevel * 100;
       case "free":
       default: return 0;

@@ -1,9 +1,10 @@
 import ItemDescriptionTemplate from "./templates/item-description.mjs";
-import ED4E from "../../config/_module.mjs";
 import { createContentLink } from "../../utils.mjs";
 import IncreasableAbilityTemplate from "./templates/increasable-ability.mjs";
 import DialogEd from "../../applications/api/dialog.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as LEGEND from "../../config/legend.mjs";
+
 
 /**
  * Data model template with information on Devotion items.
@@ -98,9 +99,9 @@ export default class DevotionData extends IncreasableAbilityTemplate.mixin(
    */
   get requiredLpForIncrease() {
     // devotion lp costs are equivalent to first discipline talents
-    const tierModifier = ED4E.lpIndexModForTier[1][this.tier];
+    const tierModifier = LEGEND.lpIndexModForTier[1][this.tier];
 
-    return ED4E.legendPointsCost[
+    return LEGEND.legendPointsCost[
       this.unmodifiedLevel
     + 1 // new level
     +  tierModifier
@@ -122,21 +123,21 @@ export default class DevotionData extends IncreasableAbilityTemplate.mixin(
 
     const increaseData = this.increaseData;
     return {
-      [ED4E.validationCategories.base]: [
+      [LEGEND.validationCategories.base]: [
         {
           name:      "ED.Dialogs.Legend.Validation.maxLevel",
           value:     increaseData.newLevel,
           fulfilled: increaseData.newLevel <= game.settings.get( "ed4e", "lpTrackingMaxRankSkill" ),
         },
       ],
-      [ED4E.validationCategories.resources]: [
+      [LEGEND.validationCategories.resources]: [
         {
           name:      "ED.Dialogs.Legend.Validation.availableLp",
           value:     increaseData.requiredLp,
           fulfilled: this.containingActor.currentLp >= increaseData.requiredLp,
         },
       ],
-      [ED4E.validationCategories.health]:    [
+      [LEGEND.validationCategories.health]:    [
         {
           name:      "ED.Dialogs.Legend.Validation.hasDamage",
           value:     increaseData.hasDamage ? game.i18n.localize( "ED.Dialogs.Legend.Validation.hasDamage" ) : game.i18n.localize( "ED.Dialogs.Legend.Validation.hasNoDamage" ),

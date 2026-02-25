@@ -1,9 +1,9 @@
 import CommonTemplate from "./common.mjs";
 import MovementFields from "./movement.mjs";
-import ED4E from "../../../config/_module.mjs";
 import MappingField from "../../fields/mapping-field.mjs";
 import { SYSTEM_TYPES } from "../../../constants/constants.mjs";
 import SiblingDocumentField from "../../fields/sibling-document-field.mjs";
+import * as ACTORS from "../../../config/actors.mjs";
 
 /**
  * A template for all actors that represent sentient beings and have such stats.
@@ -28,7 +28,7 @@ export default class SentientTemplate extends CommonTemplate {
           positive: true
         } )
       } ), {
-        initialKeys:     ED4E.attributes,
+        initialKeys:     ACTORS.attributes,
         initialKeysOnly: true,
       } ),
       healthRate: new fields.SchemaField( {
@@ -482,7 +482,7 @@ export default class SentientTemplate extends CommonTemplate {
       ),
       // dexterity, strength, toughness, perception, willpower, charisma
       Object.fromEntries(
-        Object.entries( this.attributes ).map( ( [ key, value ] ) => [ ED4E.attributes[ key ].fullKey, value.step ] )
+        Object.entries( this.attributes ).map( ( [ key, value ] ) => [ ACTORS.attributes[ key ].fullKey, value.step ] )
       ),
       // armor values
       // pa, ma

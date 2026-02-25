@@ -1,5 +1,5 @@
 import KnockdownRollOptions from "../../data/roll/knockdown.mjs";
-import { ActorWorkflow } from "./_module.mjs";
+import ActorWorkflow from "./actor-workflow.mjs";
 import Rollable from "./rollable.mjs";
 
 /**

@@ -1,11 +1,14 @@
 import PhysicalItemTemplate from "./templates/physical-item.mjs";
 import ItemDescriptionTemplate from "./templates/item-description.mjs";
 import { filterObject, inRange, sum } from "../../utils.mjs";
-import ED4E from "../../config/_module.mjs";
 import DamageRollOptions from "../roll/damage.mjs";
 import RollableTemplate from "./templates/rollable.mjs";
 import CombatDamageWorkflow from "../../workflows/workflow/damage-workflow.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as ACTORS from "../../config/actors.mjs";
+import * as COMBAT from "../../config/combat.mjs";
+import * as ITEMS from "../../config/items.mjs";
+
 
 /**
  * Data model template with information on weapon items.
@@ -36,24 +39,24 @@ export default class WeaponData extends PhysicalItemTemplate.mixin(
         required: true,
         nullable: true,
         initial:  "melee",
-        choices:  ED4E.weaponType,
+        choices:  ITEMS.weaponType,
       } ),
       weaponSubType: new fields.StringField( {
         required: true,
         initial:  "bow",
-        choices:  ED4E.weaponSubType,
+        choices:  ITEMS.weaponSubType,
       } ),
       wieldingType: new fields.StringField( {
         required: true,
         initial:  "mainHand",
-        choices:  ED4E.weaponWieldingType,
+        choices:  ITEMS.weaponWieldingType,
       } ),
       damage:        new fields.SchemaField( {
         attribute: new fields.StringField( {
           required: true,
           nullable: false,
           initial:  "str",
-          choices:  ED4E.attributes,
+          choices:  ACTORS.attributes,
         } ),
         baseStep: new fields.NumberField( {
           required: true,
@@ -64,7 +67,7 @@ export default class WeaponData extends PhysicalItemTemplate.mixin(
         } ),
         type: new fields.StringField( {
           initial:  "standard",
-          choices:  ED4E.damageType,
+          choices:  COMBAT.damageType,
         } ),
       } ),
       size: new fields.NumberField( {
@@ -126,7 +129,7 @@ export default class WeaponData extends PhysicalItemTemplate.mixin(
           nullable: true,
           blank:    true,
           initial:  "",
-          choices:  ED4E.ammunitionType,
+          choices:  ITEMS.ammunitionType,
         } ),
       } ),
       forgeBonus: new fields.NumberField( {
@@ -141,7 +144,7 @@ export default class WeaponData extends PhysicalItemTemplate.mixin(
         nullable: true,
         blank:    true,
         initial:  "physical",
-        choices:  ED4E.armor,
+        choices:  ACTORS.armor,
       } ),
     } );
   }
@@ -220,7 +223,7 @@ export default class WeaponData extends PhysicalItemTemplate.mixin(
    */
   get isRanged() {
     return Object.keys(
-      filterObject( ED4E.weaponType, ( _, value ) => value.ranged )
+      filterObject( ITEMS.weaponType, ( _, value ) => value.ranged )
     ).includes( this.weaponType );
   }
 

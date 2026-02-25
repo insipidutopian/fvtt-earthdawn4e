@@ -1,6 +1,7 @@
-import ED4E from "../../config/_module.mjs";
 import ThreadItemLevelData from "./thread-item-level.mjs";
 import SparseDataModel from "../abstract/sparse-data-model.mjs";
+import * as LEGEND from "../../config/legend.mjs";
+
 
 export default class ThreadBaseData extends SparseDataModel {
 
@@ -57,7 +58,7 @@ export default class ThreadBaseData extends SparseDataModel {
         required: true,
         nullable: false,
         initial:  "novice",
-        choices:  ED4E.tier,
+        choices:  LEGEND.tier,
       } ),
       enchantmentPattern: new fields.DocumentUUIDField( {
         required: true,

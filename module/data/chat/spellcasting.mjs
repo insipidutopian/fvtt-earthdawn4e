@@ -1,7 +1,7 @@
 import BaseMessageData from "./base-message.mjs";
-import { CHAT } from "../../config/_module.mjs";
 import { createContentAnchor } from "../../utils.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as CHAT from "../../config/chat.mjs";
 
 export default class SpellcastingMessageData extends BaseMessageData {
 

@@ -1,11 +1,11 @@
 import DocumentSheetMixinEd from "../api/document-sheet-mixin.mjs";
-import { ED4E } from "../../../earthdawn4e.mjs";
 import { getSetting } from "../../settings.mjs";
 import TruePatternData from "../../data/thread/true-pattern.mjs";
 import PromptFactory from "../global/prompt-factory.mjs";
 import { createContentAnchor } from "../../utils.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
 import DialogEd from "../api/dialog.mjs";
+import * as SYSTEM from "../../config/system.mjs";
 
 const { ActorSheetV2 } = foundry.applications.sheets;
 
@@ -115,7 +115,7 @@ export default class ActorSheetEd extends DocumentSheetMixinEd( ActorSheetV2 ) {
     foundry.utils.mergeObject( context, {
       actor:                  this.document,
       items:                  this.document.items,
-      icons:                  ED4E.icons,
+      icons:                  SYSTEM.icons,
       favoriteItems:          favoriteResults,
     } );
 

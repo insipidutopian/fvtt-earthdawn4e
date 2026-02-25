@@ -1,9 +1,11 @@
 import ActorWorkflow from "./actor-workflow.mjs";
 import Rollable from "./rollable.mjs";
 import EdRollOptions from "../../data/roll/common.mjs";
-import ED4E from "../../config/_module.mjs";
 import DialogEd from "../../applications/api/dialog.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as ACTORS from "../../config/actors.mjs";
+import * as EFFECTS from "../../config/effects.mjs";
+import * as WORKFLOWS from "../../config/workflows.mjs";
 
 const DialogClass = DialogEd;
 
@@ -53,7 +55,7 @@ export default class SubstituteWorkflow extends Rollable( ActorWorkflow ) {
    */
   constructor( actor, options = {} ) {
     super( actor, options );
-    if ( !options.attributeId || !( options.attributeId in ED4E.attributes ) ) {
+    if ( !options.attributeId || !( options.attributeId in ACTORS.attributes ) ) {
       ui.notifications.error(
         game.i18n.localize( "ED.Notifications.Error.substituteAttributeNotFound" ),
       );
@@ -92,7 +94,7 @@ export default class SubstituteWorkflow extends Rollable( ActorWorkflow ) {
   }
 
   async #getAbilityButtonByAttribute( attributeId ) {
-    const modes = ED4E.WORKFLOWS.substituteModes[attributeId];
+    const modes = WORKFLOWS.substituteModes[attributeId];
     if ( !modes ) return [];
 
     // Build button data for each mode
@@ -141,10 +143,10 @@ export default class SubstituteWorkflow extends Rollable( ActorWorkflow ) {
     const allTestsModifiers = this._actor.system.globalBonuses?.allTests.value ?? 0;
     const allActionsModifiers = this._actor.system.globalBonuses?.allActions.value ?? 0;
     if ( allTestsModifiers ) {
-      stepModifiers[ED4E.EFFECTS.globalBonuses.allTests.label] = allTestsModifiers;
+      stepModifiers[EFFECTS.globalBonuses.allTests.label] = allTestsModifiers;
     }
     if ( allActionsModifiers ) {
-      stepModifiers[ED4E.EFFECTS.globalBonuses.allActions.label] = allActionsModifiers;
+      stepModifiers[EFFECTS.globalBonuses.allActions.label] = allActionsModifiers;
     }
     const attribute = this._actor.system.attributes[this._attributeId];
     this._rollOptions = EdRollOptions.fromActor(
@@ -162,7 +164,7 @@ export default class SubstituteWorkflow extends Rollable( ActorWorkflow ) {
           {
             actor:         this._actor.name,
             step:          attribute.step,
-            attribute:     ED4E.attributes[this._attributeId].label,
+            attribute:     ACTORS.attributes[this._attributeId].label,
             substitute:    this._substituteName,
           },
         ),

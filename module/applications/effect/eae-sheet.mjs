@@ -1,6 +1,7 @@
 import { getEdIds } from "../../settings.mjs";
-import ED4E from "../../config/_module.mjs";
 import ClassTemplate from "../../data/item/templates/class.mjs";
+import * as EFFECTS from "../../config/effects.mjs";
+import * as SYSTEM from "../../config/system.mjs";
 
 const { ActiveEffectConfig } = foundry.applications.sheets;
 
@@ -39,7 +40,7 @@ export default class EarthdawnActiveEffectSheet extends ActiveEffectConfig {
       ...ActiveEffectConfig.TABS.sheet,
       tabs: [
         ...ActiveEffectConfig.TABS.sheet.tabs,
-        { id: "execution", icon: ED4E.icons.effectExecution },
+        { id: "execution", icon: SYSTEM.icons.effectExecution },
       ],
       labelPrefix: "ED.Tabs.EAESheet",
     },
@@ -53,8 +54,8 @@ export default class EarthdawnActiveEffectSheet extends ActiveEffectConfig {
    */
   get keyOptions() {
     if ( !this.document ) return [];
-    if ( this.document.system.appliedToItem ) return ED4E.eaeChangeKeysItem;
-    if ( this.document.system.appliedToActor ) return ED4E.eaeChangeKeysActor;
+    if ( this.document.system.appliedToItem ) return EFFECTS.eaeChangeKeysItem;
+    if ( this.document.system.appliedToActor ) return EFFECTS.eaeChangeKeysActor;
     return [ {
       value:    "",
       label:    game.i18n.localize( "ED.ActiveEffect.placeholderBlankSelectOption" ),

@@ -1,6 +1,7 @@
 import EdIdField from "../fields/edid-field.mjs";
-import ED4E from "../../config/_module.mjs";
 import SparseDataModel from "../abstract/sparse-data-model.mjs";
+import * as ACTORS from "../../config/actors.mjs";
+import * as LEGEND from "../../config/legend.mjs";
 
 const { fields } = foundry.data;
 
@@ -57,7 +58,7 @@ export class ConstraintData extends SparseDataModel {
 
   get summaryString() {
     return [
-      `<em>${ ED4E.constraints[ this.constructor.TYPE ].label }</em>`,
+      `<em>${ LEGEND.constraints[ this.constructor.TYPE ].label }</em>`,
       "&emsp;",
       ...Object.values( this )
     ].join( " " );
@@ -95,7 +96,7 @@ export class AttributeConstraintData extends ConstraintData {
     return this.mergeSchema( super.defineSchema(), {
       attribute: new fields.StringField( {
         required: true,
-        choices:  ED4E.attributes,
+        choices:  ACTORS.attributes,
         initial:  "str",
       } ),
       value: new fields.NumberField( {
@@ -140,7 +141,7 @@ export class LanguageConstraintData extends ConstraintData {
       language: new fields.StringField( {
         // this needs to be adjusted? Or will be fine if the config <-> settings interaction is cleared up
         // or, prepare choices during rendering...
-        choices:  ED4E.languages,
+        choices:  ACTORS.languages,
         initial:  "dwarf",
       } ),
     } );

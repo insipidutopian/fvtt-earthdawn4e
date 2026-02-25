@@ -1,5 +1,6 @@
 import ApplicationEd from "../api/application.mjs";
-import { ED4E } from "../../../earthdawn4e.mjs";
+import * as MAGIC from "../../config/magic.mjs";
+import * as SYSTEMS from "../../config/system.mjs";
 
 export default class AttuneMatrixPrompt extends ApplicationEd {
 
@@ -162,7 +163,7 @@ export default class AttuneMatrixPrompt extends ApplicationEd {
         valueAttr: "value",
         value:     spell.id,
         label:     spell.name,
-        group:     ED4E.spellcastingTypes[ spell.system.spellcastingType ],
+        group:     MAGIC.spellcastingTypes[ spell.system.spellcastingType ],
         disabled:  spellSelected && spellInMatrix,
         selected:  spellSelected,
       } );
@@ -172,7 +173,7 @@ export default class AttuneMatrixPrompt extends ApplicationEd {
 
   #getThreadWeavingTalentField() {
     const threadWeavingTalents = this.#actor.items.filter(
-      item => item.system?.rollTypeDetails?.threadWeaving?.castingType in ED4E.spellcastingTypes,
+      item => item.system?.rollTypeDetails?.threadWeaving?.castingType in MAGIC.spellcastingTypes,
     );
     const choices = threadWeavingTalents.reduce( ( acc, talent ) => {
       acc[talent.id] = talent.name;
@@ -216,7 +217,7 @@ export default class AttuneMatrixPrompt extends ApplicationEd {
           }
 
           const buttonContinue = foundry.utils.deepClone( this.constructor.BUTTONS.continue );
-          buttonContinue.icon = this.#onTheFly ? ED4E.icons.onTheFly :ED4E.icons.attune;
+          buttonContinue.icon = this.#onTheFly ? SYSTEMS.icons.onTheFly :SYSTEMS.icons.attune;
           buttonContinue.label = this.#onTheFly ? "ED.Dialogs.Buttons.reattuneOnTheFly" : "ED.Dialogs.Buttons.attuneMatrix";
           newContext.buttons.push( buttonContinue, );
         } else {

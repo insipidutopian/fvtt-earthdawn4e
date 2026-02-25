@@ -1,8 +1,8 @@
 import ActorWorkflow from "./actor-workflow.mjs";
 import RecoveryRollOptions from "../../data/roll/recovery.mjs";
-import ED4E from "../../config/_module.mjs";
 import WorkflowInterruptError from "../workflow-interrupt.mjs";
 import Rollable from "./rollable.mjs";
+import * as WORKFLOWS from "../../config/workflows.mjs";
 
 
 /**
@@ -110,7 +110,7 @@ export default class RecoveryWorkflow extends Rollable( ActorWorkflow ) {
    * @private
    */
   async _validateRecovery() {
-    if ( !( this._recoveryMode in ED4E.WORKFLOWS.recoveryModes ) ) {
+    if ( !( this._recoveryMode in WORKFLOWS.recoveryModes ) ) {
       throw new WorkflowInterruptError(
         this,
         game.i18n.localize( "ED.Notifications.Warn.invalidRecoveryMode" ),

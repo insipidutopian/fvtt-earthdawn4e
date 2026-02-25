@@ -2,12 +2,12 @@ import LpIncreaseTemplate from "../../data/item/templates/lp-increase.mjs";
 import ActorEd from "../../documents/actor.mjs";
 import ItemEd from "../../documents/item.mjs";
 import LearnableTemplate from "../../data/item/templates/learnable.mjs";
-import ED4E from "../../config/_module.mjs";
 import DialogEd from "../api/dialog.mjs";
 import { createContentAnchor } from "../../utils.mjs";
 import ChooseAdderSubstitutePrompt from "./choose-adder-substitute.mjs";
 import { getSetting } from "../../settings.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as LEGEND from "../../config/legend.mjs";
 
 const { renderTemplate } = foundry.applications.handlebars;
 
@@ -733,7 +733,7 @@ class ItemPromptFactory extends PromptFactory {
    */
   async _chooseTierPrompt( ) {
 
-    const buttons = Object.entries( ED4E.tier ).map(
+    const buttons = Object.entries( LEGEND.tier ).map(
       ( [ key, label ] ) => {
         return {
           action:  key,
@@ -811,9 +811,9 @@ class ItemPromptFactory extends PromptFactory {
 
     const versatilityItem = this.document.actor.getSingleItemByEdid( versatilityEdId, SYSTEM_TYPES.Item.talent );
     // eslint-disable-next-line no-unused-vars
-    const { versatility, ...categoriesWithoutVersatility } = ED4E.talentCategory;
+    const { versatility, ...categoriesWithoutVersatility } = LEGEND.talentCategory;
 
-    const buttons = Object.entries( versatilityItem ? ED4E.talentCategory : categoriesWithoutVersatility  ).map( ( [ key, label ] ) => {
+    const buttons = Object.entries( versatilityItem ? LEGEND.talentCategory : categoriesWithoutVersatility  ).map( ( [ key, label ] ) => {
       return {
         action:  key,
         label:   label,

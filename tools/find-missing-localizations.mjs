@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { MissingLocalizationChecker } from "./localization-checker/_module.mjs";
+import MissingLocalizationChecker from "./localization-checker/missing-keys.mjs";
 import { createLocalizationCliConfig } from "./localization-checker/cli-config.mjs";
 
 // Parse command line arguments

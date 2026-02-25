@@ -1,9 +1,9 @@
-import ED4E from "../../config/_module.mjs";
 import ActorEd from "../../documents/actor.mjs";
 import ItemDescriptionTemplate from "./templates/item-description.mjs";
 import SystemDataModel from "../abstract/system-data-model.mjs";
 import ItemDataModel from "../abstract/item-data-model.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as ITEMS from "../../config/items.mjs";
 
 
 /**
@@ -36,7 +36,7 @@ export default class CurseHorrorMarkData extends ItemDataModel.mixin(
         blank:    true,
         trim:     true,
         initial:  "minor",
-        choices:  ED4E.curseType,
+        choices:  ITEMS.curseType,
       } ),
       active: new fields.BooleanField( {
         required: true,

@@ -1,6 +1,6 @@
-import ED4E, { SYSTEM } from "../../config/_module.mjs";
 import { getAllEdIds, validateEdid } from "../../utils.mjs";
 import { getEdIds } from "../../settings.mjs";
+import * as SYSTEM from "../../config/system.mjs";
 
 /**
  * Taken from the ({@link https://gitlab.com/peginc/swade/-/wikis/Savage-Worlds-ID|SWADE system}).
@@ -13,7 +13,7 @@ export default class EdIdField extends foundry.data.fields.StringField {
   /** @inheritdoc */
   static get _defaults() {
     return foundry.utils.mergeObject( super._defaults, {
-      initial:         ED4E.reservedEdid.DEFAULT,
+      initial:         SYSTEM.reservedEdid.DEFAULT,
       blank:           false,
       required:        true,
       documentSubtype: "",

@@ -1,7 +1,7 @@
-import ED4E from "./config/_module.mjs";
 import EdRoll from "./dice/ed-roll.mjs";
 import EdRollOptions from "./data/roll/common.mjs";
 import getDice from "./dice/step-tables.mjs";
+import * as ROLLS from "./config/rolls.mjs";
 
 /**
  * Set up custom enrichers.
@@ -53,7 +53,7 @@ async function enrichRoll( match, options ) {
     ) );
   const textTestType = ( testType === "arbitrary" )
     ? ""
-    : `${ED4E.testTypes[testType].label}:&nbsp;`;
+    : `${ROLLS.testTypes[testType].label}:&nbsp;`;
 
   const rollElement = `
             <a class="journal--roll strong" data-roll-cmd="${rollCmd}" data-roll-flavor="${rollFlavor}" 

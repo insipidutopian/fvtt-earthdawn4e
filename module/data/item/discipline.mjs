@@ -1,8 +1,8 @@
 import ClassTemplate from "./templates/class.mjs";
 import ItemDescriptionTemplate from "./templates/item-description.mjs";
-import ED4E from "../../config/_module.mjs";
 import { linkForUuidSync } from "../../utils.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as LEGEND from "../../config/legend.mjs";
 
 const { isEmpty } = foundry.utils;
 
@@ -87,7 +87,7 @@ export default class DisciplineData extends ClassTemplate.mixin(
       learn:            this.unmodifiedLevel === 0,
       nextLevel,
       nextLevelData:    this.advancement.levels.find( l => l.level === nextLevel ),
-      nextTalentLpCost: ED4E.legendPointsCost[ nextLevel + ED4E.lpIndexModForTier[ this.currentTier ] ],
+      nextTalentLpCost: LEGEND.legendPointsCost[ nextLevel + LEGEND.lpIndexModForTier[ this.currentTier ] ],
       talentRequirements,
     };
   }
@@ -105,16 +105,16 @@ export default class DisciplineData extends ClassTemplate.mixin(
 
     const { learn, nextTalentLpCost, talentRequirements } = this.increaseData;
     const validationData = {
-      [ED4E.validationCategories.resources]:               [
+      [LEGEND.validationCategories.resources]:               [
         {
           name:      "ED.Dialogs.Legend.Validation.availableMoney",
           value:     this.requiredMoneyForIncrease,
           fulfilled: this.requiredMoneyForIncrease <= this.parent.actor.currentSilver,
         },
       ],
-      [ED4E.validationCategories.talentsRequirement]: talentRequirements,
+      [LEGEND.validationCategories.talentsRequirement]: talentRequirements,
     };
-    if ( !learn ) validationData[ED4E.validationCategories.newAbilityLp] = [
+    if ( !learn ) validationData[LEGEND.validationCategories.newAbilityLp] = [
       {
         name:      "ED.Dialogs.Legend.Validation.talentOptionLp",
         value:     this.requiredLpForIncrease,
@@ -131,7 +131,7 @@ export default class DisciplineData extends ClassTemplate.mixin(
 
   /** @inheritDoc */
   get requiredMoneyForIncrease() {
-    return ED4E.disciplineTeacherCost[ this.unmodifiedLevel + 1 ];
+    return LEGEND.disciplineTeacherCost[ this.unmodifiedLevel + 1 ];
   }
 
   /**
@@ -164,7 +164,7 @@ export default class DisciplineData extends ClassTemplate.mixin(
     );
     return [
       {
-        name:      ED4E.circleTalentRequirements[
+        name:      LEGEND.circleTalentRequirements[
           game.settings.get( "ed4e", "lpTrackingCircleTalentRequirements" )
         ],
         value:     requirementValue,

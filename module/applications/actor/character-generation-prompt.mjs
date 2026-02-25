@@ -1,9 +1,11 @@
 import { documentsToSelectChoices, filterObject, getAllDocuments } from "../../utils.mjs";
-import ED4E, { LEGEND } from "../../config/_module.mjs";
 import CharacterGenerationData from "../../data/other/character-generation.mjs";
 import ItemEd from "../../documents/item.mjs";
 import ApplicationEd from "../api/application.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as LEGEND from "../../config/legend.mjs";
+import * as DOCUMENT_DATA from "../../config/document-data.mjs";
+import * as SYSTEM from "../../config/system.mjs";
 
 
 export default class CharacterGenerationPrompt extends ApplicationEd {
@@ -239,8 +241,8 @@ export default class CharacterGenerationPrompt extends ApplicationEd {
     if ( !skillLanguageSpeak ) {
       skillLanguageSpeak = await ItemEd.create(
         foundry.utils.mergeObject(
-          ED4E.documentData.Item.skill.languageSpeak,
-          { system: { level: ED4E.availableRanks.speak, edid: edidLanguageSpeak, tier: "novice" }  },
+          DOCUMENT_DATA.documentData.Item.skill.languageSpeak,
+          { system: { level: LEGEND.availableRanks.speak, edid: edidLanguageSpeak, tier: "novice" }  },
           { inplace: false } ),
       );
       docCollections.skills.push( skillLanguageSpeak );
@@ -248,8 +250,8 @@ export default class CharacterGenerationPrompt extends ApplicationEd {
     if ( !skillLanguageRW ) {
       skillLanguageRW = await ItemEd.create(
         foundry.utils.mergeObject(
-          ED4E.documentData.Item.skill.languageRW,
-          { system: { level: ED4E.availableRanks.readWrite, edid: edidLanguageRW, tier: "novice" } },
+          DOCUMENT_DATA.documentData.Item.skill.languageRW,
+          { system: { level: LEGEND.availableRanks.readWrite, edid: edidLanguageRW, tier: "novice" } },
           { inplace: false } ),
       );
       docCollections.skills.push( skillLanguageRW );
@@ -279,7 +281,7 @@ export default class CharacterGenerationPrompt extends ApplicationEd {
   static async getEquipmentItems( type ) {
     const lang = game.i18n.lang;
     const items = [];
-    const equipmentList = ED4E.startingEquipment;
+    const equipmentList = DOCUMENT_DATA.startingEquipment;
 
     for ( const key in equipmentList ) {
       if ( equipmentList.hasOwnProperty( key ) ) {
@@ -536,7 +538,7 @@ export default class CharacterGenerationPrompt extends ApplicationEd {
   /** @inheritdoc */
   async _prepareContext( options = {} ) {
     const context = await super._prepareContext( options );
-    context.config = ED4E;
+    context.config = CONFIG.ED4E;
     context.options = options;
 
     context.charGenData = this.charGenData;
@@ -622,28 +624,28 @@ export default class CharacterGenerationPrompt extends ApplicationEd {
       type:     "button",
       label:    game.i18n.localize( "ED.Dialogs.Buttons.cancel" ),
       cssClass: "cancel",
-      icon:     `fas ${ED4E.icons.cancel}`,
+      icon:     `fas ${SYSTEM.icons.cancel}`,
       action:   "close",
     }, ];
     context.buttons.push( {
       type:     "button",
       label:    game.i18n.localize( "ED.Dialogs.Buttons.previousStep" ),
       cssClass: `previous ${ context.hasPreviousStep ? "" : "invisible" }`,
-      icon:     `fas ${ED4E.icons.previousCharGen}`,
+      icon:     `fas ${SYSTEM.icons.previousCharGen}`,
       action:   "previous",
     } );
     context.buttons.push( {
       type:     "button",
       label:    game.i18n.localize( "ED.Dialogs.Buttons.nextStep" ),
       cssClass: `next ${ context.hasNextStep ? "" : "invisible" }`,
-      icon:     `fa-regular ${ED4E.icons.nextCharGen}`,
+      icon:     `fa-regular ${SYSTEM.icons.nextCharGen}`,
       action:   "next",
     } );
     context.buttons.push( {
       type:     "button",
       label:    game.i18n.localize( "ED.Dialogs.Buttons.finish" ),
       cssClass: "finish",
-      icon:     `fa-regular ${ED4E.icons.finishCharGen}`,
+      icon:     `fa-regular ${SYSTEM.icons.finishCharGen}`,
       action:   "finish",
       disabled: !context.isValid,
       tooltip:  await this._getFinishButtonTooltip(),

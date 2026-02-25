@@ -1,11 +1,12 @@
 import BaseCastingWorkflow from "./base-casting-workflow.mjs";
-import { MAGIC, SYSTEM } from "../../config/_module.mjs";
 import DialogEd from "../../applications/api/dialog.mjs";
 import RollPrompt from "../../applications/global/roll-prompt.mjs";
 import WarpingRollOptions from "../../data/roll/warping.mjs";
 import DamageRollOptions from "../../data/roll/damage.mjs";
 import HorrorMarkRollOptions from "../../data/roll/horror-mark.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as MAGIC from "../../config/magic.mjs";
+import * as SYSTEM from "../../config/system.mjs";
 
 /**
  * @typedef {object} RawCastingWorkflowOptions

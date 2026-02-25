@@ -1,7 +1,8 @@
 import EdRoll from "../../dice/ed-roll.mjs";
 import EdRollOptions from "../../data/roll/common.mjs";
-import ED4E, { ROLLS } from "../../config/_module.mjs";
 import ApplicationEd from "../api/application.mjs";
+import * as ROLLS from "../../config/rolls.mjs";
+import * as SYSTEM from "../../config/system.mjs";
 
 export default class RollPrompt extends ApplicationEd {
 
@@ -13,14 +14,14 @@ export default class RollPrompt extends ApplicationEd {
       type:     "button",
       label:    game.i18n.localize( "ED.Dialogs.Buttons.cancel" ),
       cssClass: "cancel",
-      icon:     `fas ${ED4E.icons.cancel}`,
+      icon:     `fas ${SYSTEM.icons.cancel}`,
       action:   "close",
     },
     {
       type:     "button",
       label:    game.i18n.localize( "ED.Dialogs.Buttons.roll" ),
       cssClass: "roll",
-      icon:     `fa-regular ${ED4E.icons.dice}`,
+      icon:     `fa-regular ${SYSTEM.icons.dice}`,
       action:   "roll",
     },
   ];
@@ -73,7 +74,7 @@ export default class RollPrompt extends ApplicationEd {
     window: {
       frame: true,
       title: "ED.Dialogs.Title.rollPrompt",
-      icon:  `fa-light ${ED4E.SYSTEM.icons.dice}`,
+      icon:  `fa-light ${SYSTEM.icons.dice}`,
     },
     actions: {
       roll:            this._roll,

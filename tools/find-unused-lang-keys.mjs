@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { UnusedLocalizationChecker } from "./localization-checker/_module.mjs";
+import UnusedLocalizationChecker from "./localization-checker/base.mjs";
 import { createLocalizationCliConfig } from "./localization-checker/cli-config.mjs";
 
 // Parse command line arguments

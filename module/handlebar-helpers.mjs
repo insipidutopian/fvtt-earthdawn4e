@@ -1,6 +1,6 @@
-import ED4E from "./config/_module.mjs";
 import getDice from "./dice/step-tables.mjs";
 import { linkForUuidSync } from "./utils.mjs";
+import * as LEGEND from "./config/legend.mjs";
 
 /**
  * @module handlebar-helpers - Provides custom Handlebars helpers for the application.
@@ -86,7 +86,7 @@ function nameFromUuid( uuid ) {
  * @returns {number} - The step value corresponding to the attribute value.
  */
 function stepFromAttributeValue( attributeValue ) {
-  return ED4E.characteristicsTable.step[attributeValue];
+  return LEGEND.characteristicsTable.step[attributeValue];
 }
 
 /**

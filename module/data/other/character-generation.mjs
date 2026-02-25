@@ -1,4 +1,3 @@
-import ED4E from "../../config/_module.mjs";
 import {
   filterObject,
   getAttributeStep,
@@ -11,6 +10,9 @@ import NamegiverTemplate from "../actor/templates/namegiver.mjs";
 import MappingField from "../fields/mapping-field.mjs";
 import SparseDataModel from "../abstract/sparse-data-model.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as ACTORS from "../../config/actors.mjs";
+import * as LEGEND from "../../config/legend.mjs";
+
 
 /**
  * The data model from which a new character is generated.
@@ -40,8 +42,8 @@ export default class CharacterGenerationData extends SparseDataModel {
       name: new fields.StringField( {
         required: true,
         nullable: false,
-        initial:  () => ED4E.characterNames[
-          Math.floor( Math.random() * ED4E.characterNames.length )
+        initial:  () => LEGEND.characterNames[
+          Math.floor( Math.random() * LEGEND.characterNames.length )
         ],
       } ),
 
@@ -84,7 +86,7 @@ export default class CharacterGenerationData extends SparseDataModel {
           integer:  true,
         } ),
       } ), {
-        initialKeys:     ED4E.attributes,
+        initialKeys:     ACTORS.attributes,
         initialKeysOnly: true,
       } ),
 
@@ -111,51 +113,51 @@ export default class CharacterGenerationData extends SparseDataModel {
       availableRanks: new fields.SchemaField( {
         talent: new fields.NumberField( {
           required: true,
-          initial:  ED4E.availableRanks.talent,
+          initial:  LEGEND.availableRanks.talent,
           min:      0,
-          max:      ED4E.availableRanks.talent,
+          max:      LEGEND.availableRanks.talent,
           step:     1,
         } ),
         devotion: new fields.NumberField( {
           required: true,
-          initial:  ED4E.availableRanks.devotion,
+          initial:  LEGEND.availableRanks.devotion,
           min:      0,
-          max:      ED4E.availableRanks.devotion,
+          max:      LEGEND.availableRanks.devotion,
           step:     1,
         } ),
         knowledge: new fields.NumberField( {
           required: true,
-          initial:  ED4E.availableRanks.knowledge,
+          initial:  LEGEND.availableRanks.knowledge,
           min:      0,
-          max:      ED4E.availableRanks.knowledge,
+          max:      LEGEND.availableRanks.knowledge,
           step:     1,
         } ),
         artisan: new fields.NumberField( {
           required: true,
-          initial:  ED4E.availableRanks.artisan,
+          initial:  LEGEND.availableRanks.artisan,
           min:      0,
-          max:      ED4E.availableRanks.artisan,
+          max:      LEGEND.availableRanks.artisan,
           step:     1,
         } ),
         general: new fields.NumberField( {
           required: true,
-          initial:  ED4E.availableRanks.general,
+          initial:  LEGEND.availableRanks.general,
           min:      0,
-          max:      ED4E.availableRanks.general,
+          max:      LEGEND.availableRanks.general,
           step:     1,
         } ),
         speak: new fields.NumberField( {
           required: true,
-          initial:  ED4E.availableRanks.speak,
+          initial:  LEGEND.availableRanks.speak,
           min:      0,
-          max:      ED4E.availableRanks.speak,
+          max:      LEGEND.availableRanks.speak,
           step:     1,
         } ),
         readWrite: new fields.NumberField( {
           required: true,
-          initial:  ED4E.availableRanks.speak,
+          initial:  LEGEND.availableRanks.speak,
           min:      0,
-          max:      ED4E.availableRanks.speak,
+          max:      LEGEND.availableRanks.speak,
           step:     1,
         } ),
       }, {
@@ -230,7 +232,7 @@ export default class CharacterGenerationData extends SparseDataModel {
         // Treat namegiver talents as "other" talents so they are always included
         const talentCategoryToSet = category === "namegiver" ? "other" : abilityCategory;
 
-        if ( Object.keys( ED4E.talentCategory ).includes( talentCategoryToSet ) ) itemDocument.system.talentCategory = talentCategoryToSet;
+        if ( Object.keys( LEGEND.talentCategory ).includes( talentCategoryToSet ) ) itemDocument.system.talentCategory = talentCategoryToSet;
         // Set initial level to 1 for free talents with level 0, but preserve assigned levels for namegiver talents
         if ( initialLevel === 0 && abilityCategory === "free" ) initialLevel = 1;
         if ( abilityCategory !== "special" ) itemDocument.system.level = initialLevel;
@@ -326,7 +328,7 @@ export default class CharacterGenerationData extends SparseDataModel {
   }
 
   async getCharacteristicsPreview() {
-    const lookup = ED4E.characteristicsTable;
+    const lookup = LEGEND.characteristicsTable;
     const finalValues = await this.getFinalAttributeValues();
     return {
       health: {
@@ -359,7 +361,7 @@ export default class CharacterGenerationData extends SparseDataModel {
   }
 
   _getPreviewValues( lookupTable, key, index ) {
-    const lookup = lookupTable ?? ED4E.characteristicsTable;
+    const lookup = lookupTable ?? LEGEND.characteristicsTable;
     return {
       previous: lookup[key][index-1],
       current:  lookup[key][index],
@@ -479,8 +481,8 @@ export default class CharacterGenerationData extends SparseDataModel {
       && newRank <= game.settings.get( "ed4e", "charGenMaxRank" );
     if ( abilityType === "language" ) {
       const languageSkill = await fromUuid( abilityUuid );
-      if ( languageSkill.system.edid === game.settings.get( "ed4e", "edidLanguageSpeak" ) ) isRankValid &&= newRank >= ED4E.availableRanks.speak;
-      else if ( languageSkill.system.edid === game.settings.get( "ed4e", "edidLanguageRW" ) ) isRankValid &&= newRank >= ED4E.availableRanks.readWrite;
+      if ( languageSkill.system.edid === game.settings.get( "ed4e", "edidLanguageSpeak" ) ) isRankValid &&= newRank >= LEGEND.availableRanks.speak;
+      else if ( languageSkill.system.edid === game.settings.get( "ed4e", "edidLanguageRW" ) ) isRankValid &&= newRank >= LEGEND.availableRanks.readWrite;
     }
 
     const costDifference = newRank - oldRank;
@@ -523,7 +525,7 @@ export default class CharacterGenerationData extends SparseDataModel {
     );
 
     const oldCost = this.attributes[attribute].cost;
-    const newCost = ED4E.attributePointsCost[newModifier];
+    const newCost = LEGEND.attributePointsCost[newModifier];
     // Add old cost, otherwise they're included in the calculation of available points
     if ( ( newCost > ( this.availableAttributePoints + oldCost ) ) || !isModifierValid ) {
       ui.notifications.warn( game.i18n.localize(
@@ -562,7 +564,7 @@ export default class CharacterGenerationData extends SparseDataModel {
     if ( [ "artisan", "knowledge" ].includes( abilityType ) ) {
       const assignedRanks = sum( Object.values( this.abilities[abilityType] ) ) + costDifference;
       const availableRanks = this.availableRanks[abilityType];
-      const maxAvailableRanks = ED4E.availableRanks[abilityType];
+      const maxAvailableRanks = LEGEND.availableRanks[abilityType];
       if ( costDifference > 0 ) {
         if ( availableRanks > 0 ) return abilityType;
         return "general";
@@ -662,8 +664,8 @@ export default class CharacterGenerationData extends SparseDataModel {
           class:    classAbilities
         };
         const availableRanksPayload = {
-          talent:   ED4E.availableRanks.talent,
-          devotion: ED4E.availableRanks.devotion
+          talent:   LEGEND.availableRanks.talent,
+          devotion: LEGEND.availableRanks.devotion
         };
 
         updateData = {
@@ -689,16 +691,16 @@ export default class CharacterGenerationData extends SparseDataModel {
           SYSTEM_TYPES.Item.skill,
         );
         skillsPayload.language = {
-          [skillLanguageSpeak.uuid]: ED4E.availableRanks.speak,
-          [skillLanguageRW.uuid]:    ED4E.availableRanks.readWrite
+          [skillLanguageSpeak.uuid]: LEGEND.availableRanks.speak,
+          [skillLanguageRW.uuid]:    LEGEND.availableRanks.readWrite
         };
 
         const availableSkillRanksPayload = {
-          artisan:   ED4E.availableRanks.artisan,
-          knowledge: ED4E.availableRanks.knowledge,
-          general:   ED4E.availableRanks.general,
-          readWrite: ED4E.availableRanks.readWrite,
-          speak:     ED4E.availableRanks.speak
+          artisan:   LEGEND.availableRanks.artisan,
+          knowledge: LEGEND.availableRanks.knowledge,
+          general:   LEGEND.availableRanks.general,
+          readWrite: LEGEND.availableRanks.readWrite,
+          speak:     LEGEND.availableRanks.speak
         };
 
         updateData = {

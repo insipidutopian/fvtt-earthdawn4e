@@ -1,4 +1,3 @@
-import ED4E from "../../config/_module.mjs";
 import PromptFactory from "../global/prompt-factory.mjs";
 import ApplicationEd from "../api/application.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
@@ -214,7 +213,7 @@ export default class LearnSpellPrompt extends ApplicationEd {
 
     context.spell = this.spell;
 
-    context.config = ED4E;
+    context.config = CONFIG.ED4E;
 
     context.hasPatterncraft = !!this.actor.getSingleItemByEdid(
       game.settings.get( "ed4e", "edidPatterncraft" ),

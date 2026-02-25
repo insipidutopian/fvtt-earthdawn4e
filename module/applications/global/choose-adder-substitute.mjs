@@ -1,5 +1,5 @@
 import ApplicationEd from "../api/application.mjs";
-import { ROLLS } from "../../config/_module.mjs";
+import * as ROLLS from "../../config/rolls.mjs";
 
 export default class ChooseAdderSubstitutePrompt extends ApplicationEd {
 

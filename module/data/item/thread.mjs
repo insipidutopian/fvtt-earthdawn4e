@@ -1,10 +1,12 @@
 import ItemDataModel from "../abstract/item-data-model.mjs";
 import ItemDescriptionTemplate from "./templates/item-description.mjs";
 import LpIncreaseTemplate from "./templates/lp-increase.mjs";
-import ED4E, { MAGIC } from "../../config/_module.mjs";
 import PromptFactory from "../../applications/global/prompt-factory.mjs";
 import LpSpendingTransactionData from "../advancement/lp-spending-transaction.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
+import * as LEGEND from "../../config/legend.mjs";
+import * as MAGIC from "../../config/magic.mjs";
+
 
 /**
  * Data model for thread items.
@@ -149,7 +151,7 @@ export default class ThreadData extends ItemDataModel.mixin(
     if ( !this.isActorEmbedded ) return undefined;
     const increaseData = this.increaseData;
     return {
-      [ED4E.validationCategories.resources]: [
+      [LEGEND.validationCategories.resources]: [
         {
           name:      "ED.Dialogs.Legend.Validation.availableLp",
           value:     this.requiredLpForIncrease,
@@ -161,7 +163,7 @@ export default class ThreadData extends ItemDataModel.mixin(
           fulfilled: this.requiredMoneyForIncrease <= this.parent.actor.currentSilver,
         },
       ],
-      [ED4E.validationCategories.health]:    [
+      [LEGEND.validationCategories.health]:    [
         {
           name:      "ED.Dialogs.Legend.Validation.hasDamage",
           value:     increaseData.hasDamage ? game.i18n.localize( "ED.Dialogs.Legend.Validation.hasDamage" ) : game.i18n.localize( "ED.Dialogs.Legend.Validation.hasNoDamage" ),

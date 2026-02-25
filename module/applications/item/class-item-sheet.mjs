@@ -1,5 +1,5 @@
-import ED4E from "../../config/_module.mjs";
 import ItemSheetEd from "./item-sheet.mjs";
+import * as ITEMS from "../../config/items.mjs";
 
 // noinspection JSClosureCompilerSyntax
 /**
@@ -130,7 +130,7 @@ export default class ClassItemSheetEd extends ItemSheetEd {
     const tierDisplayNames = {};
     
     // Get tier configuration from config
-    const currentTierConfig = ED4E.classTierConfig[itemType] || ED4E.classTierConfig.discipline;
+    const currentTierConfig = ITEMS.classTierConfig[itemType] || ITEMS.classTierConfig.discipline;
     const validTiersForType = Object.keys( currentTierConfig );
     const tierSelectOptions = Object.values( currentTierConfig );
     
@@ -190,7 +190,7 @@ export default class ClassItemSheetEd extends ItemSheetEd {
         system:                 this.document.system,
         options:                this.options,
         systemFields:           this.document.system.schema.fields,
-        config:                 ED4E,
+        config:                 CONFIG.ED4E,
       },
     );
 

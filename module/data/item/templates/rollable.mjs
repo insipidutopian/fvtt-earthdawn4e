@@ -9,6 +9,7 @@ import * as ROLLS from "../../../config/rolls.mjs";
 
 const { fields } = foundry.data;
 
+
 export default class RollableTemplate extends SystemDataModel {
 
   /** @inheritdoc */

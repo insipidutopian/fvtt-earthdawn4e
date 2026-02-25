@@ -1,6 +1,8 @@
-import ED4E from "./config/_module.mjs";
-
 import EdIdField from "./data/fields/edid-field.mjs";
+import * as ACTORS from "./config/actors.mjs";
+import * as LEGEND from "./config/legend.mjs";
+import * as MAGIC from "./config/magic.mjs";
+import * as SYSTEM from "./config/system.mjs";
 
 const { BooleanField, NumberField, SetField, StringField } = foundry.data.fields;
 
@@ -32,7 +34,7 @@ export function setSetting( settingKey, value, options={} ) {
  */
 export function getEdIds() {
   return Object.keys(
-    ED4E.defaultEdIds
+    SYSTEM.defaultEdIds
   ).map(
     edid => getDefaultEdid( edid )
   );
@@ -80,7 +82,7 @@ export default function registerSystemSettings() {
   /*                                      ED-IDs                                      */
   /* -------------------------------------------------------------------------------- */
 
-  Object.entries( ED4E.defaultEdIds ).forEach( ( [ name, edid ] ) => {
+  Object.entries( SYSTEM.defaultEdIds ).forEach( ( [ name, edid ] ) => {
     game.settings.register( "ed4e", getEdidSettingKey( name ), {
       name:    `ED.Settings.Edid.${ name }`,
       hint:    `ED.Settings.Edid.${ name }Hint`,
@@ -212,7 +214,7 @@ export default function registerSystemSettings() {
     config:  true,
     type:    new StringField( {
       initial:  "spendLp",
-      choices:  ED4E.attributeIncreaseRules,
+      choices:  LEGEND.attributeIncreaseRules,
       label:    "ED.Settings.LpTracking.attributeOptions",
       hint:     "ED.Settings.LpTracking.hintAttributeOption",
     } ),
@@ -226,7 +228,7 @@ export default function registerSystemSettings() {
     config:  true,
     default: "disciplineTalents",
     type:    String,
-    choices: ED4E.circleTalentRequirements,
+    choices: LEGEND.circleTalentRequirements,
   } );
 
   // LP Tracking Option Skill Training
@@ -292,7 +294,7 @@ export default function registerSystemSettings() {
       nullable: false,
       blank:    false,
       initial:  "noviceTalent",
-      choices:  ED4E.spellCostRules,
+      choices:  LEGEND.spellCostRules,
       label:    "ED.Settings.LpTracking.spellCost",
       hint:     "ED.Settings.LpTracking.hintSpellCost",
     } ),
@@ -360,7 +362,7 @@ export default function registerSystemSettings() {
       } ),
       {
         empty:   false,
-        initial:  Object.values( ED4E.languages ) ,
+        initial:  Object.values( ACTORS.languages ) ,
       }
     ),
   } );
@@ -371,14 +373,14 @@ export default function registerSystemSettings() {
     hint:    "ED.Settings.GameMechanics.spellcastingTypesHint",
     scope:   "world",
     config:  true,
-    default:  Object.values( ED4E.spellcastingTypes ),
+    default:  Object.values( MAGIC.spellcastingTypes ),
     type:    new SetField(
       new StringField( {
         blank: false,
       } ),
       {
         empty:   false,
-        initial:  Object.values( ED4E.spellcastingTypes ),
+        initial:  Object.values( MAGIC.spellcastingTypes ),
       }
     )
   } );
