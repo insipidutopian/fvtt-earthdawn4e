@@ -126,7 +126,7 @@ export default class SkillData extends IncreasableAbilityTemplate.mixin(
         {
           name:      "ED.Dialogs.Legend.Validation.maxLevel",
           value:     increaseData.newLevel,
-          fulfilled: increaseData.newLevel <= game.settings.get( "LEGEND", "lpTrackingMaxRankSkill" ),
+          fulfilled: increaseData.newLevel <= game.settings.get( "ed4e", "lpTrackingMaxRankSkill" ),
         },
       ],
       [LEGEND.validationCategories.resources]: [
