@@ -911,15 +911,16 @@ export default class ActorEd extends Actor {
   /**
    * Triggers a prompt for updating the Legend Point (LP) history of the actor.
    * Updates the LPTrackingData of the actor based on the input from the prompt.
-   * @returns {Promise<Actor>} A Promise that resolves to the updated Actor instance.
-   * @see ../../documentation/User Functions/UF_LpTracking-legendPointHistory.md
+   * @returns {Promise<Actor>|undefined} A Promise that resolves to the updated Actor instance,
+   * or undefined if canceled.
    */
   async legendPointHistory() {
     const lpUpdateData = await LegendPointHistory.waitPrompt(
       new LpTrackingData( this.system.lp.toObject() ),
       { actor: this }
     );
-    return this.update( { system: { lp: lpUpdateData } } );
+
+    if ( lpUpdateData !== undefined ) return this.update( { system: { lp: lpUpdateData } } );
   }
 
   // endregion
