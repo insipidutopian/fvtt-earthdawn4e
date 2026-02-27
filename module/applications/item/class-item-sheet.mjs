@@ -225,8 +225,9 @@ export default class ClassItemSheetEd extends ItemSheetEd {
    */
   static async deleteClassLevel( event, target ) {
     event.preventDefault();
-    const oldMaxLevel = this.document.system.advancement.levels.length;
-    const newTab = ( oldMaxLevel - 1 ) > 0 ? `level${oldMaxLevel - 1}` : "options";
+    const oldMaxLevel = this.document.system.advancement.numLevels;
+    const newMaxLevel = oldMaxLevel - 1;
+    const newTab = newMaxLevel > 0 ? `level${newMaxLevel}` : "options";
     await this.document.system.advancement.deleteLevel();
     if ( this.tabGroups.classAdvancements === `level${oldMaxLevel}` ) this.changeTab( newTab, "classAdvancements" );
     // this.render( { parts: [ "advancement" ] } );
