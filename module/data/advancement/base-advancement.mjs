@@ -19,7 +19,7 @@ export default class AdvancementData extends SparseDataModel {
   static defineSchema() {
     const fields = foundry.data.fields;
     return {
-      levels: new fields.ArrayField(
+      levels: new fields.TypedObjectField(
         new fields.EmbeddedDataField(
           AdvancementLevelData,
           {
@@ -30,7 +30,7 @@ export default class AdvancementData extends SparseDataModel {
         {
           required: true,
           nullable: true,
-          initial:  [],
+          initial:  {},
         } ),
       abilityOptions: new MappingField(
         new fields.SetField(
@@ -141,5 +141,15 @@ export default class AdvancementData extends SparseDataModel {
     this.parent.parent.update( {
       [propertyKey]: currentAbilities.filter( uuid => !abilityUUIDs.includes( uuid ) ),
     } );
+  }
+
+  static migrateData( source ) {
+    if ( Array.isArray( source.levels ) ) {
+      source.levels = source.levels.reduce( ( acc, levelData ) => {
+        acc[levelData.level] = levelData;
+        return acc;
+      }, {} );
+    }
+    return super.migrateData( source );
   }
 }
