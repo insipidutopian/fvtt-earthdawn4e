@@ -9,31 +9,32 @@ import * as ITEMS from "../../config/items.mjs";
 export default class ClassItemSheetEd extends ItemSheetEd {
   
   /** @inheritDoc */
-  static DEFAULT_OPTIONS = {
-    id:       "item-sheet-{id}",
-    uniqueId: String( ++foundry.applications.api.ApplicationV2._appId ),
-    classes:  [ "earthdawn4e", "sheet", "item" ],
-    window:   {
-      frame:          true,
-      positioned:     true,
-      icon:           false,
-      minimizable:    true,
-      resizable:      true,
-    },
-    form: {
-      submitOnChange: true,
-    },
-    actions:  {
-      addClassLevel:     ClassItemSheetEd.addClassLevel,
-      deleteClassLevel:  ClassItemSheetEd.deleteClassLevel,
+  static DEFAULT_OPTIONS
+    = {
+      id:       "item-sheet-{id}",
+      uniqueId: String( ++foundry.applications.api.ApplicationV2._appId ),
+      classes:  [ "earthdawn4e", "sheet", "item" ],
+      window:   {
+        frame:          true,
+        positioned:     true,
+        icon:           false,
+        minimizable:    true,
+        resizable:      true,
+      },
+      form: {
+        submitOnChange: true,
+      },
+      actions:  {
+        addClassLevel:     ClassItemSheetEd.addClassLevel,
+        deleteClassLevel:  ClassItemSheetEd.deleteClassLevel,
 
-    },
-    position: {
-      top:    50, 
-      left:   220,
-      width:  520, 
-    }
-  };
+      },
+      position: {
+        top:    50, 
+        left:   220,
+        width:  520, 
+      }
+    };
 
   // region PARTS
   /** @inheritDoc */
@@ -100,12 +101,12 @@ export default class ClassItemSheetEd extends ItemSheetEd {
         label: "ED.Item.Tabs.talentOptions",
       },
     };
-    for ( let levelIndex = 1; levelIndex <= this.document.system.advancement.levels.length; levelIndex++ ) {
-      classTabs[`level${levelIndex}`] = {
-        id:    `level${levelIndex}`,
+    for ( const level of Object.keys( this.document.system.advancement.levels ) ) {
+      classTabs[`level${level}`] = {
+        id:    `level${level}`,
         group: "classAdvancements",
         label: "ED.Item.Tabs.level",
-        level: levelIndex,
+        level: level,
       };
     }
 
