@@ -28,9 +28,9 @@ export default class AdvancementLevelData extends SparseDataModel {
       } ),
       tier: new fields.StringField( {
         required: true,
-        nullable: true,
-        blank:    true,
-        initial:  "",
+        nullable: false,
+        blank:    false,
+        initial:  "novice",
         choices:  LEGEND.tier,
       } ),
       abilities: new MappingField(
