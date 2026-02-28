@@ -52,10 +52,10 @@ export default class KnackTemplate extends SystemDataModel.mixin(
         positive: true,
         integer:  true,
       } ),
-      requirements:     new fields.ArrayField(
+      requirements:     new fields.TypedObjectField(
         new fields.TypedSchemaField( ConstraintData.TYPES )
       ),
-      restrictions:     new fields.ArrayField(
+      restrictions:     new fields.TypedObjectField(
         new fields.TypedSchemaField( ConstraintData.TYPES )
       ),
     } );
@@ -237,6 +237,61 @@ export default class KnackTemplate extends SystemDataModel.mixin(
       );
 
     return learnedItem;
+  }
+
+  // endregion
+
+  // region Methods
+
+  /**
+   * Adds a constraint to this knack.
+   * @param {keyof ConstraintData.TYPES} constraintType The type of constraint to add.
+   * @param {"requirements"|"restrictions"} fieldName The field to add the constraint to.
+   * @returns {Promise<ItemEd|undefined>} Returns the updated knack item or undefined if not updated.
+   */
+  async addConstraint( constraintType, fieldName ) {
+    if ( ![ "requirements", "restrictions" ].includes( fieldName ) )
+      throw new Error( "Invalid field name for constraint. Must be 'requirements' or 'restrictions'." );
+
+    const constraintData = ConstraintData.fromType( constraintType );
+
+    const fieldPath = `system.${ fieldName }.==${ constraintType }`;
+
+    return await this.parent.update( {
+      [ fieldPath ]: constraintData,
+    } );
+  }
+
+  /**
+   * Removes a constraint from this knack. Sets the entire field to null if there are no more constraints.
+   * @param {keyof ConstraintData.TYPES} constraintType The type of constraint to remove.
+   * @param {"requirements"|"restrictions"} fieldName The field to remove the constraint from.
+   * @returns {Promise<ItemEd|undefined>} Returns the updated knack item or undefined if not updated.
+   */
+  async removeConstraint( constraintType, fieldName ) {
+    if ( ![ "requirements", "restrictions" ].includes( fieldName ) )
+      throw new Error( "Invalid field name for constraint. Must be 'requirements' or 'restrictions'." );
+
+
+    const fieldPath = this._getFieldPathForConstraintRemoval( fieldName, constraintType );
+
+    return await this.parent.update( {
+      [ fieldPath ]: null,
+    } );
+  }
+
+  /**
+   * Gets the field path in a TypedObjectField for removing a constraint.
+   * @param {"requirements"|"restrictions"} fieldName The name of the field to remove the constraint from.
+   * @param {keyof ConstraintData.TYPES} constraintType The type of constraint to remove.
+   * @returns {string} The field path for removing the constraint.
+   */
+  _getFieldPathForConstraintRemoval( fieldName, constraintType ) {
+    const constraintKeys = Object.keys( this[fieldName] || {} );
+
+    return constraintKeys.includes( constraintType ) && constraintKeys.length === 1
+      ? `system.==${ fieldName }`
+      : `system.${ fieldName }.-=${ constraintType }`;
   }
 
   // endregion
