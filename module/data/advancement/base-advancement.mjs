@@ -1,7 +1,7 @@
 import AbilityTemplate from "../item/templates/ability.mjs";
 import AdvancementLevelData from "./advancement-level.mjs";
-import MappingField from "../fields/mapping-field.mjs";
 import SparseDataModel from "../abstract/sparse-data-model.mjs";
+import { mapObject } from "../../utils.mjs";
 
 /**
  * Advancement of Disciplines, Paths and Questors
@@ -28,7 +28,7 @@ export default class AdvancementData extends SparseDataModel {
           nullable: true,
           initial:  {},
         } ),
-      abilityOptions: new MappingField(
+      abilityOptions: new fields.TypedObjectField(
         new fields.SetField(
           new fields.DocumentUUIDField(
             AbilityTemplate ),
@@ -37,12 +37,11 @@ export default class AdvancementData extends SparseDataModel {
             empty:    true,
           } ),
         {
-          initialKeys:     CONFIG.ED4E.tier,
-          initialKeysOnly: true,
-          required:        true,
-          nullable:        false,
+          initial:  mapObject( CONFIG.ED4E.tier, ( key, _ ) => [ key, [] ] ),
+          required: true,
+          nullable: false,
         } ),
-      learnedOptions: new MappingField(
+      learnedOptions: new fields.TypedObjectField(
         new fields.NumberField( {
           required: true,
           nullable: false,
@@ -50,10 +49,8 @@ export default class AdvancementData extends SparseDataModel {
           integer:   true,
         } ),
         {
-          initialKeysOnly: false,
           required:        true,
           nullable:        false,
-          empty:           true,
         } ),
     };
   }
