@@ -494,7 +494,8 @@
         "class":                                  "Berufung",
         "language":                               "Sprache",
         "namegiver":                              "Namensgeber",
-        "relation":                               "Beziehung"
+        "relation":                               "Beziehung",
+        "spell":                                  "Zauber"
       },
       "DamageSourceConfig": {
         "arbitrary":                              "Willkürlicher Schaden",
