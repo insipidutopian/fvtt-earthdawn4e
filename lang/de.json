@@ -3821,6 +3821,7 @@
       "castSpell":                                "Zauber&nbsp;beliebig&nbsp;wirken",
       "castSpellFromMatrix":                      "Zauber&nbsp;mit&nbsp;Matrix&nbsp;wirken",
       "delete":                                   "Lösche dieses Item.",
+      "deleteConstraint":                         "Lösche diese Einschränkung",
       "deleteEnhancement":                        "Lösche diese Verstärkung.",
       "deleteManeuver":                           "Lösche dieses Manöver von der Maske.",
       "deletePower":                              "Lösche diese Kraft von der Maske.",
