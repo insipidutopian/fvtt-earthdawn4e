@@ -494,7 +494,8 @@
         "class":                                  "TODO: Add translation",
         "language":                               "TODO: Add translation",
         "namegiver":                              "TODO: Add translation",
-        "relation":                               "TODO: Add translation"
+        "relation":                               "TODO: Add translation",
+        "spell":                                  "TODO: Add translation"
       },
       "DamageSourceConfig": {
         "arbitrary":                              "TODO: Add translation",
