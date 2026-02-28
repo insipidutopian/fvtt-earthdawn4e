@@ -3821,6 +3821,7 @@
       "castSpell":                                "Cast spell freely",
       "castSpellFromMatrix":                      "Cast spell using a matrix",
       "delete":                                   "Delete this item.",
+      "deleteConstraint":                         "Delete this constraint",
       "deleteEnhancement":                        "Delete this enhancement.",
       "deleteManeuver":                           "Delete this maneuver from the mask.",
       "deletePower":                              "Delete this power from the mask.",
