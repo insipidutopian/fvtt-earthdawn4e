@@ -37,7 +37,7 @@ export default class PcData extends NamegiverTemplate {
   static defineSchema() {
     const fields = foundry.data.fields;
     const superSchema = super.defineSchema();
-    this.mergeSchema( superSchema.attributes.model.fields,  {
+    this.mergeSchema( superSchema.attributes.element.fields,  {
       initialValue: new fields.NumberField( {
         required: true,
         nullable: false,
