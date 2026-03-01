@@ -11,7 +11,7 @@
     <label class="modifier-description">{{localize "ED.Dialogs.RollPrompt.modifier"}}</label>
     {{#each strain.modifiers as |modifier|}}
       {{formGroup
-        optionsFields.strain.fields.modifiers.model
+        ../optionsFields.strain.fields.modifiers.element
         name=(concat "strain.modifiers." @key)
         value=modifier
         label=@key

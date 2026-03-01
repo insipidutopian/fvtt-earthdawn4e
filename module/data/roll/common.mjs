@@ -1,6 +1,5 @@
 import { lowerCaseFirstLetter, sum } from "../../utils.mjs";
 import getDice from "../../dice/step-tables.mjs";
-import MappingField from "../fields/mapping-field.mjs";
 import FormulaField from "../fields/formula-field.mjs";
 import * as EFFECTS from "../../config/effects.mjs";
 import * as ROLLS from "../../config/rolls.mjs";
@@ -110,7 +109,7 @@ export default class EdRollOptions extends SparseDataModel {
             step:     1,
             integer:  true,
           } ),
-          modifiers: new MappingField(
+          modifiers: new fields.TypedObjectField(
             new fields.NumberField( {
               required: true,
               nullable: false,
@@ -120,7 +119,6 @@ export default class EdRollOptions extends SparseDataModel {
             } ),
             {
               required:        true,
-              initialKeysOnly: false,
             },
           ),
           total: new fields.NumberField( {
@@ -139,17 +137,17 @@ export default class EdRollOptions extends SparseDataModel {
       ),
       karma:     this._bonusResource,
       devotion:  this._bonusResource,
-      extraDice: new MappingField( new fields.NumberField( {
-        required: true,
-        nullable: false,
-        initial:  1,
-        min:      1,
-        step:     1,
-        integer:  true,
-      } ), {
-        required:        true,
-        initialKeysOnly: false,
-      } ),
+      extraDice: new fields.TypedObjectField(
+        new fields.NumberField( {
+          required: true,
+          nullable: false,
+          initial:  1,
+          min:      1,
+          step:     1,
+          integer:  true,
+        } ), {
+          required:        true,
+        } ),
       target: new fields.SchemaField(
         {
           base: new fields.NumberField( {
@@ -159,7 +157,7 @@ export default class EdRollOptions extends SparseDataModel {
             min:      0,
             step:     1,
           } ),
-          modifiers: new MappingField(
+          modifiers: new fields.TypedObjectField(
             new fields.NumberField( {
               required: true,
               nullable: true,
@@ -169,7 +167,6 @@ export default class EdRollOptions extends SparseDataModel {
             } ),
             {
               required:        true,
-              initialKeysOnly: false,
             },
           ),
           total: new fields.NumberField( {
@@ -203,7 +200,7 @@ export default class EdRollOptions extends SparseDataModel {
             initial:  0,
             integer:  true,
           } ),
-          modifiers: new MappingField(
+          modifiers: new fields.TypedObjectField(
             new fields.NumberField( {
               required: true,
               nullable: false,
@@ -214,7 +211,6 @@ export default class EdRollOptions extends SparseDataModel {
             } ),
             {
               required:        true,
-              initialKeysOnly: false,
             },
           ),
           total: new fields.NumberField( {
