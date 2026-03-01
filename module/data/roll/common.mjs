@@ -23,8 +23,8 @@ import SparseDataModel from "../abstract/sparse-data-model.mjs";
 /**
  * @typedef {Record<string, number>} RollModifiers
  * @description A collection of named modifiers applied to rolls.
- * Keys are localized label describing the source of the modifier (e.g., "Wounds", "Karma Bonus").
- * Values are numeric modifier value that will be applied to the roll (positive for bonuses, negative for penalties).
+ * Keys are localized labels describing the source of the modifier (e.g., "Wounds", "Karma Bonus").
+ * Values are numeric modifier values that will be applied to the roll (positive for bonuses, negative for penalties).
  * @example
  * // Example RollModifiers object:
  * {
@@ -71,9 +71,9 @@ import SparseDataModel from "../abstract/sparse-data-model.mjs";
 
 /**
  * EdRollOptions Options for creating an {@link EdRoll} instance.
- * If not provided, values for `step`, `target`, and `strain` will be initialized to their automatically.
- * This should be overridden by subclasses to provide automation. This class only provides the default values.
- * @property { RollStepData } step Ever information related to the step of the action, Mods, Bonuses, Mali etc.
+ * If not provided, values for `step`, `target`, and `strain` will be initialized to their default automatically.
+ * Subclasses should override this to provide automation. This class only provides the default values.
+ * @property { RollStepData } step Ever information related to the step of the action, Mods, Bonuses, Mali, etc.
  * @property { RollResourceData | null } karma Available Karma, Karma dice and used karma.
  * @property { RollResourceData | null } devotion Available Devotions, Devotion die, Devotion die used and used devotion.
  * @property { Record<string, number> } extraDice Extra dice that are added to the roll.
@@ -305,7 +305,7 @@ export default class EdRollOptions extends SparseDataModel {
 
   /**
    * @description Bonus resources to be added globally
-   * @type { RollResourceData }
+   * @type { fields.SchemaField }
    */
   static get _bonusResource() {
     const fields = foundry.data.fields;
@@ -588,7 +588,7 @@ export default class EdRollOptions extends SparseDataModel {
   /**
    * Used when initializing this data model. Calculates the target difficulty for a roll based on the input data.
    * @param {EdRollOptionsInitializationData} data - The data object with which this model is initialized.
-   * @returns {RollTargetData|null} The target difficulty containing base and modifiers or null if not applicable (e.g. for effect tests).
+   * @returns {RollTargetData|null} The target difficulty containing base and modifiers or null if not applicable (e.g., for effect tests).
    */
   static _prepareTargetDifficulty( data ) {
     return data.target ?? null;
