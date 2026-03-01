@@ -1,7 +1,7 @@
 import AbilityTemplate from "../item/templates/ability.mjs";
 import AdvancementLevelData from "./advancement-level.mjs";
-import MappingField from "../fields/mapping-field.mjs";
 import SparseDataModel from "../abstract/sparse-data-model.mjs";
+import { mapObject } from "../../utils.mjs";
 
 /**
  * Advancement of Disciplines, Paths and Questors
@@ -9,17 +9,13 @@ import SparseDataModel from "../abstract/sparse-data-model.mjs";
 
 export default class AdvancementData extends SparseDataModel {
 
-  /** @inheritdoc */
-  static LOCALIZATION_PREFIXES = [
-    ...super.LOCALIZATION_PREFIXES,
-    "ED.Data.Other.Advancement",
-  ];
+  // region Schema
 
   /** @inheritDoc */
   static defineSchema() {
     const fields = foundry.data.fields;
     return {
-      levels: new fields.ArrayField(
+      levels: new fields.TypedObjectField(
         new fields.EmbeddedDataField(
           AdvancementLevelData,
           {
@@ -30,9 +26,9 @@ export default class AdvancementData extends SparseDataModel {
         {
           required: true,
           nullable: true,
-          initial:  [],
+          initial:  {},
         } ),
-      abilityOptions: new MappingField(
+      abilityOptions: new fields.TypedObjectField(
         new fields.SetField(
           new fields.DocumentUUIDField(
             AbilityTemplate ),
@@ -41,12 +37,11 @@ export default class AdvancementData extends SparseDataModel {
             empty:    true,
           } ),
         {
-          initialKeys:     CONFIG.ED4E.tier,
-          initialKeysOnly: true,
-          required:        true,
-          nullable:        false,
+          initial:  mapObject( CONFIG.ED4E.tier, ( key, _ ) => [ key, [] ] ),
+          required: true,
+          nullable: false,
         } ),
-      learnedOptions: new MappingField(
+      learnedOptions: new fields.TypedObjectField(
         new fields.NumberField( {
           required: true,
           nullable: false,
@@ -54,15 +49,25 @@ export default class AdvancementData extends SparseDataModel {
           integer:   true,
         } ),
         {
-          initialKeysOnly: false,
           required:        true,
           nullable:        false,
-          empty:           true,
         } ),
     };
   }
 
-  /* -------------------------------------------- */
+  // endregion
+
+  // region Static Properties
+
+  /** @inheritdoc */
+  static LOCALIZATION_PREFIXES = [
+    ...super.LOCALIZATION_PREFIXES,
+    "ED.Data.Other.Advancement",
+  ];
+
+  // endregion
+
+  // region Getters
 
   /**
    * Get the abilities that are not yet learned for each tier.
@@ -78,6 +83,18 @@ export default class AdvancementData extends SparseDataModel {
   }
 
   /**
+   * The number of levels in this advancement.
+   * @type {number}
+   */
+  get numLevels() {
+    return Object.keys( this.levels ).length ?? 0;
+  }
+
+  // endregion
+
+  // region Methods
+
+  /**
    * Add abilities to the given type of options pool.
    * @param {[ItemEd|string]} abilities         An array of ability item or their UUIDs to add.
    * @param {keyof typeof ED4E.tier} poolType   The type/tier of pool the abilities are added to.
@@ -86,7 +103,7 @@ export default class AdvancementData extends SparseDataModel {
     const propertyKey = `system.advancement.abilityOptions.${poolType}`;
     const currentAbilities = this.abilityOptions[poolType];
     const abilityIDs = abilities.map( ability => ability.uuid ?? ability );
-    this.parent.parent.update( {
+    this.parentDocument.update( {
       [propertyKey]: currentAbilities.concat( abilityIDs ),
     } );
   }
@@ -96,15 +113,12 @@ export default class AdvancementData extends SparseDataModel {
    * @param {object} [data]    If provided, will initialize the new level with the given data.
    */
   async addLevel( data = {} ) {
-    await this.parent.parent.update( {
-      "system.advancement.levels": this.levels.concat(
-        new AdvancementLevelData(
-          {
-            ...data,
-            level: this.levels.length + 1
-          }
-        )
-      )
+    const newLevel = data.level ?? this.numLevels + 1;
+    await this.parentDocument.update( {
+      [ `system.advancement.levels.${ newLevel }` ]: new AdvancementLevelData( {
+        ...data,
+        level: newLevel,
+      } ),
     } );
   }
 
@@ -113,19 +127,14 @@ export default class AdvancementData extends SparseDataModel {
    * @param {number} [amount]   The number of levels to remove.
    */
   async deleteLevel( amount = 1 ) {
-    await this.parent.parent.update( {
-      "system.advancement.levels": this.levels.slice( 0, -( amount ?? 1 ) )
-    } );
-  }
+    const newMaxLevel = this.numLevels - amount;
+    const updates = {};
 
-  /**
-   * Get the level at which the given ability was learned.
-   * @param {ItemEd|string} ability   The ability item or its UUID.
-   * @returns {number|undefined}      The level at which the ability was learned, or undefined if it was not learned.
-   */
-  learnedAtLevel( ability ) {
-    const uuid = ability.uuid ?? ability;
-    return this.learnedOptions[uuid];
+    for ( let level = this.numLevels; level > newMaxLevel; level-- ) {
+      updates[ `system.advancement.levels.-=${ level }` ] = null;
+    }
+
+    await this.parentDocument.update( updates );
   }
 
   /**
@@ -138,8 +147,24 @@ export default class AdvancementData extends SparseDataModel {
     const currentAbilities = this.abilityOptions[poolType];
     const abilityUUIDs = abilities.map( ability => ability.uuid ?? ability );
 
-    this.parent.parent.update( {
+    this.parentDocument.update( {
       [propertyKey]: currentAbilities.filter( uuid => !abilityUUIDs.includes( uuid ) ),
     } );
   }
+
+  // endregion
+
+  // region Migration
+
+  static migrateData( source ) {
+    if ( Array.isArray( source.levels ) ) {
+      source.levels = source.levels.reduce( ( acc, levelData ) => {
+        acc[levelData.level] = levelData;
+        return acc;
+      }, {} );
+    }
+    return super.migrateData( source );
+  }
+
+  // endregion
 }
