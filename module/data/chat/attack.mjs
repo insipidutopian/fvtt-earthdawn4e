@@ -109,9 +109,12 @@ export default class AttackMessageData extends BaseMessageData {
   static async _onRollDamage( event, button ) {
     event.preventDefault();
 
+    const attackAbility = /** @type {ItemEd} */ await fromUuid( this.roll.options.attackAbilityUuid );
+    if ( attackAbility?.type === SYSTEM_TYPES.Item.power ) return attackAbility.system.rollDamage();
+
     const weapon = /** @type {ItemEd} */ await fromUuid( this.roll.options.weaponUuid );
     if ( weapon?.system.roll instanceof Function ) {
-      return await weapon.system.rollDamage( {
+      return weapon.system.rollDamage( {
         attackRoll: this.roll,
       } );
     }
