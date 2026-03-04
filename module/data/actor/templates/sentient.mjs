@@ -323,7 +323,7 @@ export default class SentientTemplate extends CommonTemplate {
         initial:  0,
         integer:  true,
       } ),
-      relations: new MappingField( new fields.SchemaField( {
+      relations: new fields.TypedObjectField( new fields.SchemaField( {
         attitude: new fields.StringField( {
           choices: [ "config stuff" ]
         } ),
