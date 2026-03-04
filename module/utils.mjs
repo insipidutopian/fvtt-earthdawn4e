@@ -49,6 +49,23 @@ export function getAllEdIds( type ) {
 }
 
 /**
+ * Get all ED-IDs of all Items in the game world, grouped by Item type. Each type also has
+ * all default ED-IDs.
+ * @param {string[]} [defaultEdIds] - An array of default ED-IDs to include in all types.
+ * @returns {Record<string, Set<string>>} An object where keys are Item types and values are sets of ED-IDs.
+ */
+export function getAllEdIdsByType( defaultEdIds = [] ) {
+  const edIdsByType = {
+    defaults: new Set( defaultEdIds ),
+  };
+  for ( const /** @type {ItemEd} */ item of game.items ) {
+    if ( !edIdsByType[item.type] ) edIdsByType[item.type] = new Set( defaultEdIds );
+    edIdsByType[item.type].add( item.system.edid );
+  }
+  return edIdsByType;
+}
+
+/**
  * Adapted from ({@link https://gitlab.com/peginc/swade/-/wikis/Savage-Worlds-ID|SWADE system}).
  * Returns an array of items that match a given EDID and optionally an item type.
  * Searched documents are world and compendium items.

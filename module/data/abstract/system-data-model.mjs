@@ -262,7 +262,6 @@ export default class SystemDataModel extends foundry.abstract.TypeDataModel {
    * @param {User} user                 The User requesting the document creation.
    * @returns {Promise<boolean|void>}   A return value of false indicates the creation operation should be cancelled.
    * @see {Document#_preCreate}
-   * @protected
    */
   async _preCreate( data, options, user ) {
     if ( await super._preCreate( data, options, user ) === false ) return false;
@@ -275,6 +274,18 @@ export default class SystemDataModel extends foundry.abstract.TypeDataModel {
       } ) );
       return false;
     }
+  }
+
+  /**
+   * On-update logic for this system data.
+   * @param {object} changed            The differential data that was changed relative to the documents prior values
+   * @param {object} options            Additional options which modify the update request
+   * @param {string} userId             The id of the User requesting the document update
+   * @returns {void}
+   * @see {Document#_onUpdate}
+   */
+  _onUpdate( changed, options, userId ) {
+    if ( changed?.system?.edid  )game.ed4e?.edIdsByType?.all.add( changed.system.edid );
   }
 
   // endregion
