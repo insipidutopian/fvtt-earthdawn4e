@@ -17,11 +17,13 @@
     disabled=(not @root.editable)
   }}
 
-  {{formGroup
-    systemFields.matrix.fields.level
-    value=system.matrix.level
-    disabled=(not @root.editable)
-  }}
+  {{#unless (and systemFields.level (gte system.level 0))}}
+    {{formGroup
+      systemFields.matrix.fields.level
+      value=system.matrix.level
+      disabled=(not @root.editable)
+    }}
+  {{/unless}}
 
   <div class="form-group">
     <label>{{systemFields.matrix.fields.threads.fields.hold.fields.value.label}} / {{systemFields.matrix.fields.threads.fields.hold.fields.max.label}}</label>
