@@ -12,15 +12,30 @@ const { fields } = foundry.data;
  */
 export class ConstraintData extends SparseDataModel {
 
+  // region Schema
+
+  /** @inheritdoc */
+  static defineSchema() {
+    return {
+      type: new fields.StringField( {
+        required:        true,
+        blank:           false,
+        initial:         this.TYPE,
+        validate:        value => value === this.TYPE,
+        validationError: `must be equal to "${this.TYPE}"`,
+      } ),
+    };
+  }
+
+  // endregion
+
+  // region Static Properties
+
   /** @inheritdoc */
   static LOCALIZATION_PREFIXES = [
     ...super.LOCALIZATION_PREFIXES,
     "ED.Data.General.Constraint",
   ];
-
-  /* -------------------------------------------- */
-  /* Properties                                   */
-  /* -------------------------------------------- */
 
   static get TYPES() {
     // eslint-disable-next-line no-return-assign
@@ -39,22 +54,28 @@ export class ConstraintData extends SparseDataModel {
 
   static TYPE = "";
 
-  /* -------------------------------------------- */
-  /*  Schema                                      */
-  /* -------------------------------------------- */
+  // endregion
 
-  /** @inheritdoc */
-  static defineSchema() {
-    return {
-      type: new fields.StringField( {
-        required:        true,
-        blank:           false,
-        initial:         this.TYPE,
-        validate:        value => value === this.TYPE,
-        validationError: `must be equal to "${this.TYPE}"`,
-      } ),
-    };
+  // region Static Methods
+
+  /**
+   * Create a new instance of a constraint class based on the given type.
+   * @param {string} type - The type of constraint to create.
+   * @param {object} [data] - The data to initialize the constraint with.
+   * @returns {ConstraintData} - A new instance of the constraint class.
+   * @throws {Error} - If no constraint class is found for the given type.
+   */
+  static fromType( type, data = {} ) {
+    const ConstrainClass = this.TYPES[ type ];
+    if ( !ConstrainClass ) {
+      throw new Error( `No constraint class found for type "${type}"` );
+    }
+    return new ConstrainClass( data );
   }
+
+  // endregion
+
+  // region Getters
 
   get summaryString() {
     return [
@@ -63,6 +84,8 @@ export class ConstraintData extends SparseDataModel {
       ...Object.values( this )
     ].join( " " );
   }
+
+  // endregion
 }
 
 export class AbilityConstraintData extends ConstraintData {

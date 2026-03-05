@@ -5,7 +5,6 @@ import * as STATUSES from "../config/statuses.mjs";
 import ED4E_CONSTANTS from "../constants/_module.mjs";
 import  "../tours/ed-tours.mjs";
 import registerHandlebarHelpers from "../handlebar-helpers.mjs";
-import { initializeMigrations } from "../services/migrations/_module.mjs";
 
 // Import submodules
 import * as applications from "../applications/_module.mjs";
@@ -258,7 +257,7 @@ export default function () {
     setupTextEditor();
     setupStatusEffects();
     setupDataModels();
-    initializeMigrations();
+    // initializeMigrations();
     registerSheetApps();
     setupHandlebars();
 

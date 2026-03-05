@@ -8,14 +8,17 @@ const { getProperty } = foundry.utils;
  */
 export default class ConstraintsConfig extends BaseConfigSheet {
 
+  // region Static Properties
+
   /** @inheritDoc */
   static DEFAULT_OPTIONS = {
     classes: [ "constraints-config" ],
     window:  {
       title: "ED.Dialogs.Configs.Constraints.title",
     },
-    form:    {
-      handler: this.#onSubmitForm,
+    actions: {
+      addConstraint:    this._onAddConstraint,
+      deleteConstraint: this._onDeleteConstraint,
     },
     keyPath: null,
     type:    null,
@@ -28,9 +31,9 @@ export default class ConstraintsConfig extends BaseConfigSheet {
     },
   };
 
-  /* -------------------------------------------- */
-  /*  Properties                                  */
-  /* -------------------------------------------- */
+  // endregion
+
+  // region Getters
 
   /**
    * The data for the constraints field on the document's system property.
@@ -58,9 +61,9 @@ export default class ConstraintsConfig extends BaseConfigSheet {
 
   }
 
-  /* -------------------------------------------- */
-  /*  Rendering                                   */
-  /* -------------------------------------------- */
+  // endregion
+
+  // region Rendering
 
   /** @inheritDoc */
   async _preparePartContext( partId, context, options ) {
@@ -77,29 +80,25 @@ export default class ConstraintsConfig extends BaseConfigSheet {
     return newContext;
   }
 
-  /* -------------------------------------------- */
-  /*  Form Submission                             */
-  /* -------------------------------------------- */
+  // endregion
+
+  // region Event Handlers
 
   /**
-   * Process form submission for the sheet
-   * @this {DocumentSheetV2}
-   * The handler is called with the application as its bound scope
-   * @param {SubmitEvent} event                   The originating form submission event
-   * @param {HTMLFormElement} form                The form element that was submitted
-   * @param {FormDataExtended} formData           Processed data for the submitted form
-   * @returns {Promise<void>}
+   * @type {ApplicationClickAction}
+   * @this {ConstraintsConfig}
    */
-  static async #onSubmitForm( event, form, formData ) {
-    const data = foundry.utils.expandObject( formData.object );
-
-    const updates = Array.from(
-      Object.values( this.constraints ),
-      ( element, index ) => new this.constraints[ index ].constructor( data.system[ this.keyPath ][ index ] )
-    );
-
-    await this.document.update( {
-      [ `system.${this.keyPath}` ]: updates,
-    } );
+  static async _onAddConstraint( event, target ) {
+    await this.document.system.addConstraint?.( target.dataset.constraintType, this.keyPath );
   }
+
+  /**
+   * @type {ApplicationClickAction}
+   * @this {ConstraintsConfig}
+   */
+  static async _onDeleteConstraint( event, target ) {
+    await this.document.system.removeConstraint?.( target.dataset.constraintType, this.keyPath );
+  }
+
+  // endregion
 }

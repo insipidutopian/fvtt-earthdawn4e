@@ -1,8 +1,8 @@
 import * as LEGEND from "../../config/legend.mjs";
 import AbilityTemplate from "../item/templates/ability.mjs";
-import MappingField from "../fields/mapping-field.mjs";
 import IdentifierField from "../fields/identifier-field.mjs";
 import SparseDataModel from "../abstract/sparse-data-model.mjs";
+import { mapObject } from "../../utils.mjs";
 
 /**
  * A level in an advancement.
@@ -28,12 +28,12 @@ export default class AdvancementLevelData extends SparseDataModel {
       } ),
       tier: new fields.StringField( {
         required: true,
-        nullable: true,
-        blank:    true,
-        initial:  "",
+        nullable: false,
+        blank:    false,
+        initial:  "novice",
         choices:  LEGEND.tier,
       } ),
-      abilities: new MappingField(
+      abilities: new fields.TypedObjectField(
         new fields.SetField(
           new fields.DocumentUUIDField(
             AbilityTemplate ),
@@ -44,8 +44,7 @@ export default class AdvancementLevelData extends SparseDataModel {
           }
         ),
         {
-          initialKeys:     LEGEND.abilityPools,
-          initialKeysOnly: true,
+          initialKeys:     mapObject( LEGEND.abilityPools, ( key, _ ) => [ key, [] ] ),
           required:        true,
           nullable:        false,
         }
@@ -86,39 +85,6 @@ export default class AdvancementLevelData extends SparseDataModel {
 
   static initResourceStep( source ) {
     return source.level >= 13 ? 5 : 4;
-  }
-
-  // endregion
-
-  // region Methods
-
-  /**
-   * Add abilities to the given type of pool on this level.
-   * @param {[Item]} abilities              An array of ability item IDs to add.
-   * @param {LEGEND.abilityPools} poolType    The type of pool the abilities are added to.
-   */
-  addAbilities( abilities, poolType ) {
-    const propertyKey = `system.advancement.levels.${this.level-1}.abilities`;
-    const currentAbilities = this.abilities;
-    const abilityUUIDs = abilities.map( ability => ability.uuid ?? ability );
-    this.parent.parent.parent.update( {
-      [propertyKey]: {
-        ...currentAbilities,
-        [poolType]: currentAbilities[poolType].concat( abilityUUIDs )
-      },
-    } );
-  }
-
-  removeAbilities( abilities, poolType ) {
-    const propertyKey = `system.advancement.levels.${this.level-1}.abilities.${poolType}`;
-    const currentAbilities = this.abilities;
-    const abilityUUIDs = abilities.map( ability => ability.uuid ?? ability );
-
-    this.parent.parent.parent.update( {
-      [propertyKey]: {
-        ...currentAbilities,
-        [poolType]: currentAbilities[poolType].filter( uuid => !abilityUUIDs.includes( uuid ) ) },
-    } );
   }
 
   // endregion

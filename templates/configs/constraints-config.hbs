@@ -1,15 +1,20 @@
 <section>
-  <!--TODO: ADD BUTTONS FOR ADDING/REMOVING CONSTRAINTS, OR VIA DRAG DROP-->
-
-  <div class="hint">
+  <div class="hint text--center">
     {{localize "ED.Dialogs.Configs.Constraints.hint"}}
   </div>
 
-  <div class="tags input-element-tags">
+  <div class="flexrow">
     {{#each availableConstraints}}
-      <div class="tag" data-key="{{this.TYPE}}">
-        <span>{{lookup (lookup ../config.constraints this.TYPE) "label"}}</span>
-      </div>
+      <button
+        type="button"
+        class=""
+        data-action="addConstraint"
+        data-constraint-type="{{this.TYPE}}"
+        data-key-path="{{@root.keyPath}}"
+      >
+        <i class="fa-thin {{lookup (lookup ../config.LEGEND.constraints this.TYPE) "icon"}}" inert></i>
+        <span>{{lookup (lookup ../config.LEGEND.constraints this.TYPE) "label"}}</span>
+      </button>
     {{/each}}
   </div>
 
@@ -18,29 +23,27 @@
   <div class="scrollable">
     {{#each constraints as | constraint |}}
       <fieldset>
-        {{#with (lookup ../config.constraints this.type) as | constraintConfig |}}
-          <legend>{{lookup constraintConfig "label"}}</legend>
-          {{#with (lookup constraintConfig "inputTemplate") as | inputTemplate |}}
-
-            {{> "systems/ed4e/templates/form/group/general.hbs"
-              dataField=constraint.schema
-              inputTemplate=inputTemplate
-              data=constraint
-              fields=constraint.schema.fields
-              fieldPath=(concat "system." @root.keyPath "." @index)
-              config=config
-            }}
-
-          {{else}}
-            {{formGroup
-              (lookup constraint.schema.fields constraint.type)
-              value=(lookup constraint constraint.type)
-              name=(concat "system." @root.keyPath "." @index "." constraint.type)
-              localize=true
-            }}
-
-          {{/with}}
-        {{/with}}
+        <legend>
+          <button
+            type="button"
+            class="item-control inline-button"
+            data-tooltip="{{localize "ED.ToolTips.deleteConstraint"}}"
+            data-action="deleteConstraint"
+            data-key-path="{{@root.keyPath}}"
+            data-constraint-type="{{this.type}}"
+          >
+            <i class="fas {{@root.config.icons.delete}}" inert></i>
+            <span>{{lookup (lookup @root.config.LEGEND.constraints this.type) "label"}}</span>
+          </button>
+        </legend>
+        {{> "systems/ed4e/templates/form/group/general.hbs"
+          dataField=this.schema
+          inputTemplate=(lookup (lookup @root.config.LEGEND.constraints this.type) "inputTemplate")
+          data=this
+          fields=this.schema.fields
+          fieldPath=(concat "system." @root.keyPath "." @key)
+          config=config
+        }}
       </fieldset>
     {{/each}}
   </div>

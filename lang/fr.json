@@ -494,7 +494,8 @@
         "class":                                  "TODO: Add translation",
         "language":                               "TODO: Add translation",
         "namegiver":                              "TODO: Add translation",
-        "relation":                               "TODO: Add translation"
+        "relation":                               "TODO: Add translation",
+        "spell":                                  "TODO: Add translation"
       },
       "DamageSourceConfig": {
         "arbitrary":                              "TODO: Add translation",
@@ -3821,6 +3822,7 @@
       "castSpell":                                "TODO: Add translation",
       "castSpellFromMatrix":                      "TODO: Add translation",
       "delete":                                   "TODO: Add translation",
+      "deleteConstraint":                         "TODO: Add translation",
       "deleteEnhancement":                        "TODO: Add translation",
       "deleteManeuver":                           "TODO: Add translation",
       "deletePower":                              "TODO: Add translation",

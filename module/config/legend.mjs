@@ -192,6 +192,10 @@ export const constraints = {
     label:         "ED.Config.Constraints.relation",
     inputTemplate: "",
   },
+  spell: {
+    label:         "ED.Config.Constraints.spell",
+    inputTemplate: "systems/ed4e/templates/form/input/base-constraint.hbs",
+  },
 };
 preLocalize( "constraints", { key: "label", sort: true } );
 

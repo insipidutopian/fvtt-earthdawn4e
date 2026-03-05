@@ -237,7 +237,7 @@ export default class MatrixTemplate extends SystemDataModel {
    */
   _prepareMatrixLevel( data ) {
     const parentLevel = foundry.utils.getProperty( data, "system.level" );
-    if ( foundry.utils.getType( parentLevel ) === "number" ) {
+    if ( Number.isNumeric( parentLevel ) && parentLevel >= 0 ) {
       foundry.utils.setProperty( data, "system.matrix.level", parentLevel );
     }
   }
