@@ -3,6 +3,7 @@ import WorkflowInterruptError from "../workflow-interrupt.mjs";
 import { getSetting } from "../../settings.mjs";
 import AttackRollOptions from "../../data/roll/attack.mjs";
 import Rollable from "./rollable.mjs";
+import { SYSTEM_TYPES } from "../../constants/constants.mjs";
 
 /**
  * @typedef {object} AttackWorkflowOptions
@@ -46,7 +47,10 @@ export default class AttackWorkflow extends Rollable( ActorWorkflow ) {
     this._weapon = options.weapon;
     this._attackType = options.attackType ?? ( this._weapon ? "weapon" : "unarmed" );
 
-    if ( !this._weapon && this._attackType !== "unarmed" ) this._steps.push( this.#setWeapon.bind( this ) );
+    if ( !this._weapon
+      && this._attackType !== "unarmed"
+      && this._ability?.type !== SYSTEM_TYPES.Item.power
+    ) this._steps.push( this.#setWeapon.bind( this ) );
     if ( !this._ability ) this._steps.push( this.#setAbility.bind( this ) );
     this._initRollableSteps();
   }

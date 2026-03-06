@@ -3,13 +3,13 @@ import ActionTemplate from "./templates/action.mjs";
 import TargetTemplate from "./templates/targeting.mjs";
 import RollPrompt from "../../applications/global/roll-prompt.mjs";
 import AbilityRollOptions from "../roll/ability.mjs";
-import AttackRollOptions from "../roll/attack.mjs";
 import RollProcessor from "../../services/roll-processor.mjs";
 import DamageRollOptions from "../roll/damage.mjs";
 import { SYSTEM_TYPES } from "../../constants/constants.mjs";
 import * as ACTORS from "../../config/actors.mjs";
 import * as COMBAT from "../../config/combat.mjs";
 import * as MAGIC from "../../config/magic.mjs";
+import AttackWorkflow from "../../workflows/workflow/attack-workflow.mjs";
 
 
 /**
@@ -279,26 +279,15 @@ export default class PowerData extends ActionTemplate.mixin(
   async rollAttack() {
     if ( !this.isActorEmbedded ) return;
 
-    const rollOptions = this.baseRollOptions;
-    const rollOptionsUpdate = {
-      ...rollOptions.toObject(),
-      rollingActorUuid: this.containingActor.uuid,
-      target:           {
-        tokens: game.user.targets.map( token => token.document.uuid ),
-        base:   this.getDifficulty(),
-      },
-      chatFlavor:       "AbilityTemplate: ATTACK ROLL",
-      rollType:         "attack",
-      weaponUuid:      this.parent.uuid,
-    };
-
-    const roll = await RollPrompt.waitPrompt(
-      new AttackRollOptions( rollOptionsUpdate ),
+    const attackWorkflow = new AttackWorkflow(
+      this.containingActor,
       {
-        rollData: this.containingActor,
-      }
+        attackAbility: this.parentDocument,
+        attackType:    this.rollTypeDetails.attack?.weaponTypes,
+      },
     );
-    return RollProcessor.process( roll, this.containingActor, { rollToMessage: true } );
+
+    return /** @type {Promise<Roll>} */ attackWorkflow.execute();
   }
 
   async rollDamage() {

@@ -1,7 +1,7 @@
 import ActorWorkflow from "./actor-workflow.mjs";
 import AttuneMatrixPrompt from "../../applications/workflow/attune-matrix-prompt.mjs";
 import RollPrompt from "../../applications/global/roll-prompt.mjs";
-import AttuningRollData from "../../data/roll/attuning.mjs";
+import AttuningRollOptions from "../../data/roll/attuning.mjs";
 import Rollable from "./rollable.mjs";
 
 /**
@@ -139,7 +139,7 @@ export default class AttuneMatrixWorkflow extends Rollable( ActorWorkflow ) {
     // Skip the roll if we're not reattuning on the fly
     if ( !this._isReattuningOnTheFly ) return;
 
-    this._rollOptions = AttuningRollData.fromActor(
+    this._rollOptions = AttuningRollOptions.fromActor(
       {
         attuningType:    "matrixOnTheFly",
         attuningAbility: this._attuneAbility.uuid,
