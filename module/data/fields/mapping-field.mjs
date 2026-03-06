@@ -19,20 +19,13 @@ const { setInputAttributes } = foundry.applications.fields;
 
 /**
  * A subclass of TypedObjectField that adds functionality for initial keys and values.
+ * @param {DataField} element               The value type of each entry in this object.
+ * @param {MappingFieldOptions} [options]   Options which configure the behavior of the field.
+ * @param {DataFieldContext} [context]      Additional context which describes the field.
  */
 export default class MappingField extends foundry.data.fields.TypedObjectField {
 
-  /**
-   * @inheritDoc
-   * @param {DataField} element               The value type of each entry in this object.
-   * @param {MappingFieldOptions} [options]   Options which configure the behavior of the field.
-   * @param {DataFieldContext} [context]      Additional context which describes the field.
-   */
-  constructor( element, options, context ) {
-    super( options, context );
-  }
-
-  /* -------------------------------------------- */
+  // region Static Properties
 
   /** @inheritDoc */
   static get _defaults() {
@@ -42,6 +35,35 @@ export default class MappingField extends foundry.data.fields.TypedObjectField {
       initialKeysOnly: false,
     } );
   }
+
+  // endregion
+
+  // region Overrides
+
+  /** @inheritDoc */
+  initialize( value, element, options = {} ) {
+    if ( !value ) return value;
+    const initializedObject = {};
+    const initialKeys = ( this.initialKeys instanceof Array ) ? this.initialKeys : Object.keys( this.initialKeys ?? {} );
+    const keys = this.initialKeysOnly ? initialKeys : Object.keys( value );
+    for ( const key of keys ) {
+      const data = value[key] ?? this._getInitialValueForKey( key, value );
+      initializedObject[key] = this.element.initialize( data, element, options );
+    }
+    return initializedObject;
+  }
+
+  /** @inheritDoc */
+  _getField( path, options =  {} ) {
+    if ( path.length === 0 ) return this;
+    if ( game.release.generation < 14 ) path.shift();
+    else path.pop();
+    return this.element._getField( path, options );
+  }
+
+  // endregion
+
+  // region Mapping Field methods
 
   /** @inheritDoc */
   getInitialValue( data ) {
@@ -64,26 +86,9 @@ export default class MappingField extends foundry.data.fields.TypedObjectField {
     return this.initialValue?.( key, initial, object ) ?? initial;
   }
 
-  /** @inheritDoc */
-  initialize( value, element, options = {} ) {
-    if ( !value ) return value;
-    const initializedObject = {};
-    const initialKeys = ( this.initialKeys instanceof Array ) ? this.initialKeys : Object.keys( this.initialKeys ?? {} );
-    const keys = this.initialKeysOnly ? initialKeys : Object.keys( value );
-    for ( const key of keys ) {
-      const data = value[key] ?? this._getInitialValueForKey( key, value );
-      initializedObject[key] = this.element.initialize( data, element, options );
-    }
-    return initializedObject;
-  }
+  // endregion
 
-  /** @inheritDoc */
-  _getField( path, options =  {} ) {
-    if ( path.length === 0 ) return this;
-    if ( game.release.generation < 14 ) path.shift();
-    else path.pop();
-    return this.element._getField( path, options );
-  }
+  // region Rendering
 
   /** @inheritDoc */
   _toInput( config ) {
@@ -138,5 +143,7 @@ export default class MappingField extends foundry.data.fields.TypedObjectField {
 
     return fieldset;
   }
+
+  // endregion
 
 }
